@@ -94,7 +94,7 @@ public class Red_sp_auto extends LinearOpMode {
     public static double x3 = 60;
     public static double x8 = 60;
     public static double y6 = -42.5;
-    public static double x4 = 7;
+    public static double x4 = 10;
     public static double y3 = -55;
 
     public static double x5 = 0;
@@ -103,6 +103,20 @@ public class Red_sp_auto extends LinearOpMode {
 
     public static double x7 = 8.5;
     public static double y5 = -18.5;
+    public static double x9 = 20;
+    public static double y9 = 0;
+    public static double y11 = 10;
+    public static double x10 = 15;
+    public static double y12 = 0;
+    public static double y13 = 55;
+    public static double x11 = 60;
+    public static double x12 = 10;
+    public static double y14 = 52.5;
+    public static double y15 = -33;
+    public static double x13 = 12.5;
+    public static double y16 = 70;
+    public static double y17 = -54;
+    public static double y18 = -54;
     public static double pickup_speed = 5;
 
     public class Intake {
@@ -173,7 +187,7 @@ public class Red_sp_auto extends LinearOpMode {
         public class spGrabPos implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                //bring claw to origin
+
                 elbow.setPosition(Epos2);
                 frontWrist.setPosition(Wpos2);
                 backWrist.setPosition(Wpos2);
@@ -240,14 +254,21 @@ public class Red_sp_auto extends LinearOpMode {
         TrajectoryActionBuilder segment3;
         TrajectoryActionBuilder segment4;
         TrajectoryActionBuilder segment5;
+        TrajectoryActionBuilder segment6;
+        TrajectoryActionBuilder segment7;
+        TrajectoryActionBuilder segment7_5;
+        TrajectoryActionBuilder segment7_6;
+        TrajectoryActionBuilder segment8;
+        TrajectoryActionBuilder segment8_5;
+        TrajectoryActionBuilder segment9;
+        TrajectoryActionBuilder segment10;
+        TrajectoryActionBuilder segment11;
+        TrajectoryActionBuilder segment12;
+        TrajectoryActionBuilder segment13;
+        TrajectoryActionBuilder segment14;
 
-        Action segment6;
-        Action segment7;
-        Action segment8;
-
-        //segment 1 - drives up to the sub and scores the preload
-        // parallel with lift to score height
         segment1 = drive.actionBuilder(initialPose)
+                .setReversed(true)
                 .strafeToConstantHeading(new Vector2d(x0, 0));
 
         Action seg1 = segment1.build();
@@ -270,46 +291,104 @@ public class Red_sp_auto extends LinearOpMode {
 
         //segment 3 - moves on a diagonal to get behind the sample
         segment3 = segment2_5.endTrajectory().fresh()
-                .setTangent(0)
-                .lineToX(x3);
+                .strafeToLinearHeading(new Vector2d(x3, y6), Math.toRadians(0));
 
         Action seg3 = segment3.build();
 
-        //segment 4 - spline path with a 180 built in, gets in position to push
+        //segment 4 - push a sample into the obs zone
         segment4 = segment3.endTrajectory().fresh()
-                .setTangent(0)
-                .splineToLinearHeading(new Pose2d(x8, y6, Math.toRadians(0)), Math.toRadians(0));
+                .strafeToConstantHeading(new Vector2d(x4, y6));
 
         Action seg4 = segment4.build();
 
         //segment 5 - push two samples into the zone
         segment5 = segment4.endTrajectory().fresh()
-                .lineToX(x4)
-                .lineToX(x3)
-                .strafeTo(new Vector2d(x3, y3))
-                .setTangent(0)
-                .lineToX(x4);
+                .strafeToConstantHeading(new Vector2d(x13, y15));
 
         Action seg5 = segment5.build();
+//
+//        segment5_5 = segment5.endTrajectory().fresh()
+//                .strafeToConstantHeading(new Vector2d(x4, y6));
+//
+//        Action seg5_5 = segment5_5.build();
 
         //segment 6 - slowly! to pick up the specimen
-        segment6 = drive.actionBuilder(drive.pose)
-                .lineToX(x5, new TranslationalVelConstraint(pickup_speed))
-                .build();
+        segment6 = segment5.endTrajectory().fresh()
+                .strafeToConstantHeading(new Vector2d(x5,y15), new TranslationalVelConstraint(pickup_speed));
 
-        //segment 7 - spline path back to the sub with a 180
+        Action seg6 = segment6.build();
+
+        //segment 7 - strafe back to the sub with a 180
         //parallel with lift to scoring position
-        segment7 = drive.actionBuilder(drive.pose)
-                .lineToX(x6)
-                .splineToLinearHeading(new Pose2d(x0, y4, Math.toRadians(0)), Math.toRadians(0))
-                .build();
+        segment7 = segment6.endTrajectory().fresh()
+                .setReversed(true)
+                .strafeToLinearHeading(new Vector2d(x9, y9), Math.toRadians(180));
 
-        //segment 8 - spline path back to the zone with a 180
+        Action seg7 = segment7.build();
+
+        //segment 7.5 - scoring second specimen
+        segment7_5 = segment7.endTrajectory().fresh()
+                .setReversed(true)
+                .strafeToConstantHeading(new Vector2d(x0, y11));
+
+        Action seg7_5 = segment7_5.build();
+
+        segment7_6 = segment7_5.endTrajectory().fresh()
+                .setReversed(true)
+                .strafeToConstantHeading(new Vector2d(x1, 0));
+
+        Action seg7_6 = segment7_6.build();
+
+        //segment 8 - strafe path back to the zone with a 180
         // parallel with lift to pickup position
-        segment8 = drive.actionBuilder(drive.pose)
-                .lineToX(x7)
-                .splineToLinearHeading(new Pose2d(x4, y5, Math.toRadians(0)), Math.toRadians(0))
-                .build();
+        segment8 = segment7_6.endTrajectory().fresh()
+
+                .strafeToLinearHeading(new Vector2d(x4, y6), Math.toRadians(0));
+
+        Action seg8 = segment8.build();
+
+//segment 8_5 - slowly! to pick up the specimen
+        segment8_5 = segment8.endTrajectory().fresh()
+                .strafeToConstantHeading(new Vector2d(x5,y6), new TranslationalVelConstraint(pickup_speed));
+
+        Action seg8_5 = segment8_5.build();
+//
+        segment9 = segment8_5.endTrajectory().fresh()
+                .setReversed(true)
+                .strafeToLinearHeading(new Vector2d(x9, y9), Math.toRadians(180));
+
+        Action seg9 = segment9.build();
+//Turn Around and go to put specimen on the bar
+        segment10 = segment9.endTrajectory().fresh()
+
+                .setReversed(true)
+                .strafeToConstantHeading(new Vector2d(x0, y11));
+
+        Action seg10 = segment10.build();
+//goes back and to the right in anticipation of pushing the block
+        segment11 = segment10.endTrajectory().fresh()
+
+                .strafeToConstantHeading(new Vector2d(x10, y12));
+
+        Action seg11 = segment11.build();
+
+        segment12 = segment11.endTrajectory().fresh()
+                .setReversed(true)
+                .strafeToLinearHeading(new Vector2d(x11, y17), Math.toRadians(0));
+
+        Action seg12 = segment12.build();
+
+        segment13 = segment12.endTrajectory().fresh()
+
+                .strafeToConstantHeading(new Vector2d(x12, y18));
+
+        Action seg13 = segment13.build();
+
+        segment14 = segment13.endTrajectory().fresh()
+
+                .strafeToConstantHeading(new Vector2d(x12, y18));
+
+        Action seg14 = segment14.build();
 
 
         waitForStart();
