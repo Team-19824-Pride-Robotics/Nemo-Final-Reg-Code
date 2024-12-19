@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 
 @Config
-@Autonomous(name = "Red_Specimen_Auto", group = "Autonomous")
+@Autonomous(name = "Test auto", group = "Autonomous")
 public class Test_auto extends LinearOpMode {
     public static double x1 = 5;
     public static double y1 = 5;

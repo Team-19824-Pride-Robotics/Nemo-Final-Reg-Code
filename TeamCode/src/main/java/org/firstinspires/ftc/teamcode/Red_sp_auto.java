@@ -87,17 +87,17 @@ public class Red_sp_auto extends LinearOpMode {
     public static double Wpos2 = 0.04;
     public static double Wpos3 = 0.7;
 
-    public static double x0 = 40;
+    public static double x0 = 27;
     public static double x1 = 25;
     public static double x2 = 11;
-    public static double y2 = -30;
+    public static double y2 = -25;
     public static double x3 = 60;
     public static double x8 = 60;
-    public static double y6 = -42.5;
-    public static double x4 = 10;
+    public static double y6 = -35;
+    public static double x4 = 3;
     public static double y3 = -55;
 
-    public static double x5 = 0;
+    public static double x5 = 7;
     public static double x6 = 6;
     public static double y4 = -2;
 
@@ -105,7 +105,7 @@ public class Red_sp_auto extends LinearOpMode {
     public static double y5 = -18.5;
     public static double x9 = 20;
     public static double y9 = 0;
-    public static double y11 = 10;
+    public static double y11 = 5;
     public static double x10 = 15;
     public static double y12 = 0;
     public static double y13 = 55;
@@ -148,8 +148,8 @@ public class Red_sp_auto extends LinearOpMode {
             public boolean run(@NonNull TelemetryPacket packet) {
                 //bring claw to origin
                 elbow.setPosition(Epos4);
-                frontWrist.setPosition(Wpos3);
-                backWrist.setPosition(Wpos3);
+                frontWrist.setPosition(Wpos2);
+                backWrist.setPosition(Wpos2);
                 lift1.setTargetPosition(spHeight2);
                 lift2.setTargetPosition(spHeight2);
                 return false;
@@ -188,7 +188,7 @@ public class Red_sp_auto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                elbow.setPosition(Epos2);
+                elbow.setPosition(Epos4);
                 frontWrist.setPosition(Wpos2);
                 backWrist.setPosition(Wpos2);
                 lift1.setTargetPosition(spHeight1);
@@ -200,7 +200,21 @@ public class Red_sp_auto extends LinearOpMode {
             return new spGrabPos();
         }
 
+        public class Return implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
 
+
+                    elbow.setPosition(Epos1);
+                    frontWrist.setPosition(Wpos2);
+                    backWrist.setPosition(Wpos2);
+                    claw.setPosition(Cpos2);
+                return false;
+            }
+        }
+        public Action Return() {
+            return new Return();
+        }
 
 
 
@@ -291,7 +305,7 @@ public class Red_sp_auto extends LinearOpMode {
 
         //segment 3 - moves on a diagonal to get behind the sample
         segment3 = segment2_5.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x3, y6), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x3, y6), Math.toRadians(180));
 
         Action seg3 = segment3.build();
 
@@ -306,7 +320,7 @@ public class Red_sp_auto extends LinearOpMode {
                 .strafeToConstantHeading(new Vector2d(x13, y15));
 
         Action seg5 = segment5.build();
-//
+
 //        segment5_5 = segment5.endTrajectory().fresh()
 //                .strafeToConstantHeading(new Vector2d(x4, y6));
 //
@@ -322,7 +336,7 @@ public class Red_sp_auto extends LinearOpMode {
         //parallel with lift to scoring position
         segment7 = segment6.endTrajectory().fresh()
                 .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(x9, y9), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x9, y11), Math.toRadians(0));
 
         Action seg7 = segment7.build();
 
@@ -343,26 +357,26 @@ public class Red_sp_auto extends LinearOpMode {
         // parallel with lift to pickup position
         segment8 = segment7_6.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x4, y6), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x4, y6), Math.toRadians(180));
 
         Action seg8 = segment8.build();
 
 //segment 8_5 - slowly! to pick up the specimen
         segment8_5 = segment8.endTrajectory().fresh()
-                .strafeToConstantHeading(new Vector2d(x5,y6), new TranslationalVelConstraint(pickup_speed));
+                .strafeToConstantHeading(new Vector2d(x5,y6));
 
         Action seg8_5 = segment8_5.build();
 //
         segment9 = segment8_5.endTrajectory().fresh()
                 .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(x9, y9), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x9, y9), Math.toRadians(0));
 
         Action seg9 = segment9.build();
 //Turn Around and go to put specimen on the bar
         segment10 = segment9.endTrajectory().fresh()
 
                 .setReversed(true)
-                .strafeToConstantHeading(new Vector2d(x0, y11));
+                .strafeToConstantHeading(new Vector2d(x0, y9));
 
         Action seg10 = segment10.build();
 //goes back and to the right in anticipation of pushing the block
@@ -402,66 +416,89 @@ public class Red_sp_auto extends LinearOpMode {
         Actions.runBlocking(new SequentialAction(
 
 
-                seg1
-
-
-
-
-/*
+                //new ParallelAction(
+                //intake.closeClaw(),
+                        seg1,
+                //intake.spHangPos()
+                //),
+                intake.openClaw(),
                 seg2,
-                seg2_5
+                seg2_5,
                 seg3,
-
                 seg4,
-
-                seg5
-
-                segment6,
-
-                lift.specimenScoreHeight(),  //this takes the specimen off the wall
-
-                new SleepAction(lift_time),  //it needs time to go up before driving away
-
-                new ParallelAction(
-                        segment7,
-                        lift.specArmScore()
-                ),
-
-                new ParallelAction(
-                        segment8,
-                        lift.specimenPickupHeight(),
-                        lift.specArmPickup()
-                ),
-
-                segment6,
-
-                lift.specimenScoreHeight(),  //this takes the specimen off the wall
-
-                new SleepAction(lift_time),  //it needs time to go up before driving away
-
-                new ParallelAction(
-                        segment7,
-                        lift.specArmScore()
-                ),
-
-                new ParallelAction(
-                        segment8,
-                        lift.specimenPickupHeight(),
-                        lift.specArmPickup()
-                ),
-
-                segment6,
-
-                lift.specimenScoreHeight(),  //this takes the specimen off the wall
-
-                new SleepAction(lift_time),  //it needs time to go up before driving away
-
-                new ParallelAction(
-                        segment7,
-                        lift.specArmScore()
-                )
-
- */
+                seg5,
+               // new ParallelAction(
+                        seg6,
+                        //intake.spGrabPos()
+                //),
+                new SleepAction(1),
+                intake.closeClaw(),
+               // new ParallelAction(
+                        seg7,
+                 //       intake.spHangPos()
+                //),
+                seg7_5,
+                intake.closeClaw(),
+                seg7_6,
+                //new ParallelAction(
+                        seg8,
+                  //      intake.spGrabPos()
+                //),
+                seg8_5,
+                //new ParallelAction(
+                        seg9,
+                  //      intake.spHangPos()
+                //),
+                seg10,
+                intake.openClaw(),
+                seg11
+                //
+//                segment6,
+//
+//                lift.specimenScoreHeight(),  //this takes the specimen off the wall
+//
+//                new SleepAction(lift_time),  //it needs time to go up before driving away
+//
+//                new ParallelAction(
+//                        segment7,
+//                        lift.specArmScore()
+//                ),
+//
+//                new ParallelAction(
+//                        segment8,
+//                        lift.specimenPickupHeight(),
+//                        lift.specArmPickup()
+//                ),
+//
+//                segment6,
+//
+//                lift.specimenScoreHeight(),  //this takes the specimen off the wall
+//
+//                new SleepAction(lift_time),  //it needs time to go up before driving away
+//
+//                new ParallelAction(
+//                        segment7,
+//                        lift.specArmScore()
+//                ),
+//
+//                new ParallelAction(
+//                        segment8,
+//                        lift.specimenPickupHeight(),
+//                        lift.specArmPickup()
+//                ),
+//
+//                segment6,
+//
+//                lift.specimenScoreHeight(),  //this takes the specimen off the wall
+//
+//                new SleepAction(lift_time),  //it needs time to go up before driving away
+//
+//                new ParallelAction(
+//                        segment7,
+//                        lift.specArmScore()
+//                )
+//
+//
 
         ));
 
