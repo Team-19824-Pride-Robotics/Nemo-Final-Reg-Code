@@ -14,6 +14,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -60,7 +61,13 @@ public class Red_sp_auto extends LinearOpMode {
     public static int saHeight2 = 3100;
     public static int spHeight2 = 1000;
 
+    public static double p = 0.005, i = 0, d = 0;
+    public static double f = 0;
+    public static double target = 0;
+    public static double target2 = 110;
+    public static double target1 = 110;
 
+    private PIDController controller;
     public static int baseHeight = 0;
 
     public static double HPos = 0.06;
@@ -150,8 +157,19 @@ public class Red_sp_auto extends LinearOpMode {
                 elbow.setPosition(Epos4);
                 frontWrist.setPosition(Wpos2);
                 backWrist.setPosition(Wpos2);
-                lift1.setTargetPosition(spHeight2);
-                lift2.setTargetPosition(spHeight2);
+                target=spHeight2;
+                controller.setPID(p, i, d);
+                int liftPos1 = lift1.getCurrentPosition();
+                int liftPos2 = lift2.getCurrentPosition();
+                double pid = controller.calculate(liftPos1, target);
+                double pid2 = controller.calculate(liftPos2, target);
+                double ff = 0;
+
+                double lPower1 = pid + ff;
+                double lPower2 = pid2 + ff;
+
+                lift1.setPower(lPower1);
+                lift2.setPower(lPower2);
                 return false;
             }
         }
@@ -191,8 +209,20 @@ public class Red_sp_auto extends LinearOpMode {
                 elbow.setPosition(Epos4);
                 frontWrist.setPosition(Wpos2);
                 backWrist.setPosition(Wpos2);
-                lift1.setTargetPosition(spHeight1);
-                lift2.setTargetPosition(spHeight1);
+                target=spHeight1;
+                controller.setPID(p, i, d);
+                int liftPos1 = lift1.getCurrentPosition();
+                int liftPos2 = lift2.getCurrentPosition();
+                double pid = controller.calculate(liftPos1, target);
+                double pid2 = controller.calculate(liftPos2, target);
+                double ff = 0;
+
+                double lPower1 = pid + ff;
+                double lPower2 = pid2 + ff;
+
+                lift1.setPower(lPower1);
+                lift2.setPower(lPower2);
+
                 return false;
             }
         }
@@ -209,6 +239,19 @@ public class Red_sp_auto extends LinearOpMode {
                     frontWrist.setPosition(Wpos2);
                     backWrist.setPosition(Wpos2);
                     claw.setPosition(Cpos2);
+                target=spHeight1;
+                controller.setPID(p, i, d);
+                int liftPos1 = lift1.getCurrentPosition();
+                int liftPos2 = lift2.getCurrentPosition();
+                double pid = controller.calculate(liftPos1, target);
+                double pid2 = controller.calculate(liftPos2, target);
+                double ff = 0;
+
+                double lPower1 = pid + ff;
+                double lPower2 = pid2 + ff;
+
+                lift1.setPower(lPower1);
+                lift2.setPower(lPower2);
                 return false;
             }
         }
@@ -413,6 +456,7 @@ public class Red_sp_auto extends LinearOpMode {
         if (isStopRequested()) return;
 
 
+
         Actions.runBlocking(new SequentialAction(
 
 
@@ -504,4 +548,5 @@ public class Red_sp_auto extends LinearOpMode {
 
 
     }
+
 }
