@@ -78,19 +78,18 @@ public class Teleop extends LinearOpMode {
 
     public static double Bpos2 = 0.8;
 
-    public static double Epos1 = 0.95;
-    public static double Epos2 = 0.8;
-    public static double Epos3 = 0.75;
-    public static double Epos4 = 0.52;
+    public static double Epos1 = 0.73;
+    public static double Epos2 = 0.45;
+    public static double Epos3 = 0.6;
 
-    public static double Cpos = 1;
+    public static double Cpos = 0.8;
 
-    public static double Cpos2 = 0.7;
+    public static double Cpos2 = 0.9;
 
     public static double Wpos1 = 0.3;
 
-    public static double Wpos2 = 0.04;
-    public static double Wpos3 = 0.7;
+    public static double Wpos2 = 0.28;
+    public static double Wpos3 = 0.5;
 
     DcMotorEx lift1;
     DcMotorEx lift2;
@@ -138,8 +137,8 @@ public class Teleop extends LinearOpMode {
         lift2 = hardwareMap.get(DcMotorEx.class, "lift2");
         lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift2.setDirection(DcMotorEx.Direction.REVERSE);
-        lift2.setDirection(DcMotorEx.Direction.REVERSE);
+        lift1.setDirection(DcMotorEx.Direction.REVERSE);
+
 
 
 //Various drive code variables
@@ -178,38 +177,53 @@ public class Teleop extends LinearOpMode {
             lift1.setPower(lPower1);
             lift2.setPower(lPower2);
             if(gamepad1.a){
+                elbow.setPosition(Epos2);
+                frontWrist.setPosition(Wpos2);
+                backWrist.setPosition(Wpos2);
+                claw.setPosition(Cpos2);
+                target=900;
+            }
+            if(gamepad1.b){
+                frontWrist.setPosition(Wpos1);
+                backWrist.setPosition(Wpos1);
+
+
+            }
+            if(gamepad1.y){
+                target=0;
                 claw.setPosition(Cpos);
             }
-            //Claw controls
 
-            //close claw
+//            Claw controls
 //
-//            if (gamepad1.left_bumper){
-//                if(!intakeIsOut) {
-//                    claw.setPosition(Cpos2);
-//
-//                } else {
-//                    intake.setPower(1);
-//                }
-//
-//
-//
-//            }
-//            ///open claw
-//            if (gamepad1.right_bumper){
-//                if(!intakeIsOut) {
-//                    if(atOrigin){
-//                        elbow.setPosition(Epos1);
-//                    }
-//                    claw.setPosition(Cpos);
-//
-//                } else{
-//                    intake.setPower(-1);
-//                    intakeBucket.setPosition(Bpos2);
-//                }
-//
-//
-//            }
+//            close claw
+
+            if (gamepad1.left_bumper){
+                if(!intakeIsOut) {
+                    claw.setPosition(Cpos2);
+
+                } else {
+                    intake.setPower(1);
+                }
+
+
+
+            }
+            ///open claw
+            if (gamepad1.right_bumper){
+                if(!intakeIsOut) {
+                    if(atOrigin){
+                        elbow.setPosition(Epos1);
+                    }
+                    claw.setPosition(Cpos);
+
+                } else{
+                    intake.setPower(-1);
+                    intakeBucket.setPosition(Bpos2);
+                }
+
+
+            }
 //            //These controls are to control the outtake so that it can score a sample
 //
 //
@@ -248,8 +262,8 @@ public class Teleop extends LinearOpMode {
 //                    //bring claw to origin
 //                    atOrigin = true;
 //                    elbow.setPosition(Epos1);
-//                    frontWrist.setPosition(Wpos2);
-//                    backWrist.setPosition(Wpos2);
+//                    frontWrist.setPosition(Wpos1);
+//                    backWrist.setPosition(Wpos1);
 //                    claw.setPosition(Cpos2);
 //                    slideAdjusted=false;
 //                    saStage = -1;

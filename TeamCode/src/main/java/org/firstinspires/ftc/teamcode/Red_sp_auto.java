@@ -3,63 +3,36 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.acmerobotics.roadrunner.ftc.Actions;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PwmControl;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
-
-
-
-// RR-specific imports
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-
-// Non-RR imports
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import androidx.annotation.NonNull;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.acmerobotics.roadrunner.SleepAction;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 
 @Config
 @Autonomous(name = "SpecimenAuto")
 public class Red_sp_auto extends LinearOpMode {
     //Positions copied from Teleop
+
     public static int saHeight1 = 1300;
     public static int spHeight1 = 0;
     public static int saHeight2 = 3100;
-    public static int spHeight2 = 1000;
+    public static int spHeight2 = 1125;
 
     public static double p = 0.005, i = 0, d = 0;
     public static double f = 0;
@@ -80,28 +53,27 @@ public class Red_sp_auto extends LinearOpMode {
 
     public static double Bpos2 = 0.8;
 
-    public static double Epos1 = 0.95;
-    public static double Epos2 = 0.8;
-    public static double Epos3 = 0.75;
-    public static double Epos4 = 0.52;
+    public static double Epos1 = 0.73;
+    public static double Epos2 = 0.45;
+    public static double Epos3 = 0.6;
 
-    public static double Cpos = 1;
 
-    public static double Cpos2 = 0.7;
+    public static double Cpos = 0.75;
+
+    public static double Cpos2 = 0.96;
 
     public static double Wpos1 = 0.3;
 
-    public static double Wpos2 = 0.04;
-    public static double Wpos3 = 0.7;
-
-    public static double x0 = 27;
+    public static double Wpos2 = 0.28;
+    public static double Wpos3 = 0.5;
+    public static double x0 = 31;
     public static double x1 = 25;
     public static double x2 = 11;
-    public static double y2 = -25;
-    public static double x3 = 60;
+    public static double y2 = -30;
+    public static double x3 = 50;
     public static double x8 = 60;
-    public static double y6 = -35;
-    public static double x4 = 3;
+    public static double y6 = -40;
+    public static double x4 = 5;
     public static double y3 = -55;
 
     public static double x5 = 7;
@@ -134,16 +106,11 @@ public class Red_sp_auto extends LinearOpMode {
         DcMotorEx lift2;
         Servo claw;
         Servo elbow;
+
         public Intake(HardwareMap hardwareMap) {
             elbow = hardwareMap.servo.get("armElbow");
             claw = hardwareMap.servo.get("claw");
-            lift1 = hardwareMap.get(DcMotorEx.class, "lift1");
-            lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            lift2 = hardwareMap.get(DcMotorEx.class, "lift2");
-            lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            lift1.setDirection(DcMotorEx.Direction.REVERSE);
+            
             backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "backWrist");
             backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
             frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "frontWrist");
@@ -154,22 +121,11 @@ public class Red_sp_auto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 //bring claw to origin
-                elbow.setPosition(Epos4);
+                elbow.setPosition(Epos2);
                 frontWrist.setPosition(Wpos2);
                 backWrist.setPosition(Wpos2);
-                target=spHeight2;
-                controller.setPID(p, i, d);
-                int liftPos1 = lift1.getCurrentPosition();
-                int liftPos2 = lift2.getCurrentPosition();
-                double pid = controller.calculate(liftPos1, target);
-                double pid2 = controller.calculate(liftPos2, target);
-                double ff = 0;
 
-                double lPower1 = pid + ff;
-                double lPower2 = pid2 + ff;
 
-                lift1.setPower(lPower1);
-                lift2.setPower(lPower2);
                 return false;
             }
         }
@@ -206,22 +162,9 @@ public class Red_sp_auto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                elbow.setPosition(Epos4);
-                frontWrist.setPosition(Wpos2);
-                backWrist.setPosition(Wpos2);
-                target=spHeight1;
-                controller.setPID(p, i, d);
-                int liftPos1 = lift1.getCurrentPosition();
-                int liftPos2 = lift2.getCurrentPosition();
-                double pid = controller.calculate(liftPos1, target);
-                double pid2 = controller.calculate(liftPos2, target);
-                double ff = 0;
-
-                double lPower1 = pid + ff;
-                double lPower2 = pid2 + ff;
-
-                lift1.setPower(lPower1);
-                lift2.setPower(lPower2);
+                elbow.setPosition(Epos3);
+                frontWrist.setPosition(Wpos3);
+                backWrist.setPosition(Wpos3);
 
                 return false;
             }
@@ -236,22 +179,9 @@ public class Red_sp_auto extends LinearOpMode {
 
 
                     elbow.setPosition(Epos1);
-                    frontWrist.setPosition(Wpos2);
-                    backWrist.setPosition(Wpos2);
-                    claw.setPosition(Cpos2);
-                target=spHeight1;
-                controller.setPID(p, i, d);
-                int liftPos1 = lift1.getCurrentPosition();
-                int liftPos2 = lift2.getCurrentPosition();
-                double pid = controller.calculate(liftPos1, target);
-                double pid2 = controller.calculate(liftPos2, target);
-                double ff = 0;
+                    frontWrist.setPosition(Wpos1);
+                    backWrist.setPosition(Wpos1);
 
-                double lPower1 = pid + ff;
-                double lPower2 = pid2 + ff;
-
-                lift1.setPower(lPower1);
-                lift2.setPower(lPower2);
                 return false;
             }
         }
@@ -261,31 +191,73 @@ public class Red_sp_auto extends LinearOpMode {
 
 
 
+
     }
 
 
-    public class Lift {
+    public class lift {
 
-        private DcMotorEx liftMotor1;
-        private DcMotorEx liftMotor2;
-        private Servo specArmServo;
-        private Servo bucketServo;
+        private DcMotorEx lift1;
+        private DcMotorEx lift2;
+        
+            
+        public lift(HardwareMap hardwareMap) {
 
-        public Lift(HardwareMap hardwareMap) {
-
-            liftMotor1 = hardwareMap.get(DcMotorEx.class, "liftMotor1");
-            liftMotor2 = hardwareMap.get(DcMotorEx.class, "liftMotor2");
-            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
-
-            specArmServo = hardwareMap.get(Servo.class,"specArmServo");
-            bucketServo = hardwareMap.get(Servo.class, "bucketServo");
-
+            lift1 = hardwareMap.get(DcMotorEx.class, "lift1");
+            lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            lift2 = hardwareMap.get(DcMotorEx.class, "lift2");
+            lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            lift1.setDirection(DcMotorEx.Direction.REVERSE);
         }
 
+        public class downABit implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                lift1.setTargetPosition(spHeight1-150);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setTargetPosition(spHeight1-150);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift1.setPower(1);
+                lift2.setPower(1);
+                return false;
+            }
+        }
+        public Action downABit() {
+            return new downABit();
+        }
+        public class baseHeight implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                lift1.setTargetPosition(spHeight1);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setTargetPosition(spHeight1);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift1.setPower(1);
+                lift2.setPower(1);
+                return false;
+            }
+        }
+        public Action baseHeight() {
+            return new baseHeight();
+        }
+
+        public class scoreHeight implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                lift1.setTargetPosition(spHeight2);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setTargetPosition(spHeight2);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift1.setPower(1);
+                lift2.setPower(1);
+                return false;
+            }
+        }
+        public Action scoreHeight() {
+            return new scoreHeight();
+        }
 
 
     }
@@ -294,13 +266,14 @@ public class Red_sp_auto extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-
+        controller = new PIDController(p, i, d);
 
         // instantiate your MecanumDrive at a particular pose.
         Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(0));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         // make an Intake instance
         Intake intake = new Intake(hardwareMap);
+        lift lift = new lift(hardwareMap);
         // make a Lift instance
 
 
@@ -348,7 +321,7 @@ public class Red_sp_auto extends LinearOpMode {
 
         //segment 3 - moves on a diagonal to get behind the sample
         segment3 = segment2_5.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x3, y6), Math.toRadians(180));
+                .strafeToConstantHeading(new Vector2d(x3, y6));
 
         Action seg3 = segment3.build();
 
@@ -459,43 +432,49 @@ public class Red_sp_auto extends LinearOpMode {
 
         Actions.runBlocking(new SequentialAction(
 
-
-                //new ParallelAction(
-                //intake.closeClaw(),
+                intake.closeClaw(),
+                lift.scoreHeight(),
+                intake.spHangPos(),
+                new SleepAction(2),
                         seg1,
-                //intake.spHangPos()
-                //),
+
+                lift.downABit(),
+                new SleepAction(0.35),
                 intake.openClaw(),
+
+                lift.baseHeight(),
+
+
                 seg2,
                 seg2_5,
                 seg3,
                 seg4,
-                seg5,
-               // new ParallelAction(
-                        seg6,
-                        //intake.spGrabPos()
-                //),
+                //seg5,
+                intake.spGrabPos(),
+                        //seg6,
+
                 new SleepAction(1),
                 intake.closeClaw(),
-               // new ParallelAction(
-                        seg7,
-                 //       intake.spHangPos()
-                //),
-                seg7_5,
-                intake.closeClaw(),
-                seg7_6,
-                //new ParallelAction(
-                        seg8,
-                  //      intake.spGrabPos()
-                //),
-                seg8_5,
-                //new ParallelAction(
-                        seg9,
-                  //      intake.spHangPos()
-                //),
-                seg10,
-                intake.openClaw(),
-                seg11
+                new SleepAction(1)
+//                new ParallelAction(
+//                        seg7,
+//                        intake.spHangPos()
+//                ),
+//                seg7_5,
+//                intake.closeClaw(),
+//                seg7_6,
+//                new ParallelAction(
+//                        seg8,
+//                        intake.spGrabPos()
+//                ),
+//                seg8_5,
+//                new ParallelAction(
+//                        seg9,
+//                        intake.spHangPos()
+//                ),
+//                seg10,
+//                intake.openClaw(),
+//                seg11
                 //
 //                segment6,
 //
