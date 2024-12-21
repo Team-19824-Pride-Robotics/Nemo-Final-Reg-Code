@@ -68,15 +68,15 @@ public class Teleop extends LinearOpMode {
 
     public static int baseHeight = 0;
 
-    public static double HPos = 0.06;
+    public static double HPos;
 
-    public static double HPos2 = 0.4;
+    public static double HPos2;
 
-    public static double HPos3 = 0.6;
 
-    public static double Bpos = 0.33;
 
-    public static double Bpos2 = 0.8;
+    public static double Bpos;
+
+    public static double Bpos2;
 
     public static double Epos1 = 0.73;
     public static double Epos2 = 0.45;
@@ -86,10 +86,10 @@ public class Teleop extends LinearOpMode {
 
     public static double Cpos2 = 0.9;
 
-    public static double Wpos1 = 0.3;
+    public static double Wpos1 = 0.73;
 
-    public static double Wpos2 = 0.28;
-    public static double Wpos3 = 0.5;
+    public static double Wpos2 = 0.45;
+    public static double Wpos3 = 0.28;
 
     DcMotorEx lift1;
     DcMotorEx lift2;
@@ -149,6 +149,7 @@ public class Teleop extends LinearOpMode {
         boolean intakeIsOut = false;
         boolean slideAdjusted = false;
         boolean stupidButton = false;
+        boolean atBase = false;
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -209,7 +210,7 @@ public class Teleop extends LinearOpMode {
 
 
             }
-            ///open claw
+            //open claw
             if (gamepad1.right_bumper){
                 if(!intakeIsOut) {
                     if(atOrigin){
@@ -231,162 +232,58 @@ public class Teleop extends LinearOpMode {
 //            //Don't mess with this without talking to me first!
 //
 //
-//            //go up a stage if able
-//            if (gamepad1.y && saStage < 3 && saStage>=0){
-//                if (!stupidButton) {
-//                    saStage = saStage + 1;
-//                    spStage = -1;
-//                    stupidButton=true;
-//                }
-//            }
-//            if(!gamepad1.y && !gamepad1.a && gamepad1.left_trigger<0.5 && gamepad1.right_trigger<0.5){
-//                stupidButton=false;
-//            }
-//            //go down a stage if able
-//            if (gamepad1.a && saStage>0){
-//                if(!stupidButton) {
-//                    saStage = saStage - 1;
-//                    stupidButton = true;
-//                }
-//            } //EXIT ORIGIN
-//            if (gamepad1.b && atOrigin){
-//                saStage = 0;
-//                spStage = 0;
-//                frontWrist.setPosition(Wpos1);
-//                backWrist.setPosition(Wpos1);
-//                atOrigin=false;
-//            }
-//            //ENTER ORIGIN
-//            if(gamepad1.x) {
-//                if ((saStage == 0 || spStage == 0)) {
-//                    //bring claw to origin
-//                    atOrigin = true;
-//                    elbow.setPosition(Epos1);
-//                    frontWrist.setPosition(Wpos1);
-//                    backWrist.setPosition(Wpos1);
-//                    claw.setPosition(Cpos2);
-//                    slideAdjusted=false;
-//                    saStage = -1;
-//                    spStage = -1;
-//                }
-//            }
-//            if (saStage == 0) {
-//                //go to stage 0
-//                elbow.setPosition(Epos1+1);
-//                frontWrist.setPosition(Wpos1);
-//                backWrist.setPosition(Wpos1);
-//                target=0;
-//
-//
-//            }
-//            if (saStage == 1) {
-//                elbow.setPosition(Epos3);
-//                frontWrist.setPosition(Wpos1);
-//                backWrist.setPosition(Wpos1);
-//                target=saHeight1;
-//
-//                //go to stage 1
-//            }
-//            if (saStage == 2) {
-//                elbow.setPosition(Epos3);
-//                frontWrist.setPosition(Wpos1);
-//                backWrist.setPosition(Wpos1);
-//                target=saHeight2;
-//
-//                //go to stage 2
-//            }
+            //go up to sample score height
+            if (gamepad1.y &&  !stupidButton){
+
+                    elbow.setPosition(Epos2);
+                frontWrist.setPosition(Wpos2);
+                backWrist.setPosition(Wpos2);
+                target=saHeight2;
+                    stupidButton=true;
+                    atOrigin=false;
+
+            }
+            //go to specimen score height
+            if (gamepad1.y &&  !stupidButton){
+
+                elbow.setPosition(Epos3);
+                frontWrist.setPosition(Wpos3);
+                backWrist.setPosition(Wpos3);
+                target=spHeight2;
+                stupidButton=true;
+                atOrigin=false;
 
 
+            }
+            if(!gamepad1.y && !gamepad1.a && gamepad1.left_trigger<0.5 && gamepad1.right_trigger<0.5){
+                stupidButton=false;
+            }
+//            //go down to origin
+            if (gamepad1.a && !stupidButton){
+            target=spHeight1;
+            elbow.setPosition(Epos1);
+            frontWrist.setPosition(Wpos1);
+            backWrist.setPosition(Wpos1);
+            stupidButton=true;
+            atOrigin=true;
+            }
+            if(gamepad1.right_trigger>0.5 && atOrigin){
+                horizontalSlides1.setPosition(HPos2);
+                horizontalSlides2.setPosition(HPos2);
+                intakeBucket.setPosition(Bpos2);
+                intakeIsOut=true;
+            }
+            if(gamepad1.left_trigger>0.5){
+                horizontalSlides1.setPosition(HPos);
+                horizontalSlides2.setPosition(HPos);
+                intakeBucket.setPosition(Bpos);
+                intakeIsOut=false;
+            }
 
+            if(!intakeIsOut) {
+                intake.setPower(0);
+            }
 
-            //same deal as the previous code, but this is for the specimen positions instead
-            //of the sample positions
-//            if (gamepad1.dpad_up && spStage>=0 && spStage < 3){
-//                spStage = spStage+1;
-//                saStage = -1;
-//                atOrigin=false;
-//            }
-//            if (gamepad1.dpad_down && spStage>0 && spStage <= 3){
-//                spStage = spStage - 1;
-//
-//            }
-//
-//            if (spStage == 0) {
-//                //do nothing cuz sp and sa stage 0 are the same
-//                slideAdjusted=false;
-//            }
-//            if (spStage == 1) {
-//                elbow.setPosition(Epos3);
-//                target=spHeight1;
-//                slideAdjusted=false;
-//
-//                //go to stage 1
-//            }
-//            if (spStage == 2) {
-//                elbow.setPosition(Epos3);
-//                target=spHeight2;
-//                slideAdjusted=false;
-//
-//                //go to stage 2
-//
-//            }
-//
-//            // Bring claw back to origin
-//
-////cool
-//
-//            if(gamepad1.dpad_left){
-//                if (!atOrigin && saStage!=0 && spStage !=0 && !slideAdjusted) {
-//                //Bring slides down a little to hang a sample
-//                    slideAdjusted=true;
-//
-//                } else if (!atOrigin && saStage!=0 && spStage !=0 && slideAdjusted) {
-//                    //Bring slides up a little bit to reset if we miss the sample
-//                    slideAdjusted=false;
-//                }
-
-            //}
-//            if(gamepad1.right_trigger>0.5 && outStage<2){
-//                if(!stupidButton) {
-//                    outStage+=1;
-//                }
-//                if(outStage==2){
-//                    intake.setPower(0);
-//                }
-//                elbow.setPosition(Epos1);
-//                stupidButton=true;
-//            }
-//            if(gamepad1.left_trigger>0.5 && outStage>0){
-//                if(!stupidButton){
-//                    outStage-=1;
-//                }
-//                stupidButton=true;
-//                elbow.setPosition(Epos1-0.1);
-//            }
-//            if(!intakeIsOut) {
-//                intake.setPower(0);
-//            }
-//            if(outStage==0){
-//                horizontalSlides1.setPosition(HPos);
-//                horizontalSlides2.setPosition(HPos);
-//                intakeBucket.setPosition(Bpos);
-//                intakeIsOut=false;
-//            }
-//            if(outStage==1){
-//                horizontalSlides1.setPosition(HPos2);
-//                horizontalSlides2.setPosition(HPos2);
-//                intakeBucket.setPosition(Bpos);
-//                intake.setPower(1);
-//                intakeIsOut=true;
-//            }
-//            if(outStage==2){
-//                horizontalSlides1.setPosition(HPos3);
-//                horizontalSlides2.setPosition(HPos3);
-//                intakeBucket.setPosition(Bpos2);
-//
-//                intakeIsOut=true;
-//            }
-            //slides
 
             //Drive code
             double y = gamepad2.left_stick_y; // Remember, Y stick value is reversed
@@ -407,7 +304,7 @@ public class Teleop extends LinearOpMode {
 
 
             frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-            backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+           
             backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
