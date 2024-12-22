@@ -73,19 +73,19 @@ public class sa_auto extends LinearOpMode {
 
     public static double Bpos2 = 0.8;
 
-    public static double Epos1 = 0.95;
-    public static double Epos2 = 0.8;
-    public static double Epos3 = 0.75;
-    public static double Epos4 = 0.52;
+    public static double Epos1 = 0.73;
+    public static double Epos2 = 0.45;
+    public static double Epos3 = 0.6;
 
-    public static double Cpos = 1;
 
-    public static double Cpos2 = 0.7;
+    public static double Cpos = 0.75;
+
+    public static double Cpos2 = 0.96;
 
     public static double Wpos1 = 0.3;
 
-    public static double Wpos2 = 0.04;
-    public static double Wpos3 = 0.7;
+    public static double Wpos2 = 0.28;
+    public static double Wpos3 = 0.5;
 
     public static double x0 = 27;
 
@@ -123,7 +123,7 @@ public class sa_auto extends LinearOpMode {
     public static double y18 = -54;
     public static double pickup_speed = 5;
 
-    public class Mechs {
+    
         ServoImplEx backWrist;
 
         ServoImplEx frontWrist;
@@ -131,9 +131,137 @@ public class sa_auto extends LinearOpMode {
         DcMotorEx lift2;
         Servo claw;
         Servo elbow;
-        public Mechs(HardwareMap hardwareMap) {
-            elbow = hardwareMap.servo.get("armElbow");
-            claw = hardwareMap.servo.get("claw");
+        public class Mechs {
+            ServoImplEx backWrist;
+
+            ServoImplEx frontWrist;
+            DcMotorEx lift1;
+            DcMotorEx lift2;
+            Servo claw;
+            Servo elbow;
+
+            Servo hSlide;
+            Servo hSlide2;
+
+            Servo bucket;
+            DcMotor intake;
+            public Mechs(HardwareMap hardwareMap) {
+                elbow = hardwareMap.servo.get("armElbow");
+                claw = hardwareMap.servo.get("claw");
+                hSlide = hardwareMap.servo.get("hSlide");
+                hSlide2 = hardwareMap.servo.get("hSlide2");
+                bucket = hardwareMap.servo.get("bucket");
+                intake = hardwareMap.get(DcMotor.class, "intake");
+                backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "backWrist");
+                backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
+                frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "frontWrist");
+                frontWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
+            }
+
+            public class saScorePos implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                    //bring claw to origin
+                    elbow.setPosition(Epos3);
+                    frontWrist.setPosition(Wpos2);
+                    backWrist.setPosition(Wpos2);
+
+
+                    return false;
+                }
+            }
+            public Action saScorePos() {
+                return new saScorePos();
+            }
+
+            public class openClaw implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                    claw.setPosition(Cpos);
+                    return false;
+                }
+            }
+            public Action openClaw() {
+                return new openClaw();
+            }
+
+
+
+            public class closeClaw implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                    claw.setPosition(Cpos2);
+                    return false;
+                }
+            }
+            public Action closeClaw() {
+                return new closeClaw();
+            }
+
+
+           
+
+            public class Return implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+
+
+                    elbow.setPosition(Epos1);
+                    frontWrist.setPosition(Wpos1);
+                    backWrist.setPosition(Wpos1);
+
+                    return false;
+                }
+            }
+            public Action Return() {
+                return new Return();
+            }
+
+            public class slideOut implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                hSlide.setPosition(HPos3);
+                hSlide2.setPosition(HPos3);
+                bucket.setPosition(Bpos2);
+                intake.setPower(1);
+
+
+
+
+                    return false;
+                }
+            }
+            public Action slideOut() {
+                return new slideOut();
+            }
+
+            public class slideIn implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                    hSlide.setPosition(HPos);
+                    hSlide2.setPosition(HPos);
+                    bucket.setPosition(Bpos);
+                    intake.setPower(0);
+
+
+
+
+                    return false;
+                }
+            }
+            public Action slideIn() {
+                return new slideIn();
+            }
+        }
+
+    public class lift {
+
+        private DcMotorEx lift1;
+        private DcMotorEx lift2;
+
+
+        public lift(HardwareMap hardwareMap) {
+
             lift1 = hardwareMap.get(DcMotorEx.class, "lift1");
             lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -141,109 +269,57 @@ public class sa_auto extends LinearOpMode {
             lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             lift1.setDirection(DcMotorEx.Direction.REVERSE);
-            backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "backWrist");
-            backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-            frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "frontWrist");
-            frontWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
         }
 
-        public class outakePos implements Action {
+        public class downABit implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                //bring claw to origin
-                elbow.setPosition(Epos2);
-                    frontWrist.setPosition(Wpos3);
-                    backWrist.setPosition(Wpos3);
-
-
+                lift1.setTargetPosition(spHeight1-150);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setTargetPosition(spHeight1-150);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift1.setPower(1);
+                lift2.setPower(1);
                 return false;
             }
         }
-        public Action outakePos() {
-            return new outakePos();
+        public Action downABit() {
+            return new downABit();
         }
-
-        public class openClaw implements Action {
+        public class baseHeight implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(Cpos);
+                lift1.setTargetPosition(spHeight1);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setTargetPosition(spHeight1);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift1.setPower(1);
+                lift2.setPower(1);
                 return false;
             }
         }
-        public Action openClaw() {
-            return new openClaw();
+        public Action baseHeight() {
+            return new baseHeight();
         }
 
-
-
-        public class closeClaw implements Action {
+        public class scoreHeight implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(Cpos2);
+                lift1.setTargetPosition(spHeight2);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setTargetPosition(spHeight2);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift1.setPower(1);
+                lift2.setPower(1);
                 return false;
             }
         }
-        public Action closeClaw() {
-            return new closeClaw();
+        public Action scoreHeight() {
+            return new scoreHeight();
         }
-
-
-        public class originPos implements Action {
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-
-
-                return false;
-            }
-        }
-        public Action originPos() {
-            return new originPos();
-        }
-
-        public class Intake implements Action {
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-
-
-
-                return false;
-            }
-        }
-        public Action Intake() {
-            return new Intake();
-        }
-
 
 
     }
-
-
-    public class Lift {
-
-        private DcMotorEx liftMotor1;
-        private DcMotorEx liftMotor2;
-        private Servo specArmServo;
-        private Servo bucketServo;
-
-        public Lift(HardwareMap hardwareMap) {
-
-            liftMotor1 = hardwareMap.get(DcMotorEx.class, "liftMotor1");
-            liftMotor2 = hardwareMap.get(DcMotorEx.class, "liftMotor2");
-            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            liftMotor2.setDirection(DcMotorEx.Direction.REVERSE);
-
-            specArmServo = hardwareMap.get(Servo.class,"specArmServo");
-            bucketServo = hardwareMap.get(Servo.class, "bucketServo");
-
-        }
-
-
-
-    }
-
 
 
     @Override
@@ -253,8 +329,9 @@ public class sa_auto extends LinearOpMode {
         // instantiate your MecanumDrive at a particular pose.
         Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(0));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-        // make an Intake instance
-        Mechs intake = new Mechs(hardwareMap);
+        // make an Mechs instance
+        Mechs Mechs = new Mechs(hardwareMap);
+        lift lift = new lift(hardwareMap);
         // make a Lift instance
 
 
@@ -280,14 +357,14 @@ public class sa_auto extends LinearOpMode {
 //segment 1 - strafe to bucket
         segment1 = drive.actionBuilder(initialPose)
                 .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(x0, y0),  Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x0, y0),  Math.toRadians(-45));
 
         Action seg1 = segment1.build();
 
         //segment 2 - strafe behind first block
 
         segment2 = segment1.endTrajectory().fresh()
-                .setReversed(true)
+
                 .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(0));
 
         Action seg2 = segment2.build();
@@ -295,7 +372,7 @@ public class sa_auto extends LinearOpMode {
         //segment 2.5 - strafe back to buckets
 
         segment2_5 = segment2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(-45));
 
         Action seg2_5 = segment2_5.build();
 
@@ -307,27 +384,25 @@ public class sa_auto extends LinearOpMode {
 
         //segment 4 - strafe back to bucket
         segment4 = segment3.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(-45));
 
         Action seg4 = segment4.build();
 
         //segment 5 - strafe to 3rd block
         segment5 = segment4.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x1, y3), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x1, y2), Math.toRadians(45));//might not be y2
 
         Action seg5 = segment5.build();
 
-//        segment5_5 = segment5.endTrajectory().fresh()
-//                .strafeToConstantHeading(new Vector2d(x4, y6));
-//
-//        Action seg5_5 = segment5_5.build();
-
         //segment 6 - strafe back to bucket
         segment6 = segment5.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(-45));
         Action seg6 = segment6.build();
 
-
+        //segment 7 - park
+        segment7 = segment6.endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(x2, y3) , Math.toRadians(-45));
+        Action seg7 = segment7.build();
         waitForStart();
 
 
@@ -338,73 +413,54 @@ public class sa_auto extends LinearOpMode {
 
         Actions.runBlocking(new SequentialAction(
 
-
-                //new ParallelAction(
-                //intake.closeClaw(),
+                Mechs.closeClaw(),
+                lift.scoreHeight(),
+                Mechs.saScorePos(),
                 seg1,
-                //intake.spHangPos()
-                //),
-                intake.openClaw(),
-                seg2,
-                seg2_5,
-                seg3,
-                seg4,
-                seg5,
-                // new ParallelAction(
-                seg6,
-                //intake.spGrabPos()
-                //),
-                new SleepAction(1),
-                intake.closeClaw()
-                // new ParallelAction(
+                Mechs.openClaw(),
+                Mechs.Return(),
+                lift.baseHeight(),
 
-                //
-//                segment6,
-//
-//                lift.specimenScoreHeight(),  //this takes the specimen off the wall
-//
-//                new SleepAction(lift_time),  //it needs time to go up before driving away
-//
-//                new ParallelAction(
-//                        segment7,
-//                        lift.specArmScore()
-//                ),
-//
-//                new ParallelAction(
-//                        segment8,
-//                        lift.specimenPickupHeight(),
-//                        lift.specArmPickup()
-//                ),
-//
-//                segment6,
-//
-//                lift.specimenScoreHeight(),  //this takes the specimen off the wall
-//
-//                new SleepAction(lift_time),  //it needs time to go up before driving away
-//
-//                new ParallelAction(
-//                        segment7,
-//                        lift.specArmScore()
-//                ),
-//
-//                new ParallelAction(
-//                        segment8,
-//                        lift.specimenPickupHeight(),
-//                        lift.specArmPickup()
-//                ),
-//
-//                segment6,
-//
-//                lift.specimenScoreHeight(),  //this takes the specimen off the wall
-//
-//                new SleepAction(lift_time),  //it needs time to go up before driving away
-//
-//                new ParallelAction(
-//                        segment7,
-//                        lift.specArmScore()
-//                )
-//
-//
+                seg2,
+                Mechs.slideOut(),
+                new SleepAction(2),
+                Mechs.slideIn(),
+                new SleepAction(1),
+                Mechs.closeClaw(),
+                lift.scoreHeight(),
+                Mechs.saScorePos(),
+                seg2_5,
+                Mechs.openClaw(),
+                Mechs.Return(),
+                lift.baseHeight(),
+
+                seg3,
+                Mechs.slideOut(),
+                new SleepAction(2),
+                Mechs.slideIn(),
+                new SleepAction(1),
+                Mechs.closeClaw(),
+                lift.scoreHeight(),
+                Mechs.saScorePos(),
+                seg4,
+                Mechs.openClaw(),
+                Mechs.Return(),
+                lift.baseHeight(),
+
+                seg5,
+                Mechs.slideOut(),
+                new SleepAction(2),
+                Mechs.slideIn(),
+                new SleepAction(1),
+                Mechs.closeClaw(),
+                lift.scoreHeight(),
+                Mechs.saScorePos(),
+                seg6,
+                Mechs.openClaw(),
+                Mechs.Return(),
+                lift.baseHeight(),
+                seg7
+
 
         ));
 
