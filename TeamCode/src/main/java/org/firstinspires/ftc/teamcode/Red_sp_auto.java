@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import androidx.annotation.NonNull;
+
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -32,7 +34,7 @@ public class Red_sp_auto extends LinearOpMode {
     public static int saHeight1 = 1300;
     public static int spHeight1 = 0;
     public static int saHeight2 = 3100;
-    public static int spHeight2 = 1125;
+    public static int spHeight2 = 1500;
 
     public static double p = 0.005, i = 0, d = 0;
     public static double f = 0;
@@ -53,30 +55,30 @@ public class Red_sp_auto extends LinearOpMode {
 
     public static double Bpos2 = 0.8;
 
-    public static double Epos1 = 0.73;
-    public static double Epos2 = 0.45;
-    public static double Epos3 = 0.6;
+    public static double Epos1 = .28; //Originpickup
+    public static double Epos2 = .3; //Origin
+    public static double Epos3 = 0.5; //Specimen
+    public static double Epos4 = 0.65; //Sample
 
+    public static double Cpos = 0.79; //open
 
-    public static double Cpos = 0.75;
+    public static double Cpos2 = 0.935; //closed
 
-    public static double Cpos2 = 0.96;
+    public static double Wpos1 = 0.35;
 
-    public static double Wpos1 = 0.3;
-
-    public static double Wpos2 = 0.28;
+    public static double Wpos2 = 0.66;
     public static double Wpos3 = 0.5;
-    public static double x0 = 31;
+    public static double x0 = 30;
     public static double x1 = 25;
     public static double x2 = 11;
     public static double y2 = -30;
     public static double x3 = 50;
     public static double x8 = 60;
-    public static double y6 = -40;
-    public static double x4 = 5;
+    public static double y6 = -45;
+    public static double x4 = 10;
     public static double y3 = -55;
 
-    public static double x5 = 7;
+    public static double x5 = 0;
     public static double x6 = 6;
     public static double y4 = -2;
 
@@ -108,20 +110,21 @@ public class Red_sp_auto extends LinearOpMode {
         Servo elbow;
 
         public Intake(HardwareMap hardwareMap) {
-            elbow = hardwareMap.servo.get("armElbow");
+            elbow = hardwareMap.servo.get("arm");
             claw = hardwareMap.servo.get("claw");
-            
-            backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "backWrist");
+
+            backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "lw");
             backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-            frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "frontWrist");
+            frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "rw");
             frontWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
+
         }
 
         public class spHangPos implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 //bring claw to origin
-                elbow.setPosition(Epos2);
+                elbow.setPosition(Epos3);
                 frontWrist.setPosition(Wpos2);
                 backWrist.setPosition(Wpos2);
 
@@ -162,7 +165,7 @@ public class Red_sp_auto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                elbow.setPosition(Epos3);
+                elbow.setPosition(Epos2);
                 frontWrist.setPosition(Wpos3);
                 backWrist.setPosition(Wpos3);
 
@@ -212,20 +215,20 @@ public class Red_sp_auto extends LinearOpMode {
             lift1.setDirection(DcMotorEx.Direction.REVERSE);
         }
 
-        public class downABit implements Action {
+        public class upABit implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                lift1.setTargetPosition(spHeight1-150);
+                lift1.setTargetPosition(spHeight1+350);
                 lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setTargetPosition(spHeight1-150);
+                lift2.setTargetPosition(spHeight1+350);
                 lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift1.setPower(1);
                 lift2.setPower(1);
                 return false;
             }
         }
-        public Action downABit() {
-            return new downABit();
+        public Action upABit() {
+            return new upABit();
         }
         public class baseHeight implements Action {
             @Override
@@ -298,7 +301,7 @@ public class Red_sp_auto extends LinearOpMode {
         TrajectoryActionBuilder segment14;
 
         segment1 = drive.actionBuilder(initialPose)
-                .setReversed(true)
+
                 .strafeToConstantHeading(new Vector2d(x0, 0));
 
         Action seg1 = segment1.build();
@@ -306,7 +309,7 @@ public class Red_sp_auto extends LinearOpMode {
         //segment 2 - backs off the sub
 
         segment2 = segment1.endTrajectory().fresh()
-                .setReversed(true)
+
                 .strafeToConstantHeading(new Vector2d(x1, 0));
 
         Action seg2 = segment2.build();
@@ -344,27 +347,27 @@ public class Red_sp_auto extends LinearOpMode {
 
         //segment 6 - slowly! to pick up the specimen
         segment6 = segment5.endTrajectory().fresh()
-                .strafeToConstantHeading(new Vector2d(x5,y15), new TranslationalVelConstraint(pickup_speed));
+                .strafeToConstantHeading(new Vector2d(x5,y6), new TranslationalVelConstraint(pickup_speed));
 
         Action seg6 = segment6.build();
 
         //segment 7 - strafe back to the sub with a 180
         //parallel with lift to scoring position
         segment7 = segment6.endTrajectory().fresh()
-                .setReversed(true)
+
                 .strafeToLinearHeading(new Vector2d(x9, y11), Math.toRadians(0));
 
         Action seg7 = segment7.build();
 
         //segment 7.5 - scoring second specimen
         segment7_5 = segment7.endTrajectory().fresh()
-                .setReversed(true)
+
                 .strafeToConstantHeading(new Vector2d(x0, y11));
 
         Action seg7_5 = segment7_5.build();
 
         segment7_6 = segment7_5.endTrajectory().fresh()
-                .setReversed(true)
+
                 .strafeToConstantHeading(new Vector2d(x1, 0));
 
         Action seg7_6 = segment7_6.build();
@@ -384,14 +387,14 @@ public class Red_sp_auto extends LinearOpMode {
         Action seg8_5 = segment8_5.build();
 //
         segment9 = segment8_5.endTrajectory().fresh()
-                .setReversed(true)
+
                 .strafeToLinearHeading(new Vector2d(x9, y9), Math.toRadians(0));
 
         Action seg9 = segment9.build();
 //Turn Around and go to put specimen on the bar
         segment10 = segment9.endTrajectory().fresh()
 
-                .setReversed(true)
+
                 .strafeToConstantHeading(new Vector2d(x0, y9));
 
         Action seg10 = segment10.build();
@@ -433,34 +436,36 @@ public class Red_sp_auto extends LinearOpMode {
         Actions.runBlocking(new SequentialAction(
 
                 intake.closeClaw(),
-                lift.scoreHeight(),
-                intake.spHangPos(),
-                new SleepAction(2),
-                        seg1,
-
-                lift.downABit(),
-                new SleepAction(0.35),
-                intake.openClaw(),
-
                 lift.baseHeight(),
-
+                intake.spHangPos(),
+                seg1,
+                lift.scoreHeight(),
+                new SleepAction(1.5),
+                intake.openClaw(),
+                lift.baseHeight(),
+                new SleepAction(2),
 
                 seg2,
                 seg2_5,
                 seg3,
                 seg4,
-                //seg5,
-                intake.spGrabPos(),
-                        //seg6,
-
+//
+               intake.spGrabPos(),
+                seg6,
+////
                 new SleepAction(1),
                 intake.closeClaw(),
-                new SleepAction(1)
+                new SleepAction(0.5)
 //                new ParallelAction(
 //                        seg7,
 //                        intake.spHangPos()
 //                ),
 //                seg7_5,
+//                lift.scoreHeight(),
+//                new SleepAction(1.5),
+//                intake.openClaw(),
+//                lift.baseHeight(),
+//                new SleepAction(3)
 //                intake.closeClaw(),
 //                seg7_6,
 //                new ParallelAction(

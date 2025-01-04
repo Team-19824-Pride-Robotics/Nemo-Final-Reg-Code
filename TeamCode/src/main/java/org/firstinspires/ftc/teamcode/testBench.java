@@ -44,7 +44,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Pride robot 2 player")
 @Config
-public class Teleop extends LinearOpMode {
+public class testBench extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -67,29 +67,26 @@ public class Teleop extends LinearOpMode {
 
 
     public static int baseHeight = 0;
-
     public static double HPos;
 
     public static double HPos2;
-
-
-
     public static double Bpos=.31; //Up
 
     public static double Bpos2=0.37; //Down
 
-    public static double Epos1 = .3; //Origin
-    public static double Epos2 = 0.7; //Specimen
-    public static double Epos3 = 0.88; //Sample
+    public static double Epos1 = .28; //Originpickup
+    public static double Epos2 = .3; //Origin
+    public static double Epos3 = 0.55; //Specimen
+    public static double Epos4 = 0.65; //Sample
 
     public static double Cpos = 0.79; //open
 
     public static double Cpos2 = 0.935; //closed
 
-    public static double Wpos1 = 0.73;
+    public static double Wpos1 = 0.35;
 
-    public static double Wpos2 = 0.45;
-    public static double Wpos3 = 0.28;
+    public static double Wpos2 = 0.66;
+    public static double Wpos3 = 0.5;
 
     DcMotorEx lift1;
     DcMotorEx lift2;
@@ -125,7 +122,6 @@ public class Teleop extends LinearOpMode {
         //Horizontal slide config
         Servo horizontalSlides1 = hardwareMap.servo.get("ll");
         Servo horizontalSlides2 = hardwareMap.servo.get("rl");
-
         //intake position
         DcMotor intake = hardwareMap.get(DcMotor.class, "intake");
         Servo intakeBucket = hardwareMap.servo.get("bucket");
@@ -178,111 +174,30 @@ public class Teleop extends LinearOpMode {
             lift1.setPower(lPower1);
             lift2.setPower(lPower2);
             if(gamepad1.a){
-                elbow.setPosition(Epos2);
-                frontWrist.setPosition(Wpos2);
-                backWrist.setPosition(Wpos2);
-                claw.setPosition(Cpos2);
-                target=900;
-            }
-            if(gamepad1.b){
                 frontWrist.setPosition(Wpos1);
                 backWrist.setPosition(Wpos1);
-
-
+                elbow.setPosition(Epos1);
             }
+            if(gamepad1.b){
+                frontWrist.setPosition(Wpos2);
+                backWrist.setPosition(Wpos2);
+                elbow.setPosition(Epos3);
+            }
+
             if(gamepad1.y){
-                target=0;
-                claw.setPosition(Cpos);
+                frontWrist.setPosition(Wpos3);
+                backWrist.setPosition(Wpos3);
+                elbow.setPosition(Epos4);
+            }
+            if(gamepad1.x){
+                elbow.setPosition(Epos4);
             }
 
 //            Claw controls
 //
 //            close claw
 
-            if (gamepad1.left_bumper){
-                if(!intakeIsOut) {
-                    claw.setPosition(Cpos2);
 
-                } else {
-                    intake.setPower(1);
-                }
-
-
-
-            }
-            //open claw
-            if (gamepad1.right_bumper){
-                if(!intakeIsOut) {
-                    if(atOrigin){
-                        elbow.setPosition(Epos1);
-                    }
-                    claw.setPosition(Cpos);
-
-                } else{
-                    intake.setPower(-1);
-                    intakeBucket.setPosition(Bpos2);
-                }
-
-
-            }
-//            //These controls are to control the outtake so that it can score a sample
-//
-//
-//            // MESSAGE IF YAJIE IS LOOKING AT CODE:
-//            //Don't mess with this without talking to me first!
-//
-//
-            //go up to sample score height
-            if (gamepad1.y &&  !stupidButton){
-
-                    elbow.setPosition(Epos2);
-                frontWrist.setPosition(Wpos2);
-                backWrist.setPosition(Wpos2);
-                target=saHeight2;
-                    stupidButton=true;
-                    atOrigin=false;
-
-            }
-            //go to specimen score height
-            if (gamepad1.y &&  !stupidButton){
-
-                elbow.setPosition(Epos3);
-                frontWrist.setPosition(Wpos3);
-                backWrist.setPosition(Wpos3);
-                target=spHeight2;
-                stupidButton=true;
-                atOrigin=false;
-
-
-            }
-            if(!gamepad1.y && !gamepad1.a && gamepad1.left_trigger<0.5 && gamepad1.right_trigger<0.5){
-                stupidButton=false;
-            }
-//            //go down to origin
-            if (gamepad1.a && !stupidButton){
-            target=spHeight1;
-            elbow.setPosition(Epos1);
-            frontWrist.setPosition(Wpos1);
-            backWrist.setPosition(Wpos1);
-            stupidButton=true;
-            atOrigin=true;
-            }
-            if(gamepad1.right_trigger>0.5 && atOrigin){
-                horizontalSlides1.setPosition(HPos2);
-                horizontalSlides2.setPosition(HPos2);
-                intakeBucket.setPosition(Bpos2);
-                intakeIsOut=true;
-            }
-            if(gamepad1.left_trigger>0.5){
-                horizontalSlides1.setPosition(HPos);
-                horizontalSlides2.setPosition(HPos);
-                intakeBucket.setPosition(Bpos);
-                intakeIsOut=false;
-            }
-
-            if(!intakeIsOut) {
-                intake.setPower(0);
-            }
 
 
             //Drive code
@@ -304,7 +219,7 @@ public class Teleop extends LinearOpMode {
 
 
             frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-           
+
             backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
 

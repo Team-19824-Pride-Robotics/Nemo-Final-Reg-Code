@@ -146,16 +146,17 @@ public class sa_auto extends LinearOpMode {
             Servo bucket;
             DcMotor intake;
             public Mechs(HardwareMap hardwareMap) {
-                elbow = hardwareMap.servo.get("armElbow");
+                elbow = hardwareMap.servo.get("arm");
                 claw = hardwareMap.servo.get("claw");
-                hSlide = hardwareMap.servo.get("hSlide");
-                hSlide2 = hardwareMap.servo.get("hSlide2");
+                Servo horizontalSlides1 = hardwareMap.servo.get("ll");
+                Servo horizontalSlides2 = hardwareMap.servo.get("rl");
                 bucket = hardwareMap.servo.get("bucket");
                 intake = hardwareMap.get(DcMotor.class, "intake");
-                backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "backWrist");
+                backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "lw");
                 backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-                frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "frontWrist");
+                frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "rw");
                 frontWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
+
             }
 
             public class saScorePos implements Action {
