@@ -265,7 +265,7 @@ public class Teleop extends OpMode {
         //letters control lift
         //dpad controls bucket
         //start and back control linkage
-        
+
         //led
         if (intaking){
             if ((red>=405&& red<=1631)&&(green>=235&&green<=900)&&(blue>=117&&blue<=524)) {

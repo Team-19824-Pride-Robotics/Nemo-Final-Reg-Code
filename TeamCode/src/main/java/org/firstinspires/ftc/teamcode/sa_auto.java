@@ -73,18 +73,18 @@ public class sa_auto extends LinearOpMode {
 
     public static double Bpos2 = 0.8;
 
-    public static double Epos1 = 0.73;
-    public static double Epos2 = 0.45;
-    public static double Epos3 = 0.6;
+    public static double Epos1 = .28; //Originpickup
+    public static double Epos2 = .3; //Origin
+    public static double Epos3 = 0.5; //Specimen
+    public static double Epos4 = 0.65; //Sample
 
+    public static double Cpos = 0.79; //open
 
-    public static double Cpos = 0.75;
+    public static double Cpos2 = 0.935; //closed
 
-    public static double Cpos2 = 0.96;
+    public static double Wpos1 = 0.35;
 
-    public static double Wpos1 = 0.3;
-
-    public static double Wpos2 = 0.28;
+    public static double Wpos2 = 0.66;
     public static double Wpos3 = 0.5;
 
     public static double x0 = 27;
@@ -328,7 +328,7 @@ public class sa_auto extends LinearOpMode {
 
 
         // instantiate your MecanumDrive at a particular pose.
-        Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(0));
+        Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(135));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         // make an Mechs instance
         Mechs Mechs = new Mechs(hardwareMap);
@@ -357,8 +357,8 @@ public class sa_auto extends LinearOpMode {
         TrajectoryActionBuilder segment14;
 //segment 1 - strafe to bucket
         segment1 = drive.actionBuilder(initialPose)
-                .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(x0, y0),  Math.toRadians(-45));
+
+                .strafeToLinearHeading(new Vector2d(x0, y0),  Math.toRadians(135),new TranslationalVelConstraint(5));
 
         Action seg1 = segment1.build();
 
@@ -373,7 +373,7 @@ public class sa_auto extends LinearOpMode {
         //segment 2.5 - strafe back to buckets
 
         segment2_5 = segment2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(-45));
+                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
 
         Action seg2_5 = segment2_5.build();
 
@@ -385,7 +385,7 @@ public class sa_auto extends LinearOpMode {
 
         //segment 4 - strafe back to bucket
         segment4 = segment3.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(-45));
+                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
 
         Action seg4 = segment4.build();
 
@@ -397,7 +397,7 @@ public class sa_auto extends LinearOpMode {
 
         //segment 6 - strafe back to bucket
         segment6 = segment5.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(-45));
+                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
         Action seg6 = segment6.build();
 
         //segment 7 - park
@@ -419,48 +419,49 @@ public class sa_auto extends LinearOpMode {
                 Mechs.saScorePos(),
                 seg1,
                 Mechs.openClaw(),
-                Mechs.Return(),
-                lift.baseHeight(),
-
-                seg2,
-                Mechs.slideOut(),
-                new SleepAction(2),
-                Mechs.slideIn(),
                 new SleepAction(1),
-                Mechs.closeClaw(),
-                lift.scoreHeight(),
-                Mechs.saScorePos(),
-                seg2_5,
-                Mechs.openClaw(),
                 Mechs.Return(),
                 lift.baseHeight(),
-
-                seg3,
-                Mechs.slideOut(),
-                new SleepAction(2),
-                Mechs.slideIn(),
-                new SleepAction(1),
-                Mechs.closeClaw(),
-                lift.scoreHeight(),
-                Mechs.saScorePos(),
-                seg4,
-                Mechs.openClaw(),
-                Mechs.Return(),
-                lift.baseHeight(),
-
-                seg5,
-                Mechs.slideOut(),
-                new SleepAction(2),
-                Mechs.slideIn(),
-                new SleepAction(1),
-                Mechs.closeClaw(),
-                lift.scoreHeight(),
-                Mechs.saScorePos(),
-                seg6,
-                Mechs.openClaw(),
-                Mechs.Return(),
-                lift.baseHeight(),
-                seg7
+new SleepAction(3)
+//                seg2,
+//                Mechs.slideOut(),
+//                new SleepAction(2),
+//                Mechs.slideIn(),
+//                new SleepAction(1),
+//                Mechs.closeClaw(),
+//                lift.scoreHeight(),
+//                Mechs.saScorePos(),
+//                seg2_5,
+//                Mechs.openClaw(),
+//                Mechs.Return(),
+//                lift.baseHeight(),
+//
+//                seg3,
+//                Mechs.slideOut(),
+//                new SleepAction(2),
+//                Mechs.slideIn(),
+//                new SleepAction(1),
+//                Mechs.closeClaw(),
+//                lift.scoreHeight(),
+//                Mechs.saScorePos(),
+//                seg4,
+//                Mechs.openClaw(),
+//                Mechs.Return(),
+//                lift.baseHeight(),
+//
+//                seg5,
+//                Mechs.slideOut(),
+//                new SleepAction(2),
+//                Mechs.slideIn(),
+//                new SleepAction(1),
+//                Mechs.closeClaw(),
+//                lift.scoreHeight(),
+//                Mechs.saScorePos(),
+//                seg6,
+//                Mechs.openClaw(),
+//                Mechs.Return(),
+//                lift.baseHeight(),
+//                seg7
 
 
         ));
