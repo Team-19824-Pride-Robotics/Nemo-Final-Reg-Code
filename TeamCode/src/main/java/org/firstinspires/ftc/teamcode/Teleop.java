@@ -98,7 +98,7 @@ public class Teleop extends OpMode {
 
         LED = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
-        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+      /*  colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");*/
 
         pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
         LED.setPattern(pattern);
@@ -114,9 +114,9 @@ public class Teleop extends OpMode {
         }
 
         distance = distanceSensor.getDistance(DistanceUnit.MM);
-        red= colorSensor.red();
+       /* red= colorSensor.red();
         green = colorSensor.green();
-        blue = colorSensor.blue();
+        blue = colorSensor.blue();*/
         //////////////////////////
         /// Gamepad 1 controls ///
         //////////////////////////
@@ -166,12 +166,17 @@ public class Teleop extends OpMode {
             intaking = true;
         } else if (gamepad2.back) {
             linkage.disableStickControl();
+            bucket.bucketUp();
             pickup2= true;
             intaking = false;
         }
         if (linkage.getEncoderRlPosition() <= 48 && pickup2) {
             arm.armPickup2();
-            pickup2 = false;
+            wrist.wristIn();
+        }
+        if(arm.getArmEncoderPosition()<=120 && pickup2){
+            wrist.wristPickup();
+            pickup2= false;
         }
         if (linkage.isStickControlEnabled()) {
             double stickY = Math.max(-gamepad2.left_stick_y, 0);
@@ -229,8 +234,8 @@ public class Teleop extends OpMode {
 
         //intake control
         if (gamepad2.left_trigger > .1 || gamepad2.right_trigger > .1) {
-            intakeSubsystem.intakeIn = Math.pow(gamepad2.left_trigger, 3);
-            intakeSubsystem.intakeOut = Math.pow(-gamepad2.right_trigger, 3);
+            intakeSubsystem.intakeIn = Math.pow(gamepad2.right_trigger, 3);
+            intakeSubsystem.intakeOut = Math.pow(-gamepad2.left_trigger, 3);
             intake.intakeSetPower();
         } else {
             intake.intakeSetIdle();
@@ -245,10 +250,10 @@ public class Teleop extends OpMode {
         }
 
         //claw control
-        if (gamepad1.left_bumper) {
+        if (gamepad2.left_bumper) {
             claw.clawOpen();
         }
-        if (gamepad1.right_bumper) {
+        if (gamepad2.right_bumper) {
             claw.clawClose();
         }
 
@@ -267,7 +272,7 @@ public class Teleop extends OpMode {
         //start and back control linkage
 
         //led
-        if (intaking){
+       /* if (intaking){
             if ((red>=405&& red<=1631)&&(green>=235&&green<=900)&&(blue>=117&&blue<=524)) {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.RED;
             }
@@ -282,7 +287,7 @@ public class Teleop extends OpMode {
             else {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.ORANGE;
             }
-        }
+        } */
         if (!intaking){
             if (distance <=250&& distance>25 ){
                 pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;

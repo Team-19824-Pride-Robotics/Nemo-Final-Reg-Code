@@ -15,6 +15,8 @@ public class wristSubsystem {
 
     public static double rwPickup = .33;
     public static double lwPickup = .37;
+    public static double rwIn = .3;
+    public static double lwIn = .34;
     public static double rwPickupSpeicmen = .46;
     public static double lwPickupSpeicmen = .5;
     public static double rwScoreSpeicmen = .3;
@@ -50,6 +52,10 @@ public class wristSubsystem {
     public void wristPickup() {
         rwTargetPosition = rwPickup;
         lwTargetPosition = lwPickup;
+    }
+    public void wristIn() {
+        rwTargetPosition = rwIn;
+        lwTargetPosition= lwIn;
     }
     public void wristPickupSpeicmen(){
         rwTargetPosition = rwPickupSpeicmen;
