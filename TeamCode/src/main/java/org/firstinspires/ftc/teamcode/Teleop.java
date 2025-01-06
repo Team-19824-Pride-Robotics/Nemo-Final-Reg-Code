@@ -1,329 +1,338 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.PwmControl;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="Pride robot 2 player")
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.subsystem.LinkageSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.armSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.bucketSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.clawSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.intakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.liftSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.wristSubsystem;
+
+import java.util.List;
+
 @Config
-public class Teleop extends LinearOpMode {
+@TeleOp(name="Teleop")
+public class Teleop extends OpMode {
+    private LinkageSubsystem linkage;
+    private liftSubsystem lift;
+    private intakeSubsystem intake;
+    private bucketSubsystem bucket;
+    private clawSubsystem claw;
+    private armSubsystem arm;
+    private wristSubsystem wrist;
+    boolean dpad_up =false ;
+    boolean dpad_down =false ;
 
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
+    boolean dpad_right =false ;
+    boolean dpad_left =false ;
+    boolean pickup = true;
+    boolean pickup2 =  false;
+    boolean liftPickup = true;
+    boolean intaking = false;
+    boolean speicmenScore = false;
 
-    //lift pid
-    public static double p = 0.005, i = 0, d = 0;
-    public static double f = 0;
-    public static double target = 0;
-    public static double target2 = 110;
-    public static double target1 = 110;
+    private ElapsedTime elapsedtime;
+    private List<LynxModule> allHubs;
 
-    private PIDController controller;
+    //sensor
+    RevBlinkinLedDriver LED;
+    RevBlinkinLedDriver.BlinkinPattern pattern;
+    DistanceSensor distanceSensor;
+    ColorSensor colorSensor;
+    public double distance;
+    public double red;
+    public double green;
+    public double blue;
 
-
-    //Slide heights
-    public static int saHeight1 = 1300;
-    public static int spHeight1 = 0;
-    public static int saHeight2 = 3100;
-    public static int spHeight2 = 1000;
-
-
-    public static int baseHeight = 0;
-
-    public static double HPos;
-
-    public static double HPos2;
+    DcMotorEx FR;
+    DcMotorEx FL;
+    DcMotorEx BR;
+    DcMotorEx BL;
+    public static double drive_speed_M = 1;
 
 
-
-    public static double Bpos=.31; //Up
-
-    public static double Bpos2=0.37; //Down
-
-    public static double Epos1 = .3; //Origin
-    public static double Epos2 = 0.7; //Specimen
-    public static double Epos3 = 0.88; //Sample
-
-    public static double Cpos = 0.79; //open
-
-    public static double Cpos2 = 0.935; //closed
-
-    public static double Wpos1 = 0.73;
-
-    public static double Wpos2 = 0.45;
-    public static double Wpos3 = 0.28;
-
-    DcMotorEx lift1;
-    DcMotorEx lift2;
-
-    ServoImplEx backWrist;
-
-    ServoImplEx frontWrist;
     @Override
-    public void runOpMode() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-        controller = new PIDController(p, i, d);
+    public void init() {
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        //Drive base config
-        DcMotor frontLeft = hardwareMap.dcMotor.get("leftFront");
-        DcMotor backLeft = hardwareMap.dcMotor.get("leftBack");
-        DcMotor frontRight = hardwareMap.dcMotor.get("rightFront");
-        DcMotor backRight = hardwareMap.dcMotor.get("rightBack");
-        //Claw config
-        Servo claw = hardwareMap.servo.get("claw");
-
-        //Wrist Config
-        backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "lw");
-        backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-        frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "rw");
-        frontWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-
-
-        //Elbow config
-        Servo elbow = hardwareMap.servo.get("arm");
-
-        //Horizontal slide config
-        Servo horizontalSlides1 = hardwareMap.servo.get("ll");
-        Servo horizontalSlides2 = hardwareMap.servo.get("rl");
-
-        //intake position
-        DcMotor intake = hardwareMap.get(DcMotor.class, "intake");
-        Servo intakeBucket = hardwareMap.servo.get("bucket");
-
-        //lift
-        lift1 = hardwareMap.get(DcMotorEx.class, "lift1");
-        lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift2 = hardwareMap.get(DcMotorEx.class, "lift2");
-        lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift1.setDirection(DcMotorEx.Direction.REVERSE);
-
-
-
-//Various drive code variables
-        int spStage = -1;
-        boolean atOrigin = true;
-        int saStage = -1;
-        int outStage = 0;
-        boolean intakeIsOut = false;
-        boolean slideAdjusted = false;
-        boolean stupidButton = false;
-        boolean atBase = false;
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        runtime.reset();
-
-        //Starting values
-        //intakeBucket.setPosition(Bpos);
-//        frontWrist.setPosition(Wpos2);
-//        backWrist.setPosition(Wpos2);
-//        elbow.setPosition(Epos1);
-//        horizontalSlides1.setPosition(HPos);
-//        horizontalSlides2.setPosition(HPos);
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            //Pid stuff lol
-            controller.setPID(p, i, d);
-            int liftPos1 = lift1.getCurrentPosition();
-            int liftPos2 = lift2.getCurrentPosition();
-            double pid = controller.calculate(liftPos1, target);
-            double pid2 = controller.calculate(liftPos2, target);
-            double ff = 0;
-
-            double lPower1 = pid + ff;
-            double lPower2 = pid2 + ff;
-
-            lift1.setPower(lPower1);
-            lift2.setPower(lPower2);
-            if(gamepad1.a){
-                elbow.setPosition(Epos2);
-                frontWrist.setPosition(Wpos2);
-                backWrist.setPosition(Wpos2);
-                claw.setPosition(Cpos2);
-                target=900;
-            }
-            if(gamepad1.b){
-                frontWrist.setPosition(Wpos1);
-                backWrist.setPosition(Wpos1);
-
-
-            }
-            if(gamepad1.y){
-                target=0;
-                claw.setPosition(Cpos);
-            }
-
-//            Claw controls
-//
-//            close claw
-
-            if (gamepad1.left_bumper){
-                if(!intakeIsOut) {
-                    claw.setPosition(Cpos2);
-
-                } else {
-                    intake.setPower(1);
-                }
-
-
-
-            }
-            //open claw
-            if (gamepad1.right_bumper){
-                if(!intakeIsOut) {
-                    if(atOrigin){
-                        elbow.setPosition(Epos1);
-                    }
-                    claw.setPosition(Cpos);
-
-                } else{
-                    intake.setPower(-1);
-                    intakeBucket.setPosition(Bpos2);
-                }
-
-
-            }
-//            //These controls are to control the outtake so that it can score a sample
-//
-//
-//            // MESSAGE IF YAJIE IS LOOKING AT CODE:
-//            //Don't mess with this without talking to me first!
-//
-//
-            //go up to sample score height
-            if (gamepad1.y &&  !stupidButton){
-
-                    elbow.setPosition(Epos2);
-                frontWrist.setPosition(Wpos2);
-                backWrist.setPosition(Wpos2);
-                target=saHeight2;
-                    stupidButton=true;
-                    atOrigin=false;
-
-            }
-            //go to specimen score height
-            if (gamepad1.y &&  !stupidButton){
-
-                elbow.setPosition(Epos3);
-                frontWrist.setPosition(Wpos3);
-                backWrist.setPosition(Wpos3);
-                target=spHeight2;
-                stupidButton=true;
-                atOrigin=false;
-
-
-            }
-            if(!gamepad1.y && !gamepad1.a && gamepad1.left_trigger<0.5 && gamepad1.right_trigger<0.5){
-                stupidButton=false;
-            }
-//            //go down to origin
-            if (gamepad1.a && !stupidButton){
-            target=spHeight1;
-            elbow.setPosition(Epos1);
-            frontWrist.setPosition(Wpos1);
-            backWrist.setPosition(Wpos1);
-            stupidButton=true;
-            atOrigin=true;
-            }
-            if(gamepad1.right_trigger>0.5 && atOrigin){
-                horizontalSlides1.setPosition(HPos2);
-                horizontalSlides2.setPosition(HPos2);
-                intakeBucket.setPosition(Bpos2);
-                intakeIsOut=true;
-            }
-            if(gamepad1.left_trigger>0.5){
-                horizontalSlides1.setPosition(HPos);
-                horizontalSlides2.setPosition(HPos);
-                intakeBucket.setPosition(Bpos);
-                intakeIsOut=false;
-            }
-
-            if(!intakeIsOut) {
-                intake.setPower(0);
-            }
-
-
-            //Drive code
-            double y = gamepad2.left_stick_y; // Remember, Y stick value is reversed
-            double x = -gamepad2.left_stick_x * 1.1; // Counteract imperfect strafing
-            double rx =  gamepad2.right_stick_x;
-
-
-
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
-
-
-
-//pid
-
-
-            frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-           
-            backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-
-//             Send calculated power to wheels
-            frontLeft.setPower(frontLeftPower);
-            backLeft.setPower(backLeftPower);
-            frontRight.setPower(frontRightPower);
-            backRight.setPower(backRightPower);
-
-            telemetry.addData("outStage", outStage);
-            telemetry.addData("stupid button", stupidButton);
-            telemetry.addData("1", "test");
-            telemetry.addData("pos1", lift1.getCurrentPosition());
-            telemetry.addData("power1", lift1.getPower());
-            telemetry.addData("pos2", lift2.getCurrentPosition());
-            telemetry.addData("power2", lift2.getPower());
-            telemetry.update();
-
+        allHubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule hub : allHubs){
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
+
+        linkage = new LinkageSubsystem(hardwareMap);
+        linkage.init();
+        lift = new liftSubsystem(hardwareMap);
+        lift.init();
+        intake = new intakeSubsystem(hardwareMap);
+        intake.init();
+        bucket = new bucketSubsystem(hardwareMap);
+        bucket.init();
+        claw = new clawSubsystem(hardwareMap);
+        claw.init();
+        arm = new armSubsystem(hardwareMap);
+        arm.init();
+        wrist = new wristSubsystem(hardwareMap);
+        wrist.init();
+
+        FR = hardwareMap.get(DcMotorEx.class, "rightFront");
+        FL = hardwareMap.get(DcMotorEx.class, "leftFront");
+        BR = hardwareMap.get(DcMotorEx.class, "rightBack");
+        BL = hardwareMap.get(DcMotorEx.class, "leftBack");
+        BR.setDirection(DcMotorEx.Direction.REVERSE);
+        FR.setDirection(DcMotorEx.Direction.REVERSE);
+
+        LED = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+
+        pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+        LED.setPattern(pattern);
+
+        elapsedtime = new ElapsedTime();
+        elapsedtime.reset();
+    }
+
+    @Override
+    public void loop() {
+        for (LynxModule hub : allHubs){
+            hub.clearBulkCache();
+        }
+
+        distance = distanceSensor.getDistance(DistanceUnit.MM);
+        red= colorSensor.red();
+        green = colorSensor.green();
+        blue = colorSensor.blue();
+        //////////////////////////
+        /// Gamepad 1 controls ///
+        //////////////////////////
+        double d_power = .8 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
+        double drive = gamepad1.left_stick_y * drive_speed_M;
+        double rotate = -gamepad1.right_stick_x * drive_speed_M;
+
+        BL.setPower(drive + rotate);
+        FL.setPower(drive + rotate);
+        BR.setPower(drive - rotate);
+        FR.setPower(drive - rotate);
+
+        if (gamepad1.dpad_up) {
+            BL.setPower(-d_power);
+            FL.setPower(-d_power);
+            BR.setPower(-d_power);
+            FR.setPower(-d_power);
+        }
+        else if (gamepad1.dpad_down) {
+            BL.setPower(d_power);
+            FL.setPower(d_power);
+            BR.setPower(d_power);
+            FR.setPower(d_power);
+        }
+        else if (gamepad1.dpad_left) {
+            BL.setPower(-d_power);
+            FL.setPower(d_power);
+            BR.setPower(d_power);
+            FR.setPower(-d_power);
+        }
+        else if (gamepad1.dpad_right) {
+            BL.setPower(d_power);
+            FL.setPower(-d_power);
+            BR.setPower(-d_power);
+            FR.setPower(d_power);
+        }
+
+        //////////////////////////
+        /// Gamepad 2 controls ///
+        //////////////////////////
+
+        //linkage control
+        if (gamepad2.start) {
+            linkage.enableStickControl(0.13, 0.2);
+            arm.armPickup();
+            liftPickup = false;
+            intaking = true;
+        } else if (gamepad2.back) {
+            linkage.disableStickControl();
+            pickup2= true;
+            intaking = false;
+        }
+        if (linkage.getEncoderRlPosition() <= 48 && pickup2) {
+            arm.armPickup2();
+            pickup2 = false;
+        }
+        if (linkage.isStickControlEnabled()) {
+            double stickY = Math.max(-gamepad2.left_stick_y, 0);
+            linkage.updateServoPositions(stickY);
+        }
+
+        //lift control
+        if (gamepad1.back){
+            arm.armPickupSpeicmen();
+            lift.pickup();
+            wrist.wristPickupSpeicmen();
+        }
+        if (gamepad2.a) {
+            wrist.wristPickup();
+            arm.armPickup();
+            pickup = true;
+            liftPickup = true;
+        }
+        if (arm.getArmPosition() <= 115&& pickup) {
+            lift.pickup();
+            pickup = false;
+        }
+        if (lift.getLift1Position() <= 10 && liftPickup) {
+            arm.armPickup2();
+            liftPickup = false;
+        }
+        if (gamepad2.y) {
+            dpad_up = true;
+            lift.bucketHigh();
+            arm.armSample();
+            wrist.wristOut();
+        }
+
+        if (gamepad2.b) {
+            lift.barHigh();
+            arm.armSpecimen();
+            wrist.wristScore();
+        }
+        if (gamepad1.start){
+            lift.score();
+            speicmenScore = true;
+        }
+        if (lift.getLift1Position()<= (lift.getTarget()-550) && speicmenScore) {
+            arm.armSpecimen2();
+        }
+        if ((arm.getArmEncoderPosition() >= 125 && dpad_right) || (arm.getArmEncoderPosition() >= 120 && dpad_left) || (arm.getArmEncoderPosition() >= 200 && dpad_up) || (arm.getArmEncoderPosition() >= 200 && dpad_down)) {
+            wrist.wristScore();
+            pickup = false;
+            liftPickup = false;
+            dpad_right = false;
+            dpad_left = false;
+            dpad_down = false;
+            dpad_up = false;
+        }
+
+        //intake control
+        if (gamepad2.left_trigger > .1 || gamepad2.right_trigger > .1) {
+            intakeSubsystem.intakeIn = Math.pow(gamepad2.left_trigger, 3);
+            intakeSubsystem.intakeOut = Math.pow(-gamepad2.right_trigger, 3);
+            intake.intakeSetPower();
+        } else {
+            intake.intakeSetIdle();
+        }
+
+        //bucket control
+        if (gamepad2.dpad_up) {
+            bucket.bucketUp();
+        }
+        if (gamepad2.dpad_down) {
+            bucket.bucketDown();
+        }
+
+        //claw control
+        if (gamepad1.left_bumper) {
+            claw.clawOpen();
+        }
+        if (gamepad1.right_bumper) {
+            claw.clawClose();
+        }
+
+        if (gamepad1.dpad_left){
+            lift.score();
+        }
+        lift.update();
+        intake.update();
+        bucket.update();
+        claw.update();
+        arm.update();
+        wrist.update();
+//Jackson control changes
+        //letters control lift
+        //dpad controls bucket
+        //start and back control linkage
+        
+        //led
+        if (intaking){
+            if ((red>=405&& red<=1631)&&(green>=235&&green<=900)&&(blue>=117&&blue<=524)) {
+                pattern = RevBlinkinLedDriver.BlinkinPattern.RED;
+            }
+            // Check for Blue Block
+            else if ((green>=214&&green<=826)&&(blue>=500&&blue<=1828)&&(red<455)) {
+                pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;
+            }
+            // Check for Yellow Block
+            else if ((red>=690&&red<=2380)&&(green>=925&&green<=3100)&&(blue>=200&&blue<=790)) {
+                pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
+            }
+            else {
+                pattern = RevBlinkinLedDriver.BlinkinPattern.ORANGE;
+            }
+        }
+        if (!intaking){
+            if (distance <=250&& distance>25 ){
+                pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+            }
+            else if(distance<=25){
+                pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE;
+            }
+            else {
+                pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
+            }
+        }
+
+        LED.setPattern(pattern);
+
+        telemetry.addData("Run time", getRuntime());
+        //linkage
+        telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
+        telemetry.addData("Stick Control Min", linkage.getStickControlMin());
+        telemetry.addData("RL Position", linkage.getServo1Position());
+        telemetry.addData("LL Position", linkage.getServo2Position());
+        telemetry.addData("Encoder RL Position", linkage.getEncoderRlPosition());
+        telemetry.addData("Encoder LL Position", linkage.getEncoderLlPosition());
+        //lift
+        telemetry.addData("Lift Target", lift.getTarget());
+        telemetry.addData("Lift Position 1", lift.getLift1Position());
+        telemetry.addData("Lift Position 2", lift.getLift2Position());
+        //intake
+        telemetry.addData("intakePower", intake.getIntakePower());
+        telemetry.addData("intakePowerin", intake.getIntakeIn());
+        telemetry.addData("intakePowerout", intake.getIntakeOut());
+        //bucket
+        telemetry.addData("bucketTarget", bucket.getBucketPosition());
+        telemetry.addData("bucketEncoder", bucket.getBucketEncoderPosition());
+        //claw
+        telemetry.addData("clawPosition", claw.getClawPosition());
+        //arm
+        telemetry.addData("armTarget", arm.getArmPosition());
+        telemetry.addData("armEncoder", arm.getArmEncoderPosition());
+        //wrist
+        telemetry.addData("lwTarget", wrist.getlwTargetPosition());
+        telemetry.addData("lwEncoder", wrist.getLwEncoderPosition());
+        telemetry.addData("rwTarget", wrist.getRwTargetPosition());
+        telemetry.addData("lwEncoder", wrist.getRwEncoderPosition());
+
+        telemetry.addData("dpad", dpad_up);
+
+        telemetry.addData("Distance", distance);
+
+        telemetry.addData("Loop Times", elapsedtime.milliseconds());
+        elapsedtime.reset();
+        telemetry.update();
     }
 }
