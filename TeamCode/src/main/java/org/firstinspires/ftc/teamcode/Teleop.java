@@ -36,13 +36,11 @@ public class Teleop extends OpMode {
     boolean dpad_up =false ;
     boolean dpad_down =false ;
 
-    boolean dpad_right =false ;
-    boolean dpad_left =false ;
+
     boolean pickup = true;
     boolean pickup2 =  false;
     boolean liftPickup = true;
     boolean intaking = false;
-    boolean speicmenScore = false;
 
     private ElapsedTime elapsedtime;
     private List<LynxModule> allHubs;
@@ -109,6 +107,7 @@ public class Teleop extends OpMode {
 
     @Override
     public void loop() {
+
         for (LynxModule hub : allHubs){
             hub.clearBulkCache();
         }
@@ -154,6 +153,28 @@ public class Teleop extends OpMode {
             FR.setPower(d_power);
         }
 
+        //specimen control
+        if (gamepad1.y){
+            lift.barHigh();
+            arm.armSpecimen();
+            wrist.wristScoreSpeicmen();
+        }
+        if (gamepad1.x){
+            lift.score();
+        }
+        if (gamepad1.a){
+            arm.armPickupSpeicmen();
+            lift.pickup();
+            wrist.wristPickupSpeicmen();
+        }
+
+        //claw control
+        if (gamepad1.left_bumper) {
+            claw.clawOpen();
+        }
+        if (gamepad1.right_bumper) {
+            claw.clawClose();
+        }
         //////////////////////////
         /// Gamepad 2 controls ///
         //////////////////////////
@@ -184,11 +205,7 @@ public class Teleop extends OpMode {
         }
 
         //lift control
-        if (gamepad1.back){
-            arm.armPickupSpeicmen();
-            lift.pickup();
-            wrist.wristPickupSpeicmen();
-        }
+
         if (gamepad2.a) {
             wrist.wristPickup();
             arm.armPickup();
@@ -211,23 +228,16 @@ public class Teleop extends OpMode {
         }
 
         if (gamepad2.b) {
-            lift.barHigh();
-            arm.armSpecimen();
-            wrist.wristScore();
+            dpad_down =true;
+            lift.bucketLow();
+            arm.armSample();
+            wrist.wristOut();
         }
-        if (gamepad1.start){
-            lift.score();
-            speicmenScore = true;
-        }
-        if (lift.getLift1Position()<= (lift.getTarget()-550) && speicmenScore) {
-            arm.armSpecimen2();
-        }
-        if ((arm.getArmEncoderPosition() >= 125 && dpad_right) || (arm.getArmEncoderPosition() >= 120 && dpad_left) || (arm.getArmEncoderPosition() >= 200 && dpad_up) || (arm.getArmEncoderPosition() >= 200 && dpad_down)) {
+
+        if ((arm.getArmEncoderPosition() >= 200 && dpad_up) || (arm.getArmEncoderPosition() >= 200 && dpad_down)) {
             wrist.wristScore();
             pickup = false;
             liftPickup = false;
-            dpad_right = false;
-            dpad_left = false;
             dpad_down = false;
             dpad_up = false;
         }
@@ -249,17 +259,7 @@ public class Teleop extends OpMode {
             bucket.bucketDown();
         }
 
-        //claw control
-        if (gamepad2.left_bumper) {
-            claw.clawOpen();
-        }
-        if (gamepad2.right_bumper) {
-            claw.clawClose();
-        }
 
-        if (gamepad1.dpad_left){
-            lift.score();
-        }
         lift.update();
         intake.update();
         bucket.update();
@@ -332,9 +332,8 @@ public class Teleop extends OpMode {
         telemetry.addData("rwTarget", wrist.getRwTargetPosition());
         telemetry.addData("lwEncoder", wrist.getRwEncoderPosition());
 
-        telemetry.addData("dpad", dpad_up);
-
         telemetry.addData("Distance", distance);
+        telemetry.addData ("pickup", pickup);
 
         telemetry.addData("Loop Times", elapsedtime.milliseconds());
         elapsedtime.reset();
