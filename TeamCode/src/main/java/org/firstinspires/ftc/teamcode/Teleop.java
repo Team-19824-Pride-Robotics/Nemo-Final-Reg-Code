@@ -49,12 +49,12 @@ public class Teleop extends OpMode {
     RevBlinkinLedDriver LED;
     RevBlinkinLedDriver.BlinkinPattern pattern;
     DistanceSensor distanceSensor;
-    ColorSensor colorSensor;
     public double distance;
+    /*ColorSensor colorSensor;
     public double red;
     public double green;
     public double blue;
-
+*/
     DcMotorEx FR;
     DcMotorEx FL;
     DcMotorEx BR;
