@@ -122,17 +122,12 @@ public class sa_auto extends LinearOpMode {
     public static double y17 = -54;
     public static double y18 = -54;
     public static double pickup_speed = 5;
-
+    public static double tan = 0;
     public static double score_angle = 135;
 
     
-        ServoImplEx backWrist;
 
-        ServoImplEx frontWrist;
-        DcMotorEx lift1;
-        DcMotorEx lift2;
-        Servo claw;
-        Servo elbow;
+
         public class Mechs {
             ServoImplEx backWrist;
 
@@ -140,18 +135,21 @@ public class sa_auto extends LinearOpMode {
             DcMotorEx lift1;
             DcMotorEx lift2;
             Servo claw;
-            Servo elbow;
+            ServoImplEx elbow;
 
-            Servo hSlide;
-            Servo hSlide2;
+            ServoImplEx hSlide;
+            ServoImplEx hSlide2;
 
             Servo bucket;
             DcMotor intake;
             public Mechs(HardwareMap hardwareMap) {
-                elbow = hardwareMap.servo.get("arm");
+                elbow = (ServoImplEx)hardwareMap.servo.get("arm");
+                elbow.setPwmRange(new PwmControl.PwmRange(505, 2495));
                 claw = hardwareMap.servo.get("claw");
-                Servo horizontalSlides1 = hardwareMap.servo.get("ll");
-                Servo horizontalSlides2 = hardwareMap.servo.get("rl");
+                hSlide = (ServoImplEx)hardwareMap.servo.get("ll");
+                hSlide.setPwmRange(new PwmControl.PwmRange(505, 2495));
+                hSlide2 = (ServoImplEx)hardwareMap.servo.get("rl");
+                hSlide2.setPwmRange(new PwmControl.PwmRange(505, 2495));
                 bucket = hardwareMap.servo.get("bucket");
                 intake = hardwareMap.get(DcMotor.class, "intake");
                 backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "lw");
@@ -223,8 +221,8 @@ public class sa_auto extends LinearOpMode {
             public class slideOut implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                //hSlide.setPosition(HPos3);
-                //hSlide2.setPosition(HPos3);
+                hSlide.setPosition(HPos3);
+                hSlide2.setPosition(HPos3);
                 bucket.setPosition(Bpos2);
                 elbow.setPosition(Epos2);
                 intake.setPower(1);
@@ -276,21 +274,7 @@ public class sa_auto extends LinearOpMode {
             lift1.setDirection(DcMotorEx.Direction.REVERSE);
         }
 
-        public class downABit implements Action {
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                lift1.setTargetPosition(spHeight1-150);
-                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setTargetPosition(spHeight1-150);
-                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift1.setPower(1);
-                lift2.setPower(1);
-                return false;
-            }
-        }
-        public Action downABit() {
-            return new downABit();
-        }
+
         public class baseHeight implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
@@ -329,36 +313,34 @@ public class sa_auto extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-
+        Mechs Mechs = new Mechs(hardwareMap);
+        lift lift = new lift(hardwareMap);
 
         // instantiate your MecanumDrive at a particular pose.
         Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(180));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-        // make an Mechs instance
-        Mechs Mechs = new Mechs(hardwareMap);
-        lift lift = new lift(hardwareMap);
-        // make a Lift instance
+
 
 
 
         TrajectoryActionBuilder segment1;
         TrajectoryActionBuilder segment2;
-        TrajectoryActionBuilder segment2_5;
-        TrajectoryActionBuilder segment3;
-        TrajectoryActionBuilder segment4;
-        TrajectoryActionBuilder segment5;
-        TrajectoryActionBuilder segment6;
-        TrajectoryActionBuilder segment7;
-        TrajectoryActionBuilder segment7_5;
-        TrajectoryActionBuilder segment7_6;
-        TrajectoryActionBuilder segment8;
-        TrajectoryActionBuilder segment8_5;
-        TrajectoryActionBuilder segment9;
-        TrajectoryActionBuilder segment10;
-        TrajectoryActionBuilder segment11;
-        TrajectoryActionBuilder segment12;
-        TrajectoryActionBuilder segment13;
-        TrajectoryActionBuilder segment14;
+//        TrajectoryActionBuilder segment2_5;
+//        TrajectoryActionBuilder segment3;
+//        TrajectoryActionBuilder segment4;
+//        TrajectoryActionBuilder segment5;
+//        TrajectoryActionBuilder segment6;
+//        TrajectoryActionBuilder segment7;
+//        TrajectoryActionBuilder segment7_5;
+//        TrajectoryActionBuilder segment7_6;
+//        TrajectoryActionBuilder segment8;
+//        TrajectoryActionBuilder segment8_5;
+//        TrajectoryActionBuilder segment9;
+//        TrajectoryActionBuilder segment10;
+//        TrajectoryActionBuilder segment11;
+//        TrajectoryActionBuilder segment12;
+//        TrajectoryActionBuilder segment13;
+//        TrajectoryActionBuilder segment14;
 //segment 1 - strafe to bucket
         segment1 = drive.actionBuilder(initialPose)
 
@@ -368,13 +350,14 @@ public class sa_auto extends LinearOpMode {
 
         //segment 2 - strafe behind first block
 
-        segment2 = segment1.endTrajectory().fresh()
+        segment2 = drive.actionBuilder(new Pose2d(x0, y0, Math.toRadians(135)))
+//        segment2 = segment1.endTrajectory().fresh()
+                .turn(Math.toRadians(180));
 
-                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(180));
 
         Action seg2 = segment2.build();
 //
-//        //segment 2.5 - strafe back to buckets
+        //segment 2.5 - strafe back to buckets
 //
 //        segment2_5 = segment2.endTrajectory().fresh()
 //                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
@@ -423,15 +406,18 @@ public class sa_auto extends LinearOpMode {
                 Mechs.saScorePos(),
                 new SleepAction(0.5),
                 seg1,
+                new SleepAction(0.25),
                 Mechs.openClaw(),
                 new SleepAction(1),
                 Mechs.Return(),
                 lift.baseHeight(),
-                seg2
+                seg2,
+                new SleepAction(3)
+
 //                Mechs.slideOut(),
 //                new SleepAction(2),
-//                Mechs.slideIn(),
-//                new SleepAction(1)
+//                Mechs.slideIn()
+//                new SleepAction(1),
 //                seg2,
 //                Mechs.slideOut(),
 //                new SleepAction(2),
