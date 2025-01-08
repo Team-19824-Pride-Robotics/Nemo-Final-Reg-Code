@@ -57,7 +57,7 @@ public class sa_auto extends LinearOpMode {
     //Positions copied from Teleop
     public static int saHeight1 = 1300;
     public static int spHeight1 = 0;
-    public static int saHeight2 = 3100;
+    public static int saHeight2 = 2850;
     public static int spHeight2 = 1000;
 
 
@@ -74,8 +74,8 @@ public class sa_auto extends LinearOpMode {
     public static double Bpos2 = 0.8;
 
     public static double Epos1 = .28; //Originpickup
-    public static double Epos2 = .3; //Origin
-    public static double Epos3 = 0.5; //Specimen
+    public static double Epos2 = .4; //Origin
+    public static double Epos3 = 0.7; //Specimen
     public static double Epos4 = 0.65; //Sample
 
     public static double Cpos = 0.79; //open
@@ -87,12 +87,12 @@ public class sa_auto extends LinearOpMode {
     public static double Wpos2 = 0.66;
     public static double Wpos3 = 0.5;
 
-    public static double x0 = 27;
+    public static double x0 = 12.5;
 
-    public static double y0 = 0;
-    public static double x1 = 25;
+    public static double y0 = 16;
+    public static double x1 = 12.5;
 
-    public static double y1 = 0;
+    public static double y1 = 16;
     public static double x2 = 11;
     public static double y2 = -25;
     public static double x3 = 60;
@@ -122,6 +122,8 @@ public class sa_auto extends LinearOpMode {
     public static double y17 = -54;
     public static double y18 = -54;
     public static double pickup_speed = 5;
+
+    public static double score_angle = 135;
 
     
         ServoImplEx backWrist;
@@ -164,8 +166,8 @@ public class sa_auto extends LinearOpMode {
                 public boolean run(@NonNull TelemetryPacket packet) {
                     //bring claw to origin
                     elbow.setPosition(Epos3);
-                    frontWrist.setPosition(Wpos2);
-                    backWrist.setPosition(Wpos2);
+                    frontWrist.setPosition(Wpos3);
+                    backWrist.setPosition(Wpos3);
 
 
                     return false;
@@ -221,9 +223,10 @@ public class sa_auto extends LinearOpMode {
             public class slideOut implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                hSlide.setPosition(HPos3);
-                hSlide2.setPosition(HPos3);
+                //hSlide.setPosition(HPos3);
+                //hSlide2.setPosition(HPos3);
                 bucket.setPosition(Bpos2);
+                elbow.setPosition(Epos2);
                 intake.setPower(1);
 
 
@@ -239,9 +242,10 @@ public class sa_auto extends LinearOpMode {
             public class slideIn implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                    hSlide.setPosition(HPos);
-                    hSlide2.setPosition(HPos);
+                    //hSlide.setPosition(HPos);
+                    //hSlide2.setPosition(HPos);
                     bucket.setPosition(Bpos);
+                    elbow.setPosition(Epos1);
                     intake.setPower(0);
 
 
@@ -306,9 +310,9 @@ public class sa_auto extends LinearOpMode {
         public class scoreHeight implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                lift1.setTargetPosition(spHeight2);
+                lift1.setTargetPosition(saHeight2);
                 lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setTargetPosition(spHeight2);
+                lift2.setTargetPosition(saHeight2);
                 lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift1.setPower(1);
                 lift2.setPower(1);
@@ -328,7 +332,7 @@ public class sa_auto extends LinearOpMode {
 
 
         // instantiate your MecanumDrive at a particular pose.
-        Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(135));
+        Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(180));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         // make an Mechs instance
         Mechs Mechs = new Mechs(hardwareMap);
@@ -358,7 +362,7 @@ public class sa_auto extends LinearOpMode {
 //segment 1 - strafe to bucket
         segment1 = drive.actionBuilder(initialPose)
 
-                .strafeToLinearHeading(new Vector2d(x0, y0),  Math.toRadians(135),new TranslationalVelConstraint(5));
+                .strafeToLinearHeading(new Vector2d(x0, y0),  Math.toRadians(135));
 
         Action seg1 = segment1.build();
 
@@ -366,44 +370,44 @@ public class sa_auto extends LinearOpMode {
 
         segment2 = segment1.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(180));
 
         Action seg2 = segment2.build();
-
-        //segment 2.5 - strafe back to buckets
-
-        segment2_5 = segment2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
-
-        Action seg2_5 = segment2_5.build();
-
-        //segment 3 - strafe to 2nd block
-        segment3 = segment2_5.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x1, y2), Math.toRadians(0));
-
-        Action seg3 = segment3.build();
-
-        //segment 4 - strafe back to bucket
-        segment4 = segment3.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
-
-        Action seg4 = segment4.build();
-
-        //segment 5 - strafe to 3rd block
-        segment5 = segment4.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x1, y2), Math.toRadians(45));//might not be y2
-
-        Action seg5 = segment5.build();
-
-        //segment 6 - strafe back to bucket
-        segment6 = segment5.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
-        Action seg6 = segment6.build();
-
-        //segment 7 - park
-        segment7 = segment6.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x2, y3) , Math.toRadians(-45));
-        Action seg7 = segment7.build();
+//
+//        //segment 2.5 - strafe back to buckets
+//
+//        segment2_5 = segment2.endTrajectory().fresh()
+//                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
+//
+//        Action seg2_5 = segment2_5.build();
+//
+//        //segment 3 - strafe to 2nd block
+//        segment3 = segment2_5.endTrajectory().fresh()
+//                .strafeToLinearHeading(new Vector2d(x1, y2), Math.toRadians(0));
+//
+//        Action seg3 = segment3.build();
+//
+//        //segment 4 - strafe back to bucket
+//        segment4 = segment3.endTrajectory().fresh()
+//                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
+//
+//        Action seg4 = segment4.build();
+//
+//        //segment 5 - strafe to 3rd block
+//        segment5 = segment4.endTrajectory().fresh()
+//                .strafeToLinearHeading(new Vector2d(x1, y2), Math.toRadians(45));//might not be y2
+//
+//        Action seg5 = segment5.build();
+//
+//        //segment 6 - strafe back to bucket
+//        segment6 = segment5.endTrajectory().fresh()
+//                .strafeToLinearHeading(new Vector2d(x0, y0) , Math.toRadians(135));
+//        Action seg6 = segment6.build();
+//
+//        //segment 7 - park
+//        segment7 = segment6.endTrajectory().fresh()
+//                .strafeToLinearHeading(new Vector2d(x2, y3) , Math.toRadians(-45));
+//        Action seg7 = segment7.build();
         waitForStart();
 
 
@@ -417,12 +421,17 @@ public class sa_auto extends LinearOpMode {
                 Mechs.closeClaw(),
                 lift.scoreHeight(),
                 Mechs.saScorePos(),
+                new SleepAction(0.5),
                 seg1,
                 Mechs.openClaw(),
                 new SleepAction(1),
                 Mechs.Return(),
                 lift.baseHeight(),
-new SleepAction(3)
+                seg2
+//                Mechs.slideOut(),
+//                new SleepAction(2),
+//                Mechs.slideIn(),
+//                new SleepAction(1)
 //                seg2,
 //                Mechs.slideOut(),
 //                new SleepAction(2),
