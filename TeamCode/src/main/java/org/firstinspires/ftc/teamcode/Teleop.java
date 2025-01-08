@@ -46,10 +46,10 @@ public class Teleop extends OpMode {
     private List<LynxModule> allHubs;
 
     //sensor
-    RevBlinkinLedDriver LED;
-    RevBlinkinLedDriver.BlinkinPattern pattern;
-    DistanceSensor distanceSensor;
-    public double distance;
+  //  RevBlinkinLedDriver LED;
+  //  RevBlinkinLedDriver.BlinkinPattern pattern;
+  /*  DistanceSensor distanceSensor;
+    public double distance; */
     /*ColorSensor colorSensor;
     public double red;
     public double green;
@@ -69,7 +69,7 @@ public class Teleop extends OpMode {
 
         allHubs = hardwareMap.getAll(LynxModule.class);
         for (LynxModule hub : allHubs){
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO); //MANUAL
         }
 
         linkage = new LinkageSubsystem(hardwareMap);
@@ -94,12 +94,12 @@ public class Teleop extends OpMode {
         BR.setDirection(DcMotorEx.Direction.REVERSE);
         FR.setDirection(DcMotorEx.Direction.REVERSE);
 
-        LED = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+    /*    LED = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
-      /*  colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");*/
+        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
         pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-        LED.setPattern(pattern);
+        LED.setPattern(pattern);*/
 
         elapsedtime = new ElapsedTime();
         elapsedtime.reset();
@@ -108,11 +108,11 @@ public class Teleop extends OpMode {
     @Override
     public void loop() {
 
-        for (LynxModule hub : allHubs){
+      /*  for (LynxModule hub : allHubs){
             hub.clearBulkCache();
-        }
+        } */
 
-        distance = distanceSensor.getDistance(DistanceUnit.MM);
+     //   distance = distanceSensor.getDistance(DistanceUnit.MM);
        /* red= colorSensor.red();
         green = colorSensor.green();
         blue = colorSensor.blue();*/
@@ -291,7 +291,7 @@ public class Teleop extends OpMode {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.ORANGE;
             }
         } */
-        if (!intaking){
+      /*  if (!intaking){
             if (distance <=250&& distance>25 ){
                 pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
             }
@@ -303,11 +303,11 @@ public class Teleop extends OpMode {
             }
         }
 
-        LED.setPattern(pattern);
+        LED.setPattern(pattern);*/
 
         telemetry.addData("Run time", getRuntime());
         //linkage
-        telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
+      /*  telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
         telemetry.addData("Stick Control Min", linkage.getStickControlMin());
         telemetry.addData("RL Position", linkage.getServo1Position());
         telemetry.addData("LL Position", linkage.getServo2Position());
@@ -330,13 +330,23 @@ public class Teleop extends OpMode {
         telemetry.addData("armTarget", arm.getArmPosition());
         telemetry.addData("armEncoder", arm.getArmEncoderPosition());
         //wrist
+        telemetry.addData("rwTarget", wrist.getRwTargetPosition());
         telemetry.addData("lwTarget", wrist.getlwTargetPosition());
         telemetry.addData("lwEncoder", wrist.getLwEncoderPosition());
-        telemetry.addData("rwTarget", wrist.getRwTargetPosition());
-        telemetry.addData("lwEncoder", wrist.getRwEncoderPosition());
+        telemetry.addData("rwEncoder", wrist.getRwEncoderPosition());
+
 
         telemetry.addData("Distance", distance);
-        telemetry.addData ("pickup", pickup);
+        telemetry.addData ("pickup", pickup);*/
+
+        telemetry.addData("Encoder RL Position", linkage.getEncoderRlPosition());
+        telemetry.addData("Encoder LL Position", linkage.getEncoderLlPosition());
+        telemetry.addData("Lift Position 1", lift.getLift1Position());
+        telemetry.addData("Lift Position 2", lift.getLift2Position());
+        telemetry.addData("bucketEncoder", bucket.getBucketEncoderPosition());
+        telemetry.addData("armEncoder", arm.getArmEncoderPosition());
+        telemetry.addData("lwEncoder", wrist.getLwEncoderPosition());
+        telemetry.addData("rwEncoder", wrist.getRwEncoderPosition());
 
         telemetry.addData("Loop Times", elapsedtime.milliseconds());
         elapsedtime.reset();
