@@ -168,6 +168,9 @@ public class Teleop extends OpMode {
             wrist.wristPickupSpeicmen();
         }
 
+        if (gamepad1.b){
+            lift.barLow();
+        }
         //claw control
         if (gamepad1.left_bumper) {
             claw.clawOpen();
