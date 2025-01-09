@@ -34,22 +34,21 @@ public class sample_auto2 extends LinearOpMode {
 
     public static int baseHeight = 0;
 
-    public static double HPos = 0.06;
+    public static double AHPos = 0.07;
+    public static double BHPos = 0.13;
+    public static double AHPos3 = 0.9;
+    public static double BHPos3 = 0.9;
 
-    public static double HPos2 = 0.4;
+    public static double Bpos = 0.32;
 
-    public static double HPos3 = 0.6;
+    public static double Bpos2 = 0.37;
 
-    public static double Bpos = 0.33;
-
-    public static double Bpos2 = 0.8;
-
-    public static double Epos1 = .28; //Originpickup
+    public static double Epos1 = .3; //Originpickup
     public static double Epos2 = .4; //Origin
     public static double Epos3 = 0.7; //Specimen
     public static double Epos4 = 0.65; //Sample
 
-    public static double Cpos = 0.79; //open
+    public static double Cpos = 0.73; //open
 
     public static double Cpos2 = 0.935; //closed
 
@@ -61,9 +60,15 @@ public class sample_auto2 extends LinearOpMode {
     public static double x0 = 12.5;
 
     public static double y0 = 16;
-    public static double x1 = 20;
+    public static double x1 = 5;
 
-    public static double y1 = 5;
+    public static double y1 = 6;
+
+    public static double x2 = 10;
+
+    public static double y2 = 15;
+
+
 
 
 
@@ -162,8 +167,8 @@ public class sample_auto2 extends LinearOpMode {
             public class slideOut implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                hSlide.setPosition(HPos3);
-                hSlide2.setPosition(HPos3);
+                hSlide.setPosition(AHPos3);
+                hSlide2.setPosition(BHPos3);
                 bucket.setPosition(Bpos2);
                 elbow.setPosition(Epos2);
                 intake.setPower(1);
@@ -181,10 +186,10 @@ public class sample_auto2 extends LinearOpMode {
             public class slideIn implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                    //hSlide.setPosition(HPos);
-                    //hSlide2.setPosition(HPos);
+                    hSlide.setPosition(AHPos);
+                    hSlide2.setPosition(BHPos);
                     bucket.setPosition(Bpos);
-                    elbow.setPosition(Epos1);
+
                     intake.setPower(0);
 
 
@@ -196,7 +201,25 @@ public class sample_auto2 extends LinearOpMode {
             public Action slideIn() {
                 return new slideIn();
             }
+            public class armDownALil implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                    elbow.setPosition(Epos1);
+
+
+
+
+
+                    return false;
+                }
+            }
+            public Action armDownALil() {
+                return new armDownALil();
+            }
         }
+
+
+
 
     public class lift {
 
@@ -266,6 +289,7 @@ public class sample_auto2 extends LinearOpMode {
 
         TrajectoryActionBuilder segment1;
         TrajectoryActionBuilder segment2;
+        TrajectoryActionBuilder segment3;
 
 //segment 1 - strafe to bucket
         segment1 = drive.actionBuilder(initialPose)
@@ -282,6 +306,12 @@ public class sample_auto2 extends LinearOpMode {
 
         Action seg2 = segment2.build();
 
+        segment3 = segment2.endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(x2, y2), Math.toRadians(135));
+
+
+        Action seg3 = segment3.build();
+
         waitForStart();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -295,15 +325,33 @@ public class sample_auto2 extends LinearOpMode {
 
                 Mechs.closeClaw(),
                 lift.scoreHeight(),
+                new SleepAction(0.75),
+                seg1,
                 Mechs.saScorePos(),
                 new SleepAction(0.5),
-                seg1,
-                new SleepAction(0.25),
                 Mechs.openClaw(),
                 new SleepAction(1),
                 Mechs.Return(),
                 lift.baseHeight(),
+
                 seg2,
+                Mechs.slideOut(),
+                new SleepAction(2),
+                Mechs.slideIn(),
+                new SleepAction(1),
+                Mechs.armDownALil(),
+                new SleepAction(0.5),
+                Mechs.closeClaw(),
+                new SleepAction(0.5),
+
+
+                Mechs.saScorePos(),
+                lift.scoreHeight(),
+                seg3,
+                Mechs.openClaw(),
+                new SleepAction(1),
+                Mechs.Return(),
+                lift.baseHeight(),
                 new SleepAction(3)
 
 

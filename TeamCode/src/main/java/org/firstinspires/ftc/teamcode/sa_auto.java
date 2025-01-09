@@ -81,11 +81,11 @@ public class sa_auto extends LinearOpMode {
     public static double Epos3 = 0.7; //Specimen
     public static double Epos4 = 0.65; //Sample
 
-    public static double Cpos = 0.79; //open
+    public static double Cpos = 0.76; //open
 
     public static double Cpos2 = 0.935; //closed
 
-    public static double Wpos1 = 0.35;
+    public static double Wpos1 = 0.3;
 
     public static double Wpos2 = 0.66;
     public static double Wpos3 = 0.5;
