@@ -4,7 +4,9 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -15,6 +17,7 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -50,7 +53,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
-
+@Disabled
 @Config
 @Autonomous(name = "Sample auto")
 public class sa_auto extends LinearOpMode {
@@ -391,8 +394,10 @@ public class sa_auto extends LinearOpMode {
 //        segment7 = segment6.endTrajectory().fresh()
 //                .strafeToLinearHeading(new Vector2d(x2, y3) , Math.toRadians(-45));
 //        Action seg7 = segment7.build();
+
         waitForStart();
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
 
 
@@ -460,6 +465,10 @@ public class sa_auto extends LinearOpMode {
 
 
         ));
+        telemetry.addData("x", drive.pose.position.x);
+        telemetry.addData("y", drive.pose.position.y);
+        telemetry.addData("heading", drive.pose.heading);
+        telemetry.update();
 
 
     }

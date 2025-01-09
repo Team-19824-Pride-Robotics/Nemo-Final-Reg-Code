@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -12,7 +14,6 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -20,10 +21,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
-@Disabled
+
 @Config
 @Autonomous(name = "Sample auto 2")
-public class sa_auto2 extends LinearOpMode {
+public class sample_auto2 extends LinearOpMode {
     //Positions copied from Teleop
     public static int saHeight1 = 1300;
     public static int spHeight1 = 0;
@@ -60,27 +61,26 @@ public class sa_auto2 extends LinearOpMode {
     public static double x0 = 12.5;
 
     public static double y0 = 16;
-    public static double x1 = 12.5;
+    public static double x1 = 20;
 
-    public static double y1 = 16;
+    public static double y1 = 5;
 
 
-    
+
 
 
         public class Mechs {
             ServoImplEx backWrist;
 
             ServoImplEx frontWrist;
-            DcMotorEx lift1;
-            DcMotorEx lift2;
+
             Servo claw;
             ServoImplEx elbow;
 
             ServoImplEx hSlide;
             ServoImplEx hSlide2;
 
-            Servo bucket;
+            ServoImplEx bucket;
             DcMotor intake;
             public Mechs(HardwareMap hardwareMap) {
                 elbow = (ServoImplEx)hardwareMap.servo.get("arm");
@@ -90,7 +90,8 @@ public class sa_auto2 extends LinearOpMode {
                 hSlide.setPwmRange(new PwmControl.PwmRange(505, 2495));
                 hSlide2 = (ServoImplEx)hardwareMap.servo.get("rl");
                 hSlide2.setPwmRange(new PwmControl.PwmRange(505, 2495));
-                bucket = hardwareMap.servo.get("bucket");
+                bucket = (ServoImplEx)hardwareMap.servo.get("bucket");
+                bucket.setPwmRange(new PwmControl.PwmRange(505, 2495));
                 intake = hardwareMap.get(DcMotor.class, "intake");
                 backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "lw");
                 backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
@@ -283,6 +284,7 @@ public class sa_auto2 extends LinearOpMode {
 
         waitForStart();
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
 
 
@@ -307,7 +309,10 @@ public class sa_auto2 extends LinearOpMode {
 
 
         ));
-
+        telemetry.addData("x", drive.pose.position.x);
+        telemetry.addData("y", drive.pose.position.y);
+        telemetry.addData("heading", drive.pose.heading);
+    telemetry.update();
 
     }
 }

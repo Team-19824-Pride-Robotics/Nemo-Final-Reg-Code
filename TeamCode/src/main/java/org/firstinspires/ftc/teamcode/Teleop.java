@@ -46,15 +46,15 @@ public class Teleop extends OpMode {
     private List<LynxModule> allHubs;
 
     //sensor
-  //  RevBlinkinLedDriver LED;
-  //  RevBlinkinLedDriver.BlinkinPattern pattern;
+    RevBlinkinLedDriver LED;
+    RevBlinkinLedDriver.BlinkinPattern pattern;
   /*  DistanceSensor distanceSensor;
     public double distance; */
-    /*ColorSensor colorSensor;
+    ColorSensor colorSensor;
     public double red;
     public double green;
     public double blue;
-*/
+
     DcMotorEx FR;
     DcMotorEx FL;
     DcMotorEx BR;
@@ -94,12 +94,12 @@ public class Teleop extends OpMode {
         BR.setDirection(DcMotorEx.Direction.REVERSE);
         FR.setDirection(DcMotorEx.Direction.REVERSE);
 
-    /*    LED = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+        LED = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+        //distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
         pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-        LED.setPattern(pattern);*/
+        LED.setPattern(pattern);
 
         elapsedtime = new ElapsedTime();
         elapsedtime.reset();
@@ -113,9 +113,9 @@ public class Teleop extends OpMode {
         } */
 
      //   distance = distanceSensor.getDistance(DistanceUnit.MM);
-       /* red= colorSensor.red();
+        red= colorSensor.red();
         green = colorSensor.green();
-        blue = colorSensor.blue();*/
+        blue = colorSensor.blue();
         //////////////////////////
         /// Gamepad 1 controls ///
         //////////////////////////
@@ -269,13 +269,9 @@ public class Teleop extends OpMode {
         claw.update();
         arm.update();
         wrist.update();
-//Jackson control changes
-        //letters control lift
-        //dpad controls bucket
-        //start and back control linkage
 
         //led
-       /* if (intaking){
+        if (intaking){
             if ((red>=405&& red<=1631)&&(green>=235&&green<=900)&&(blue>=117&&blue<=524)) {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.RED;
             }
@@ -288,9 +284,9 @@ public class Teleop extends OpMode {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
             }
             else {
-                pattern = RevBlinkinLedDriver.BlinkinPattern.ORANGE;
+                pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
             }
-        } */
+        }
       /*  if (!intaking){
             if (distance <=250&& distance>25 ){
                 pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
@@ -301,9 +297,9 @@ public class Teleop extends OpMode {
             else {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
             }
-        }
+        } */
 
-        LED.setPattern(pattern);*/
+        LED.setPattern(pattern);
 
         telemetry.addData("Run time", getRuntime());
         //linkage
@@ -336,13 +332,13 @@ public class Teleop extends OpMode {
         telemetry.addData("rwEncoder", wrist.getRwEncoderPosition());
 
 
-        telemetry.addData("Distance", distance);
-        telemetry.addData ("pickup", pickup);*/
+        telemetry.addData("Distance", distance);*/
+        telemetry.addData ("pickup", pickup);
 
-        telemetry.addData("Encoder RL Position", linkage.getEncoderRlPosition());
-        telemetry.addData("Encoder LL Position", linkage.getEncoderLlPosition());
         telemetry.addData("Lift Position 1", lift.getLift1Position());
         telemetry.addData("Lift Position 2", lift.getLift2Position());
+        telemetry.addData("Encoder RL Position", linkage.getEncoderRlPosition());
+        telemetry.addData("Encoder LL Position", linkage.getEncoderLlPosition());
         telemetry.addData("bucketEncoder", bucket.getBucketEncoderPosition());
         telemetry.addData("armEncoder", arm.getArmEncoderPosition());
         telemetry.addData("lwEncoder", wrist.getLwEncoderPosition());
