@@ -52,10 +52,11 @@ public class sample_auto2 extends LinearOpMode {
 
     public static double Cpos2 = 0.935; //closed
 
-    public static double Wpos1 = 0.35;
+    public static double rwIn = .33;
+    public static double lwIn = .37;
+    public static double lwPos3 = 0.5;
 
-    public static double Wpos2 = 0.66;
-    public static double Wpos3 = 0.5;
+    public static double rwPos3 = 0.46;
 
     public static double x0 = 12.5;
 
@@ -110,8 +111,8 @@ public class sample_auto2 extends LinearOpMode {
                 public boolean run(@NonNull TelemetryPacket packet) {
                     //bring claw to origin
                     elbow.setPosition(Epos3);
-                    frontWrist.setPosition(Wpos3);
-                    backWrist.setPosition(Wpos3);
+                    frontWrist.setPosition(rwPos3);
+                    backWrist.setPosition(lwPos3);
 
 
                     return false;
@@ -154,8 +155,8 @@ public class sample_auto2 extends LinearOpMode {
 
 
                     elbow.setPosition(Epos1);
-                    frontWrist.setPosition(Wpos1);
-                    backWrist.setPosition(Wpos1);
+                    frontWrist.setPosition(rwIn);
+                    backWrist.setPosition(lwIn);
 
                     return false;
                 }

@@ -47,7 +47,7 @@ public class liftSubsystem {
         target = bucketHigh;
     }
     public void score() {
-        target = target - score;
+        target = score;
     }
     public void barLow() {
         target = barLow;

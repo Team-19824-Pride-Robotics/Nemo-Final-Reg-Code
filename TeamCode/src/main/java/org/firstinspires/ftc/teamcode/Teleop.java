@@ -215,7 +215,7 @@ public class Teleop extends OpMode {
             pickup = true;
             liftPickup = true;
         }
-        if (arm.getArmPosition() <= 115&& pickup) {
+        if (arm.getArmPosition() <= 120&& pickup) {
             lift.pickup();
             pickup = false;
         }
