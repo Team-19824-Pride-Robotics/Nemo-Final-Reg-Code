@@ -34,10 +34,10 @@ public class sample_auto2 extends LinearOpMode {
 
     public static int baseHeight = 0;
 
-    public static double AHPos = 0.07;
-    public static double BHPos = 0.13;
-    public static double AHPos3 = 0.9;
-    public static double BHPos3 = 0.9;
+    public static double AHPos = 0.06;
+    public static double BHPos = 0.12;
+    public static double AHPos3 = 0.27;
+    public static double BHPos3 = 0.45;
 
     public static double Bpos = 0.32;
 
@@ -58,12 +58,12 @@ public class sample_auto2 extends LinearOpMode {
 
     public static double rwPos3 = 0.46;
 
-    public static double x0 = 12.5;
+    public static double x0 = 13;
 
-    public static double y0 = 16;
-    public static double x1 = 5;
+    public static double y0 = 15;
+    public static double x1 = 7;
 
-    public static double y1 = 6;
+    public static double y1 = 8.25;
 
     public static double x2 = 10;
 
@@ -191,7 +191,7 @@ public class sample_auto2 extends LinearOpMode {
                     hSlide2.setPosition(BHPos);
                     bucket.setPosition(Bpos);
 
-                    intake.setPower(0);
+
 
 
 
@@ -201,6 +201,21 @@ public class sample_auto2 extends LinearOpMode {
             }
             public Action slideIn() {
                 return new slideIn();
+            }
+            public class intakeOff implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+
+                    intake.setPower(0);
+
+
+
+
+                    return false;
+                }
+            }
+            public Action intakeOff() {
+                return new intakeOff();
             }
             public class armDownALil implements Action {
                 @Override
@@ -306,10 +321,11 @@ public class sample_auto2 extends LinearOpMode {
 
 
         Action seg2 = segment2.build();
-
+//Strafe back to buckets
         segment3 = segment2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x2, y2), Math.toRadians(135));
-
+                //.splineToLinearHeading(new Vector2d(x0, y2), Math.toRadians(135))
+               // .setTangent(Math.toRadians(180))
+        .splineToLinearHeading(new Pose2d(x0,y0,Math.toRadians(135)),Math.toRadians(135));
 
         Action seg3 = segment3.build();
 
@@ -326,9 +342,9 @@ public class sample_auto2 extends LinearOpMode {
 
                 Mechs.closeClaw(),
                 lift.scoreHeight(),
+                Mechs.saScorePos(),
                 new SleepAction(0.75),
                 seg1,
-                Mechs.saScorePos(),
                 new SleepAction(0.5),
                 Mechs.openClaw(),
                 new SleepAction(1),
@@ -338,6 +354,8 @@ public class sample_auto2 extends LinearOpMode {
                 seg2,
                 Mechs.slideOut(),
                 new SleepAction(2),
+                Mechs.intakeOff(),
+                new SleepAction(0.25),
                 Mechs.slideIn(),
                 new SleepAction(1),
                 Mechs.armDownALil(),
@@ -348,6 +366,7 @@ public class sample_auto2 extends LinearOpMode {
 
                 Mechs.saScorePos(),
                 lift.scoreHeight(),
+                new SleepAction(1.5),
                 seg3,
                 Mechs.openClaw(),
                 new SleepAction(1),
