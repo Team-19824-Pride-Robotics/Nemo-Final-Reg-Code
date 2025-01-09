@@ -65,9 +65,15 @@ public class sample_auto2 extends LinearOpMode {
 
     public static double y1 = 8.25;
 
-    public static double x2 = 10;
+    public static double x2 = 0;
 
-    public static double y2 = 15;
+    public static double y2 = 8;
+    public static double x3 = 7;
+
+    public static double y3 = 20;
+    public static double x4 = 0;
+
+    public static double y4 = 8;
 
 
 
@@ -306,6 +312,10 @@ public class sample_auto2 extends LinearOpMode {
         TrajectoryActionBuilder segment1;
         TrajectoryActionBuilder segment2;
         TrajectoryActionBuilder segment3;
+        TrajectoryActionBuilder segment4;
+        TrajectoryActionBuilder segment5;
+
+
 
 //segment 1 - strafe to bucket
         segment1 = drive.actionBuilder(initialPose)
@@ -324,10 +334,19 @@ public class sample_auto2 extends LinearOpMode {
 //Strafe back to buckets
         segment3 = segment2.endTrajectory().fresh()
                 //.splineToLinearHeading(new Vector2d(x0, y2), Math.toRadians(135))
-               // .setTangent(Math.toRadians(180))
-        .splineToLinearHeading(new Pose2d(x0,y0,Math.toRadians(135)),Math.toRadians(135));
+                //.setTangent(Math.toRadians(180))
+        .splineToLinearHeading(new Pose2d(x2,y2,Math.toRadians(135)),Math.toRadians(135));
 
         Action seg3 = segment3.build();
+
+        segment4 = segment3.endTrajectory().fresh()
+                .splineToLinearHeading(new Pose2d(x3,y3,Math.toRadians(180)),Math.toRadians(180));
+
+        Action seg4 = segment4.build();
+        segment5 = segment4.endTrajectory().fresh()
+                .splineToLinearHeading(new Pose2d(x4,y4,Math.toRadians(135)),Math.toRadians(135));
+
+        Action seg5 = segment5.build();
 
         waitForStart();
 
@@ -372,9 +391,29 @@ public class sample_auto2 extends LinearOpMode {
                 new SleepAction(1),
                 Mechs.Return(),
                 lift.baseHeight(),
+                new SleepAction(3),
+
+                seg4,
+                Mechs.slideOut(),
+                new SleepAction(2),
+                Mechs.intakeOff(),
+                new SleepAction(0.25),
+                Mechs.slideIn(),
+                new SleepAction(1),
+                Mechs.armDownALil(),
+                new SleepAction(0.5),
+                Mechs.closeClaw(),
+                new SleepAction(0.5),
+
+                Mechs.saScorePos(),
+                lift.scoreHeight(),
+                new SleepAction(1.5),
+                seg5,
+                Mechs.openClaw(),
+                new SleepAction(1),
+                Mechs.Return(),
+                lift.baseHeight(),
                 new SleepAction(3)
-
-
 
         ));
         telemetry.addData("x", drive.pose.position.x);
