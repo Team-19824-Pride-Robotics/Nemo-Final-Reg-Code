@@ -61,7 +61,7 @@ public class sample_auto2 extends LinearOpMode {
     public static double x0 = 13;
 
     public static double y0 = 15;
-    public static double x1 = 12;
+    public static double x1 = 11.5;
 
     public static double y1 = 8.25;
 
@@ -70,14 +70,15 @@ public class sample_auto2 extends LinearOpMode {
     public static double y2 = 8;
     public static double x3 = 7;
 
-    public static double y3 = 20;
+    public static double y3 = 21;
     public static double x4 = 0;
 
     public static double y4 = 10.5;
 
+    public static double x5 = 11;
+    public static double y5 = 11;
 
-
-
+public static double thirdScoreAngle = 217.5;
 
 
 
@@ -227,7 +228,7 @@ public class sample_auto2 extends LinearOpMode {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
 
-                    intake.setPower(0.5);
+                    intake.setPower(0.6);
 
 
 
@@ -329,7 +330,7 @@ public class sample_auto2 extends LinearOpMode {
         TrajectoryActionBuilder segment3;
         TrajectoryActionBuilder segment4;
         TrajectoryActionBuilder segment5;
-
+        TrajectoryActionBuilder segment6;
 
 
 //segment 1 - strafe to bucket
@@ -363,6 +364,11 @@ public class sample_auto2 extends LinearOpMode {
 
         Action seg5 = segment5.build();
 
+        segment6 = segment5.endTrajectory().fresh()
+                .splineToLinearHeading(new Pose2d(x5,y5,Math.toRadians(thirdScoreAngle)),Math.toRadians(thirdScoreAngle));
+
+        Action seg6 = segment6.build();
+
         waitForStart();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -373,7 +379,7 @@ public class sample_auto2 extends LinearOpMode {
 
 
         Actions.runBlocking(new SequentialAction(
-
+                Mechs.slideIn(),
                 Mechs.closeClaw(),
                 lift.scoreHeight(),
                 Mechs.saScorePos(),
@@ -434,7 +440,27 @@ public class sample_auto2 extends LinearOpMode {
                 new SleepAction(1),
                 Mechs.Return(),
                 lift.baseHeight(),
-                new SleepAction(3)
+                new SleepAction(2)
+
+//                seg6,
+//                Mechs.slideOut(),
+//                new SleepAction(1.5),
+//                Mechs.intakeOff(),
+//                new SleepAction(0.25),
+//                Mechs.slideIn(),
+//                new SleepAction(0.5),
+//                Mechs.intakeOn(),
+//                new SleepAction(0.25),
+//                Mechs.intakeOff(),
+//                new SleepAction(0.5),
+//                Mechs.armDownALil(),
+//                new SleepAction(0.5),
+//                Mechs.closeClaw(),
+//                new SleepAction(0.5),
+//
+//                Mechs.saScorePos(),
+//                lift.scoreHeight(),
+//                new SleepAction(1.5)
 
         ));
         telemetry.addData("x", drive.pose.position.x);
