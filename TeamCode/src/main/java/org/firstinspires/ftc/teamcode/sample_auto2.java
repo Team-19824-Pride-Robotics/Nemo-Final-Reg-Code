@@ -61,7 +61,7 @@ public class sample_auto2 extends LinearOpMode {
     public static double x0 = 13;
 
     public static double y0 = 15;
-    public static double x1 = 7;
+    public static double x1 = 12;
 
     public static double y1 = 8.25;
 
@@ -73,7 +73,7 @@ public class sample_auto2 extends LinearOpMode {
     public static double y3 = 20;
     public static double x4 = 0;
 
-    public static double y4 = 8;
+    public static double y4 = 10.5;
 
 
 
@@ -222,6 +222,21 @@ public class sample_auto2 extends LinearOpMode {
             }
             public Action intakeOff() {
                 return new intakeOff();
+            }
+            public class intakeOn implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+
+                    intake.setPower(0.5);
+
+
+
+
+                    return false;
+                }
+            }
+            public Action intakeOn() {
+                return new intakeOn();
             }
             public class armDownALil implements Action {
                 @Override
@@ -372,11 +387,14 @@ public class sample_auto2 extends LinearOpMode {
 
                 seg2,
                 Mechs.slideOut(),
-                new SleepAction(2),
+                new SleepAction(1),
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
-                new SleepAction(1),
+                new SleepAction(0.5),
+                Mechs.intakeOn(),
+                new SleepAction(0.25),
+                Mechs.intakeOff(),
                 Mechs.armDownALil(),
                 new SleepAction(0.5),
                 Mechs.closeClaw(),
@@ -385,21 +403,24 @@ public class sample_auto2 extends LinearOpMode {
 
                 Mechs.saScorePos(),
                 lift.scoreHeight(),
-                new SleepAction(1.5),
+                new SleepAction(1.1),
                 seg3,
                 Mechs.openClaw(),
                 new SleepAction(1),
                 Mechs.Return(),
                 lift.baseHeight(),
-                new SleepAction(3),
 
                 seg4,
                 Mechs.slideOut(),
-                new SleepAction(2),
+                new SleepAction(1),
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
-                new SleepAction(1),
+                new SleepAction(0.5),
+                Mechs.intakeOn(),
+                new SleepAction(0.25),
+                Mechs.intakeOff(),
+                new SleepAction(0.5),
                 Mechs.armDownALil(),
                 new SleepAction(0.5),
                 Mechs.closeClaw(),
