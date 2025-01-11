@@ -57,11 +57,12 @@ public class sample_auto2 extends LinearOpMode {
     public static double lwPos3 = 0.5;
 
     public static double rwPos3 = 0.46;
+    public static double armOut= .66;
 
     public static double x0 = 13;
 
     public static double y0 = 15;
-    public static double x1 = 7;
+    public static double x1 = 11.5;
 
     public static double y1 = 8.25;
 
@@ -70,14 +71,22 @@ public class sample_auto2 extends LinearOpMode {
     public static double y2 = 8;
     public static double x3 = 7;
 
-    public static double y3 = 20;
+    public static double y3 = 21;
     public static double x4 = 0;
 
-    public static double y4 = 8;
+    public static double y4 = 10.5;
+
+    public static double x5 = 60;
+    public static double y5 = -5;
+    public static double x6 = 55;
+    public static double y6 = -20;
+    public static double h6 = 270;
 
 
+    public static double tangent1 = 180;
+    public static double tangent2 = -90;
 
-
+public static double turn = 45;
 
 
 
@@ -171,6 +180,22 @@ public class sample_auto2 extends LinearOpMode {
                 return new Return();
             }
 
+            public class park implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+
+
+                    elbow.setPosition(armOut);
+                    frontWrist.setPosition(rwPos3);
+                    backWrist.setPosition(lwPos3);
+
+                    return false;
+                }
+            }
+            public Action park() {
+                return new park();
+            }
+
             public class slideOut implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
@@ -222,6 +247,21 @@ public class sample_auto2 extends LinearOpMode {
             }
             public Action intakeOff() {
                 return new intakeOff();
+            }
+            public class intakeOn implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+
+                    intake.setPower(0.6);
+
+
+
+
+                    return false;
+                }
+            }
+            public Action intakeOn() {
+                return new intakeOn();
             }
             public class armDownALil implements Action {
                 @Override
@@ -314,6 +354,9 @@ public class sample_auto2 extends LinearOpMode {
         TrajectoryActionBuilder segment3;
         TrajectoryActionBuilder segment4;
         TrajectoryActionBuilder segment5;
+        TrajectoryActionBuilder segment6;
+        TrajectoryActionBuilder segment7;
+        TrajectoryActionBuilder segment8;
 
 
 
@@ -347,6 +390,21 @@ public class sample_auto2 extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(x4,y4,Math.toRadians(135)),Math.toRadians(135));
 
         Action seg5 = segment5.build();
+        segment6 = segment5.endTrajectory().fresh()
+                .turn(Math.toRadians(turn));
+        Action seg6 = segment6.build();
+        segment7 = segment6.endTrajectory().fresh()
+                //.setTangent(Math.toRadians(tangent1))
+                .lineToX(x5);
+        //.splineToLinearHeading(new Pose2d(x5,y5,Math.toRadians(thirdScoreAngle)),Math.toRadians(tangent2));
+
+        Action seg7 = segment7.build();
+        segment8 = segment7.endTrajectory().fresh()
+                .setTangent(Math.toRadians(tangent1))
+
+        .splineToLinearHeading(new Pose2d(x6,y6,Math.toRadians(h6)),Math.toRadians(tangent2));
+
+        Action seg8 = segment8.build();
 
         waitForStart();
 
@@ -358,7 +416,7 @@ public class sample_auto2 extends LinearOpMode {
 
 
         Actions.runBlocking(new SequentialAction(
-
+                Mechs.slideIn(),
                 Mechs.closeClaw(),
                 lift.scoreHeight(),
                 Mechs.saScorePos(),
@@ -372,11 +430,14 @@ public class sample_auto2 extends LinearOpMode {
 
                 seg2,
                 Mechs.slideOut(),
-                new SleepAction(2),
+                new SleepAction(1),
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
-                new SleepAction(1),
+                new SleepAction(0.5),
+                Mechs.intakeOn(),
+                new SleepAction(0.25),
+                Mechs.intakeOff(),
                 Mechs.armDownALil(),
                 new SleepAction(0.5),
                 Mechs.closeClaw(),
@@ -385,21 +446,24 @@ public class sample_auto2 extends LinearOpMode {
 
                 Mechs.saScorePos(),
                 lift.scoreHeight(),
-                new SleepAction(1.5),
+                new SleepAction(1.1),
                 seg3,
                 Mechs.openClaw(),
                 new SleepAction(1),
                 Mechs.Return(),
                 lift.baseHeight(),
-                new SleepAction(3),
 
                 seg4,
                 Mechs.slideOut(),
-                new SleepAction(2),
+                new SleepAction(1),
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
-                new SleepAction(1),
+                new SleepAction(0.5),
+                Mechs.intakeOn(),
+                new SleepAction(0.25),
+                Mechs.intakeOff(),
+                new SleepAction(0.5),
                 Mechs.armDownALil(),
                 new SleepAction(0.5),
                 Mechs.closeClaw(),
@@ -413,7 +477,32 @@ public class sample_auto2 extends LinearOpMode {
                 new SleepAction(1),
                 Mechs.Return(),
                 lift.baseHeight(),
-                new SleepAction(3)
+                //new SleepAction(2),
+                seg6,
+                seg7,
+                seg8,
+                Mechs.park(),
+                new SleepAction(2)
+
+//                seg6,
+//                Mechs.slideOut(),
+//                new SleepAction(1.5),
+//                Mechs.intakeOff(),
+//                new SleepAction(0.25),
+//                Mechs.slideIn(),
+//                new SleepAction(0.5),
+//                Mechs.intakeOn(),
+//                new SleepAction(0.25),
+//                Mechs.intakeOff(),
+//                new SleepAction(0.5),
+//                Mechs.armDownALil(),
+//                new SleepAction(0.5),
+//                Mechs.closeClaw(),
+//                new SleepAction(0.5),
+//
+//                Mechs.saScorePos(),
+//                lift.scoreHeight(),
+//                new SleepAction(1.5)
 
         ));
         telemetry.addData("x", drive.pose.position.x);
