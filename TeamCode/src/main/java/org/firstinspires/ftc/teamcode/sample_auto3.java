@@ -44,7 +44,7 @@ public class sample_auto3 extends LinearOpMode {
 
     public static double Bpos2 = 0.37;
 
-    public static double Epos1 = .3; //Originpickup
+    public static double Epos1 = .31; //Originpickup
     public static double Epos2 = .4; //Origin
     public static double Epos3 = 0.7; //Specimen
     public static double Epos4 = 0.65; //Sample
@@ -69,9 +69,8 @@ public class sample_auto3 extends LinearOpMode {
 
     public static double x2 = 0;
 
-    public static double y2 = 8;
+    public static double y2 = 5;
     public static double x3 = 7;
-
     public static double y3 = 21.5; //24
     public static double x4 = 0;
 
@@ -82,7 +81,7 @@ public class sample_auto3 extends LinearOpMode {
     public static double x6 = 15;
     public static double y6 = 14;
 
-    public static double x7 = -5;
+    public static double x7 = 0;
     public static double y7 = 21.5;
     public static double h6 = 270;
 
@@ -506,6 +505,7 @@ public static double turn = 45;
                 new SleepAction(1.5),
                 seg7,
                 new SleepAction(1),
+                Mechs.Return(),
                 lift.baseHeight(),
                 new SleepAction(2)
 

@@ -43,7 +43,7 @@ public class sample_auto2 extends LinearOpMode {
 
     public static double Bpos2 = 0.37;
 
-    public static double Epos1 = .3; //Originpickup
+    public static double Epos1 = .31; //Originpickup
     public static double Epos2 = .4; //Origin
     public static double Epos3 = 0.7; //Specimen
     public static double Epos4 = 0.65; //Sample
