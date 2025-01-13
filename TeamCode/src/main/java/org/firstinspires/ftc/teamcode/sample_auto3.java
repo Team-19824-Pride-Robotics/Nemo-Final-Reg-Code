@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
-@Disabled
+
 @Config
 @Autonomous(name = "Sample auto 3")
 public class sample_auto3 extends LinearOpMode {
@@ -60,30 +60,30 @@ public class sample_auto3 extends LinearOpMode {
     public static double rwPos3 = 0.46;
     public static double armOut= .66;
 
-    public static double x0 = 14;
+    public static double x0 = 13;
 
-    public static double y0 = 16;
-    public static double x1 = 13.5;
+    public static double y0 = 15;
+    public static double x1 = 11.5;
 
-    public static double y1 = 9; //9
+    public static double y1 = 8.25; //9
 
-    public static double x2 = 1;
+    public static double x2 = 0;
 
-    public static double y2 = 10;
-    public static double x3 = 8;
+    public static double y2 = 8;
+    public static double x3 = 7;
 
-    public static double y3 = 24; //24
-    public static double x4 = 1;
+    public static double y3 = 21.5; //24
+    public static double x4 = 0;
 
-    public static double y4 = 15;
+    public static double y4 = 12;
 
     public static double x5 = 61;
     public static double y5 = -4;
-    public static double x6 = 12;
-    public static double y6 = 11;
+    public static double x6 = 15;
+    public static double y6 = 14;
 
-    public static double x7 = 2;
-    public static double y7 = 10;
+    public static double x7 = -5;
+    public static double y7 = 21.5;
     public static double h6 = 270;
 
 
@@ -504,7 +504,10 @@ public static double turn = 45;
                 Mechs.saScorePos(),
                 lift.scoreHeight(),
                 new SleepAction(1.5),
-                seg7
+                seg7,
+                new SleepAction(1),
+                lift.baseHeight(),
+                new SleepAction(2)
 
 
         ));
