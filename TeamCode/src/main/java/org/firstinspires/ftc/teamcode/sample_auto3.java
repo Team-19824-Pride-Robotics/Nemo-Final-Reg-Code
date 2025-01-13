@@ -14,6 +14,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -21,10 +22,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
-
+@Disabled
 @Config
-@Autonomous(name = "Sample auto 2")
-public class sample_auto2 extends LinearOpMode {
+@Autonomous(name = "Sample auto 3")
+public class sample_auto3 extends LinearOpMode {
     //Positions copied from Teleop
     public static int saHeight1 = 1300;
     public static int spHeight1 = 0;
@@ -68,7 +69,7 @@ public class sample_auto2 extends LinearOpMode {
 
     public static double x2 = 1;
 
-    public static double y2 = 12;
+    public static double y2 = 10;
     public static double x3 = 8;
 
     public static double y3 = 24; //24
@@ -78,14 +79,18 @@ public class sample_auto2 extends LinearOpMode {
 
     public static double x5 = 61;
     public static double y5 = -4;
-    public static double x6 = 56;
-    public static double y6 = -19;
+    public static double x6 = 12;
+    public static double y6 = 11;
+
+    public static double x7 = 2;
+    public static double y7 = 10;
     public static double h6 = 270;
 
 
     public static double tangent1 = 180;
     public static double tangent2 = -90;
 
+    public static double thirdSampleAngle = 215;
 public static double turn = 45;
 
 
@@ -252,7 +257,7 @@ public static double turn = 45;
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
 
-                    intake.setPower(0.4);
+                    intake.setPower(0.5);
 
 
 
@@ -391,11 +396,11 @@ public static double turn = 45;
 
         Action seg5 = segment5.build();
         segment6 = segment5.endTrajectory().fresh()
-                .turn(Math.toRadians(turn));
+                .splineToLinearHeading(new Pose2d(x6,y6,Math.toRadians(thirdSampleAngle)),Math.toRadians(thirdSampleAngle));
         Action seg6 = segment6.build();
         segment7 = segment6.endTrajectory().fresh()
                 //.setTangent(Math.toRadians(tangent1))
-                .lineToX(x5);
+                .splineToLinearHeading(new Pose2d(x7,y7,Math.toRadians(135)),Math.toRadians(135));
         //.splineToLinearHeading(new Pose2d(x5,y5,Math.toRadians(thirdScoreAngle)),Math.toRadians(tangent2));
 
         Action seg7 = segment7.build();
@@ -478,31 +483,29 @@ public static double turn = 45;
                 Mechs.Return(),
                 lift.baseHeight(),
                 //new SleepAction(2),
-                seg6,
-                seg7,
-                seg8,
-                Mechs.park(),
-                new SleepAction(2)
 
-//                seg6,
-//                Mechs.slideOut(),
-//                new SleepAction(1.5),
-//                Mechs.intakeOff(),
-//                new SleepAction(0.25),
-//                Mechs.slideIn(),
-//                new SleepAction(0.5),
-//                Mechs.intakeOn(),
-//                new SleepAction(0.25),
-//                Mechs.intakeOff(),
-//                new SleepAction(0.5),
-//                Mechs.armDownALil(),
-//                new SleepAction(0.5),
-//                Mechs.closeClaw(),
-//                new SleepAction(0.5),
-//
-//                Mechs.saScorePos(),
-//                lift.scoreHeight(),
-//                new SleepAction(1.5)
+
+                seg6,
+                Mechs.slideOut(),
+                new SleepAction(1.5),
+                Mechs.intakeOff(),
+                new SleepAction(0.25),
+                Mechs.slideIn(),
+                new SleepAction(0.5),
+                Mechs.intakeOn(),
+                new SleepAction(0.25),
+                Mechs.intakeOff(),
+                new SleepAction(0.5),
+                Mechs.armDownALil(),
+                new SleepAction(0.5),
+                Mechs.closeClaw(),
+                new SleepAction(0.5),
+
+                Mechs.saScorePos(),
+                lift.scoreHeight(),
+                new SleepAction(1.5),
+                seg7
+
 
         ));
         telemetry.addData("x", drive.pose.position.x);

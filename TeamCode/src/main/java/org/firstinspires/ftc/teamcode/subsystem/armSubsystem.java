@@ -22,6 +22,8 @@ public class armSubsystem {
 
     public double armTargetPosition =.3;
 
+    public static double park = .66;
+
     public armSubsystem(HardwareMap hardwareMap) {
         arm = hardwareMap.get(ServoImplEx.class, "arm");
         arm.setPwmRange(new PwmControl.PwmRange(505, 2495));
@@ -43,6 +45,10 @@ public class armSubsystem {
     public void armPickupSpeicmen() {
         armTargetPosition= armPickupSpcimen;
     }
+    public void armPark() {
+        armTargetPosition= park;
+    }
+
 
     public void armSample(){
         armTargetPosition = armSample;

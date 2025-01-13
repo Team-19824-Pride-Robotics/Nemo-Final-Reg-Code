@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.subsystem.wristSubsystem;
 import java.util.List;
 
 @Config
-@TeleOp(name="Teleop")
+@TeleOp(name="A_Teleop")
 public class Teleop extends OpMode {
     private LinkageSubsystem linkage;
     private liftSubsystem lift;
@@ -119,7 +119,7 @@ public class Teleop extends OpMode {
         //////////////////////////
         /// Gamepad 1 controls ///
         //////////////////////////
-        double d_power = .8 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
+        double d_power = .5 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
         double drive = gamepad1.left_stick_y * drive_speed_M;
         double rotate = -gamepad1.right_stick_x * drive_speed_M;
 
@@ -178,6 +178,12 @@ public class Teleop extends OpMode {
         if (gamepad1.right_bumper) {
             claw.clawClose();
         }
+        if (gamepad1.back){
+            arm.armPark();
+            wrist.wristScore();
+            lift.pickup();
+
+        }
         //////////////////////////
         /// Gamepad 2 controls ///
         //////////////////////////
@@ -194,7 +200,7 @@ public class Teleop extends OpMode {
             pickup2= true;
             intaking = false;
         }
-        if (linkage.getEncoderRlPosition() <= 48 && pickup2) {
+        if (linkage.getEncoderRlPosition() <= 38 && pickup2) {
             arm.armPickup2();
             wrist.wristIn();
         }
