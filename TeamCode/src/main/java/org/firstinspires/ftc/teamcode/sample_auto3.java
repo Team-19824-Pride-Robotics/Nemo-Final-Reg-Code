@@ -35,12 +35,12 @@ public class sample_auto3 extends LinearOpMode {
 
     public static int baseHeight = 0;
 
-    public static double AHPos = 0.06;
-    public static double BHPos = 0.12;
+    public static double AHPos = 0.05;
+    public static double BHPos = 0.11;
     public static double AHPos3 = 0.27;
     public static double BHPos3 = 0.45;
 
-    public static double Bpos = 0.32;
+    public static double Bpos = 0.31;
 
     public static double Bpos2 = 0.37;
 
@@ -65,31 +65,31 @@ public class sample_auto3 extends LinearOpMode {
     public static double y0 = 15;
     public static double x1 = 11.5;
 
-    public static double y1 = 8.25; //9
+    public static double y1 = 7; //9
 
     public static double x2 = 0;
 
-    public static double y2 = 5;
+    public static double y2 = 12;
     public static double x3 = 7;
     public static double y3 = 21.5; //24
-    public static double x4 = 0;
+    public static double x4 = -2;
 
-    public static double y4 = 12;
+    public static double y4 = 14;
 
     public static double x5 = 61;
     public static double y5 = -4;
-    public static double x6 = 15;
-    public static double y6 = 14;
+    public static double x6 = 18;
+    public static double y6 = 17;
 
-    public static double x7 = 0;
-    public static double y7 = 21.5;
+    public static double x7 = -8;
+    public static double y7 = 25;
     public static double h6 = 270;
 
 
     public static double tangent1 = 180;
     public static double tangent2 = -90;
 
-    public static double thirdSampleAngle = 215;
+    public static double thirdSampleAngle = 230;
 public static double turn = 45;
 
 
@@ -505,6 +505,8 @@ public static double turn = 45;
                 new SleepAction(1.5),
                 seg7,
                 new SleepAction(1),
+                Mechs.openClaw(),
+                new SleepAction(.5),
                 Mechs.Return(),
                 lift.baseHeight(),
                 new SleepAction(2)
