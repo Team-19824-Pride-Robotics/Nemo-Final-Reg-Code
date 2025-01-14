@@ -14,7 +14,6 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -24,8 +23,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 @Config
-@Autonomous(name = "Sample auto 3")
-public class sample_auto3 extends LinearOpMode {
+@Autonomous(name = "4 Sample Auto")
+public class auto_4Sample extends LinearOpMode {
     //Positions copied from Teleop
     public static int saHeight1 = 1300;
     public static int spHeight1 = 0;

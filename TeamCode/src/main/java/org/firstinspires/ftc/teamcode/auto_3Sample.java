@@ -23,8 +23,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 @Config
-@Autonomous(name = "Sample auto 2")
-public class sample_auto2 extends LinearOpMode {
+@Autonomous(name = "3 Sample Auto")
+public class auto_3Sample extends LinearOpMode {
     //Positions copied from Teleop
     public static int saHeight1 = 1300;
     public static int spHeight1 = 0;
