@@ -70,7 +70,7 @@ public class auto_4Sample extends LinearOpMode {
 
     public static double y2 = 12;
     public static double x3 = 7;
-    public static double y3 = 21.5; //24
+    public static double y3 = 23; //24
     public static double x4 = -2;
 
     public static double y4 = 14;
@@ -90,6 +90,8 @@ public class auto_4Sample extends LinearOpMode {
 
     public static double thirdSampleAngle = 230;
 public static double turn = 45;
+
+public static double sleepy = 1;
 
 
 
@@ -427,7 +429,7 @@ public static double turn = 45;
                 seg1,
                 new SleepAction(0.5),
                 Mechs.openClaw(),
-                new SleepAction(1),
+                new SleepAction(0.5),
                 Mechs.Return(),
                 lift.baseHeight(),
 
@@ -449,10 +451,10 @@ public static double turn = 45;
 
                 Mechs.saScorePos(),
                 lift.scoreHeight(),
-                new SleepAction(1.1),
+                new SleepAction(sleepy),
                 seg3,
                 Mechs.openClaw(),
-                new SleepAction(1),
+                new SleepAction(0.3),
                 Mechs.Return(),
                 lift.baseHeight(),
 
@@ -464,11 +466,9 @@ public static double turn = 45;
                 Mechs.slideIn(),
                 new SleepAction(0.5),
                 Mechs.intakeOn(),
+                Mechs.armDownALil(),
                 new SleepAction(0.25),
                 Mechs.intakeOff(),
-                new SleepAction(0.5),
-                Mechs.armDownALil(),
-                new SleepAction(0.5),
                 Mechs.closeClaw(),
                 new SleepAction(0.5),
 
@@ -477,7 +477,7 @@ public static double turn = 45;
                 new SleepAction(1.5),
                 seg5,
                 Mechs.openClaw(),
-                new SleepAction(1),
+                new SleepAction(0.3),
                 Mechs.Return(),
                 lift.baseHeight(),
                 //new SleepAction(2),
@@ -503,7 +503,7 @@ public static double turn = 45;
                 lift.scoreHeight(),
                 new SleepAction(1.5),
                 seg7,
-                new SleepAction(1),
+                new SleepAction(0.3),
                 Mechs.openClaw(),
                 new SleepAction(.5),
                 Mechs.Return(),
