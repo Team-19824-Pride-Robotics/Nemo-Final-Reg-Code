@@ -23,8 +23,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 @Config
-@Autonomous(name = "4 Sample Auto")
-public class auto_4Sample extends LinearOpMode {
+@Autonomous(name = "5 Sample Auto")
+public class auto_5Sample extends LinearOpMode {
     //Positions copied from Teleop
     public static int saHeight1 = 1300;
     public static int spHeight1 = 0;
@@ -77,15 +77,18 @@ public class auto_4Sample extends LinearOpMode {
 
     public static double x5 = 61;
     public static double y5 = -4;
-    public static double x6 = 18;
-    public static double y6 = 17;
+    public static double x6 = 17;
+    public static double y6 = 16;
 
     public static double x7 = -8;
     public static double y7 = 25;
-    public static double x8 = 40;
-    public static double y8 =14;
+    public static double x8 = -23;
+    public static double y8 =10;
 
-    public static double h8 = 270;
+    public static double h8 = 90;
+    public static double x9 = -11;
+    public static double y9 = 21;
+    public static double h9 = 135;
 
 
     public static double tangent1 = 180;
@@ -365,6 +368,8 @@ public static double sleepy = 1;
         TrajectoryActionBuilder segment6;
         TrajectoryActionBuilder segment7;
         TrajectoryActionBuilder segment8;
+        TrajectoryActionBuilder segment9;
+
 
 
 
@@ -410,9 +415,15 @@ public static double sleepy = 1;
         segment8 = segment7.endTrajectory().fresh()
                // .setTangent(Math.toRadians(tangent1))
 
-        .splineToLinearHeading(new Pose2d(x8,y8,Math.toRadians(h8)),Math.toRadians(tangent2));
+        .splineToLinearHeading(new Pose2d(x8,y8,Math.toRadians(h8)),Math.toRadians(135));
 
         Action seg8 = segment8.build();
+        segment9 = segment8.endTrajectory().fresh()
+                // .setTangent(Math.toRadians(tangent1))
+
+                .splineToLinearHeading(new Pose2d(x9,y9,Math.toRadians(h9)),Math.toRadians(135));
+
+        Action seg9 = segment9.build();
 
         waitForStart();
 
@@ -438,7 +449,7 @@ public static double sleepy = 1;
 
                 seg2,
                 Mechs.slideOut(),
-                new SleepAction(1),
+                new SleepAction(.5), //1
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
@@ -463,7 +474,7 @@ public static double sleepy = 1;
 
                 seg4,
                 Mechs.slideOut(),
-                new SleepAction(1),
+                new SleepAction(.5),//1
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
@@ -489,7 +500,7 @@ public static double sleepy = 1;
 
                 seg6,
                 Mechs.slideOut(),
-                new SleepAction(1.5),
+                new SleepAction(1), //1.5
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
@@ -513,8 +524,30 @@ public static double sleepy = 1;
                 Mechs.Return(),
                 lift.baseHeight(),
                 seg8,
-                Mechs.park(),
+                Mechs.slideOut(),
+                new SleepAction(.5), //1.5
+                Mechs.intakeOff(),
+                new SleepAction(0.25),
+                Mechs.slideIn(),
+                new SleepAction(0.3), //.5 //.25
+                Mechs.intakeOn(),
+                new SleepAction(0.2),
+                Mechs.intakeOff(),
+                new SleepAction(0.5),
+                Mechs.armDownALil(),
+                new SleepAction(0.25),
+                Mechs.closeClaw(),
+                new SleepAction(0.25), //.5
+                Mechs.saScorePos(),
+                lift.scoreHeight(),
+                seg9,
+                new SleepAction(.4),
+                Mechs.openClaw(),
+                new SleepAction(.2), //.3
+                Mechs.Return(),
+                lift.baseHeight(),
                 new SleepAction(2)
+
 
 
         ));
