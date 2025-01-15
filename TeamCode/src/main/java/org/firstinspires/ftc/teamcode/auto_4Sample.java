@@ -82,7 +82,10 @@ public class auto_4Sample extends LinearOpMode {
 
     public static double x7 = -8;
     public static double y7 = 25;
-    public static double h6 = 270;
+    public static double x8 = 40;
+    public static double y8 =5;
+
+    public static double h8 = 270;
 
 
     public static double tangent1 = 180;
@@ -405,9 +408,9 @@ public static double sleepy = 1;
 
         Action seg7 = segment7.build();
         segment8 = segment7.endTrajectory().fresh()
-                .setTangent(Math.toRadians(tangent1))
+               // .setTangent(Math.toRadians(tangent1))
 
-        .splineToLinearHeading(new Pose2d(x6,y6,Math.toRadians(h6)),Math.toRadians(tangent2));
+        .splineToLinearHeading(new Pose2d(x8,y8,Math.toRadians(h8)),Math.toRadians(tangent2));
 
         Action seg8 = segment8.build();
 
@@ -425,11 +428,11 @@ public static double sleepy = 1;
                 Mechs.closeClaw(),
                 lift.scoreHeight(),
                 Mechs.saScorePos(),
-                new SleepAction(0.75),
+                new SleepAction(0.1), //.75 //.25
                 seg1,
-                new SleepAction(0.5),
+                //new SleepAction(0.25), //.5
                 Mechs.openClaw(),
-                new SleepAction(0.5),
+                new SleepAction(0.2), //.5
                 Mechs.Return(),
                 lift.baseHeight(),
 
@@ -439,14 +442,14 @@ public static double sleepy = 1;
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
-                new SleepAction(0.5),
+                new SleepAction(0.25), //.5 //.25
                 Mechs.intakeOn(),
-                new SleepAction(0.25),
+                new SleepAction(0.1), //.25
                 Mechs.intakeOff(),
                 Mechs.armDownALil(),
-                new SleepAction(0.5),
+                new SleepAction(0.25), //.5
                 Mechs.closeClaw(),
-                new SleepAction(0.5),
+                new SleepAction(0.25), //.5
 
 
                 Mechs.saScorePos(),
@@ -454,7 +457,7 @@ public static double sleepy = 1;
                 new SleepAction(sleepy),
                 seg3,
                 Mechs.openClaw(),
-                new SleepAction(0.3),
+                new SleepAction(0.2), //.3
                 Mechs.Return(),
                 lift.baseHeight(),
 
@@ -464,20 +467,21 @@ public static double sleepy = 1;
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
-                new SleepAction(0.5),
+                new SleepAction(0.25), //.5 //.25
                 Mechs.intakeOn(),
+                new SleepAction(0.1),
                 Mechs.armDownALil(),
                 new SleepAction(0.25),
                 Mechs.intakeOff(),
                 Mechs.closeClaw(),
-                new SleepAction(0.5),
+                new SleepAction(0.25),//.5
 
                 Mechs.saScorePos(),
                 lift.scoreHeight(),
                 new SleepAction(1.5),
                 seg5,
                 Mechs.openClaw(),
-                new SleepAction(0.3),
+                new SleepAction(0.2), //.3
                 Mechs.Return(),
                 lift.baseHeight(),
                 //new SleepAction(2),
@@ -489,26 +493,27 @@ public static double sleepy = 1;
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
-                new SleepAction(0.5),
+                new SleepAction(0.25), //.5 //.25
                 Mechs.intakeOn(),
-                new SleepAction(0.25),
+                new SleepAction(0.1),
                 Mechs.intakeOff(),
                 new SleepAction(0.5),
                 Mechs.armDownALil(),
-                new SleepAction(0.5),
+                new SleepAction(0.25),
                 Mechs.closeClaw(),
-                new SleepAction(0.5),
+                new SleepAction(0.25), //.5
 
                 Mechs.saScorePos(),
                 lift.scoreHeight(),
                 new SleepAction(1.5),
                 seg7,
-                new SleepAction(0.3),
+                //new SleepAction(0.1), //.3
                 Mechs.openClaw(),
-                new SleepAction(.5),
+                new SleepAction(.2), //.3
                 Mechs.Return(),
                 lift.baseHeight(),
-                new SleepAction(2)
+                //new SleepAction(2),
+                seg8
 
 
         ));
