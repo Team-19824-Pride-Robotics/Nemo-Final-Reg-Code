@@ -82,7 +82,7 @@ public class auto_5Sample extends LinearOpMode {
 
     public static double x7 = -8;
     public static double y7 = 25;
-    public static double x8 = -23;
+    public static double x8 = -22;  //9in away from wall
     public static double y8 =10;
 
     public static double h8 = 90;

@@ -61,17 +61,15 @@ public class fieldCentricTeleop extends OpMode {
     DcMotorEx BR;
     DcMotorEx BL;
     public static double drive_speed_M = 1;
-
-    //imu
-    IMU imu = hardwareMap.get(IMU.class, "imu");
-    IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-            RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-            RevHubOrientationOnRobot.UsbFacingDirection.UP));
+    IMU imu;
 
 
     @Override
     public void init() {
-
+        imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
         //imu
         imu.initialize(parameters);
 
@@ -135,9 +133,9 @@ public class fieldCentricTeleop extends OpMode {
         double d_power = .5 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
 
 
-        double y = -gamepad1.left_stick_y;
-        double x = gamepad1.left_stick_x;
-        double rx = gamepad1.right_stick_x;
+        double y = gamepad1.left_stick_y;
+        double x = -gamepad1.left_stick_x;
+        double rx = -gamepad1.right_stick_x;
 
         // it can be freely changed based on preference.
         if (gamepad1.options) {
