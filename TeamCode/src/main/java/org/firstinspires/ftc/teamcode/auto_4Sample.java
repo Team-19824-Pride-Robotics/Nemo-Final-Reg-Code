@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
@@ -43,7 +44,7 @@ public class auto_4Sample extends LinearOpMode {
 
     public static double Bpos2 = 0.37;
 
-    public static double Epos1 = .31; //Originpickup
+    public static double Epos1 = .30; //Originpickup
     public static double Epos2 = .4; //Origin
     public static double Epos3 = 0.7; //Specimen
     public static double Epos4 = 0.65; //Sample
@@ -77,11 +78,11 @@ public class auto_4Sample extends LinearOpMode {
 
     public static double x5 = 61;
     public static double y5 = -4;
-    public static double x6 = 18;
-    public static double y6 = 17;
+    public static double x6 = 17;
+    public static double y6 = 16;
 
-    public static double x7 = -8;
-    public static double y7 = 25;
+    public static double x7 = -16; //-8
+    public static double y7 = 22;//25
     public static double x8 = 40;
     public static double y8 =14;
 
@@ -458,10 +459,11 @@ public static double sleepy = 1;
                 seg3,
                 Mechs.openClaw(),
                 new SleepAction(0.2), //.3
-                Mechs.Return(),
-                lift.baseHeight(),
-
-                seg4,
+                new ParallelAction(
+                        seg4,
+                        Mechs.Return(),
+                        lift.baseHeight()
+                ),
                 Mechs.slideOut(),
                 new SleepAction(1),
                 Mechs.intakeOff(),
@@ -480,14 +482,14 @@ public static double sleepy = 1;
                 lift.scoreHeight(),
                 new SleepAction(1.5),
                 seg5,
+                new SleepAction(.2),
                 Mechs.openClaw(),
                 new SleepAction(0.2), //.3
+                seg6,
                 Mechs.Return(),
                 lift.baseHeight(),
-                //new SleepAction(2),
 
 
-                seg6,
                 Mechs.slideOut(),
                 new SleepAction(1.5),
                 Mechs.intakeOff(),
@@ -510,9 +512,10 @@ public static double sleepy = 1;
                 //new SleepAction(0.1), //.3
                 Mechs.openClaw(),
                 new SleepAction(.2), //.3
+                seg8,
                 Mechs.Return(),
                 lift.baseHeight(),
-                seg8,
+                new SleepAction(1),
                 Mechs.park(),
                 new SleepAction(2)
 

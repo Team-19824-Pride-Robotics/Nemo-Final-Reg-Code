@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
@@ -43,7 +44,7 @@ public class auto_5Sample extends LinearOpMode {
 
     public static double Bpos2 = 0.37;
 
-    public static double Epos1 = .31; //Originpickup
+    public static double Epos1 = .30; //Originpickup
     public static double Epos2 = .4; //Origin
     public static double Epos3 = 0.7; //Specimen
     public static double Epos4 = 0.65; //Sample
@@ -80,14 +81,15 @@ public class auto_5Sample extends LinearOpMode {
     public static double x6 = 17;
     public static double y6 = 16;
 
-    public static double x7 = -8;
-    public static double y7 = 25;
-    public static double x8 = -22;  //9in away from wall
-    public static double y8 =10;
+    public static double x7 = -16;
+    public static double y7 = 22;
+    public static double x8 = -27.5;  //9in away from wall
+    public static double y8 =16;
 
     public static double h8 = 90;
-    public static double x9 = -11;
-    public static double y9 = 21;
+
+    public static double x9 = -17;
+    public static double y9 = 22.5;
     public static double h9 = 135;
 
 
@@ -369,7 +371,7 @@ public static double sleepy = 1;
         TrajectoryActionBuilder segment7;
         TrajectoryActionBuilder segment8;
         TrajectoryActionBuilder segment9;
-
+        TrajectoryActionBuilder segment10;
 
 
 
@@ -425,6 +427,11 @@ public static double sleepy = 1;
 
         Action seg9 = segment9.build();
 
+        segment10 = segment9.endTrajectory().fresh()
+                // .setTangent(Math.toRadians(tangent1))
+
+                .lineToX(-5);
+        Action seg10 = segment10.build();
         waitForStart();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -469,10 +476,11 @@ public static double sleepy = 1;
                 seg3,
                 Mechs.openClaw(),
                 new SleepAction(0.2), //.3
-                Mechs.Return(),
-                lift.baseHeight(),
-
-                seg4,
+                new ParallelAction(
+                        seg4,
+                        Mechs.Return(),
+                        lift.baseHeight()
+                ),
                 Mechs.slideOut(),
                 new SleepAction(.5),//1
                 Mechs.intakeOff(),
@@ -493,12 +501,11 @@ public static double sleepy = 1;
                 seg5,
                 Mechs.openClaw(),
                 new SleepAction(0.2), //.3
+                seg6,
                 Mechs.Return(),
                 lift.baseHeight(),
-                //new SleepAction(2),
 
 
-                seg6,
                 Mechs.slideOut(),
                 new SleepAction(1), //1.5
                 Mechs.intakeOff(),
@@ -506,7 +513,7 @@ public static double sleepy = 1;
                 Mechs.slideIn(),
                 new SleepAction(0.25), //.5 //.25
                 Mechs.intakeOn(),
-                new SleepAction(0.1),
+                new SleepAction(0.05), //.1
                 Mechs.intakeOff(),
                 new SleepAction(0.5),
                 Mechs.armDownALil(),
@@ -521,9 +528,12 @@ public static double sleepy = 1;
                 //new SleepAction(0.1), //.3
                 Mechs.openClaw(),
                 new SleepAction(.2), //.3
+                /*new ParallelAction(
+
+                        ), */
+                seg8,
                 Mechs.Return(),
                 lift.baseHeight(),
-                seg8,
                 Mechs.slideOut(),
                 new SleepAction(.5), //1.5
                 Mechs.intakeOff(),
@@ -541,12 +551,16 @@ public static double sleepy = 1;
                 Mechs.saScorePos(),
                 lift.scoreHeight(),
                 seg9,
-                new SleepAction(.4),
+                new SleepAction(.6), //.4
                 Mechs.openClaw(),
                 new SleepAction(.2), //.3
-                Mechs.Return(),
-                lift.baseHeight(),
+                new ParallelAction(
+                        seg10,
+                        Mechs.Return(),
+                        lift.baseHeight()
+                ),
                 new SleepAction(2)
+
 
 
 

@@ -41,6 +41,7 @@ public class Teleop extends OpMode {
     boolean pickup2 =  false;
     boolean liftPickup = true;
     boolean intaking = false;
+    boolean specPos = false;
 
     private ElapsedTime elapsedtime;
     private List<LynxModule> allHubs;
@@ -69,7 +70,7 @@ public class Teleop extends OpMode {
 
         allHubs = hardwareMap.getAll(LynxModule.class);
         for (LynxModule hub : allHubs){
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO); //MANUAL
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
         linkage = new LinkageSubsystem(hardwareMap);
@@ -108,9 +109,9 @@ public class Teleop extends OpMode {
     @Override
     public void loop() {
 
-      /*  for (LynxModule hub : allHubs){
+        for (LynxModule hub : allHubs){
             hub.clearBulkCache();
-        } */
+        }
 
      //   distance = distanceSensor.getDistance(DistanceUnit.MM);
         red= colorSensor.red();
@@ -154,12 +155,17 @@ public class Teleop extends OpMode {
         }
 
         //specimen control
-        if (gamepad1.y){
+        if (gamepad1.x){
+
             lift.barHigh();
+            specPos = true;
+        }
+        if (lift.getLift1Position() > 400 && specPos) {
             arm.armSpecimen();
             wrist.wristScoreSpeicmen();
+            specPos = false;
         }
-        if (gamepad1.x){
+        if (gamepad1.y){
             lift.score();
         }
         if (gamepad1.a){
@@ -178,12 +184,19 @@ public class Teleop extends OpMode {
         if (gamepad1.right_bumper) {
             claw.clawClose();
         }
-        if (gamepad1.back){
+       /* if (gamepad1.back){
             arm.armPark();
             wrist.wristScore();
             lift.pickup();
-
+        } */
+        if (gamepad1.start) {
+            lift.ascent2();
         }
+        if (gamepad1.back) {
+            lift.pickup();
+            linkage.hangIn();
+        }
+
         //////////////////////////
         /// Gamepad 2 controls ///
         //////////////////////////
@@ -341,14 +354,19 @@ public class Teleop extends OpMode {
         telemetry.addData("Distance", distance);*/
         telemetry.addData ("pickup", pickup);
 
-        telemetry.addData("Lift Position 1", lift.getLift1Position());
+       /* telemetry.addData("Lift Position 1", lift.getLift1Position());
         telemetry.addData("Lift Position 2", lift.getLift2Position());
         telemetry.addData("Encoder RL Position", linkage.getEncoderRlPosition());
         telemetry.addData("Encoder LL Position", linkage.getEncoderLlPosition());
         telemetry.addData("bucketEncoder", bucket.getBucketEncoderPosition());
         telemetry.addData("armEncoder", arm.getArmEncoderPosition());
         telemetry.addData("lwEncoder", wrist.getLwEncoderPosition());
-        telemetry.addData("rwEncoder", wrist.getRwEncoderPosition());
+        telemetry.addData("rwEncoder", wrist.getRwEncoderPosition());*/
+
+        /*telemetry.addData("lift1 setPower", lift.getLift1SetPower());
+        telemetry.addData("lift1 power",lift.getLift1Power());
+        telemetry.addData("lift2 setPower", lift.getLift2SetPower());
+        telemetry.addData("lift2 power",lift.getLift2Power());*/
 
         telemetry.addData("Loop Times", elapsedtime.milliseconds());
         elapsedtime.reset();

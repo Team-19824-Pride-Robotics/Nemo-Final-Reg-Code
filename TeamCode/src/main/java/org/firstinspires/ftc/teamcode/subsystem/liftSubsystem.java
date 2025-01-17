@@ -18,10 +18,15 @@ public class liftSubsystem {
     public static double bucketLow = 1000;
     public static double bucketHigh = 2850;
     public static double barLow = 700;
-    public static double barHigh = 1000;
-    public static double score = 200;
+    public static double barHigh = 800;
+    public static double score = 1300;
+
+    public static double ascent2 = 1300;
 
     private double target = 0;
+
+    public double pid1;
+    public double pid2;
 
     public liftSubsystem(HardwareMap hardwareMap) {
         lift1 = hardwareMap.get(DcMotorEx.class, "lift1");
@@ -55,6 +60,9 @@ public class liftSubsystem {
     public void barHigh() {
         target = barHigh;
     }
+    public void ascent2() {
+        target = ascent2;
+    }
     public double getTarget() {
         return target;
     }
@@ -66,13 +74,26 @@ public class liftSubsystem {
     public int getLift2Position() {
         return lift2.getCurrentPosition();
     }
+    public double getLift1SetPower() {
+        return pid1;
+    }
+    public double getLift2SetPower() {
+        return pid2;
+    }
 
+    public double getLift1Power() {
+        return lift1.getPower();
+    }
+    public double getLift2Power() {
+        return lift2.getPower();
+    }
     public void update() {
-        double pid1 = controller.calculate(lift1.getCurrentPosition(), target);
-        double pid2 = controller.calculate(lift2.getCurrentPosition(), target);
+         pid1 = controller.calculate(lift1.getCurrentPosition(), target);
+         pid2 = controller.calculate(lift2.getCurrentPosition(), target);
 
         lift1.setPower(pid1);
         lift2.setPower(pid2);
     }
+
 }
 

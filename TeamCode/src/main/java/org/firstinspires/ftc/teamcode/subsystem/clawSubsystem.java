@@ -11,7 +11,7 @@ public class clawSubsystem {
     public static double clawOpen = 0.72;
     public static double clawClose = .92;
 
-    public double clawTargetPosition = .79;
+    public double clawTargetPosition = .72;
 
     public clawSubsystem(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "claw");
