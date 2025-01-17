@@ -193,8 +193,7 @@ public class Teleop extends OpMode {
             lift.ascent2();
         }
         if (gamepad1.back) {
-            lift.pickup();
-            linkage.hangIn();
+            lift.ascent2Up();
         }
 
         //////////////////////////
