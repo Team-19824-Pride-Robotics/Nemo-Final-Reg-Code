@@ -12,8 +12,8 @@ public class LinkageSubsystem {
     private final ServoImplEx ll, rl;
     private final AnalogInput encoderRl, encoderLl;
 
-    public static final double SERVO1_MIN = 0.07, SERVO1_MAX = 0.27;
-    public static final double SERVO2_MIN = 0.13, SERVO2_MAX = 0.45;
+    public static final double SERVO1_MIN = 0.05, SERVO1_MAX = 0.27;
+    public static final double SERVO2_MIN = 0.11, SERVO2_MAX = 0.45;
     public static final double SERVO_FULL_MIN = 0.01, SERVO_FULL_MAX = 0.99;
     public static double rlHangIn = .06, llHangIn = .12;
 
