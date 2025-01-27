@@ -22,27 +22,27 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Disabled
+
 @Config
-@Autonomous(name = "SpecimenAuto")
+@Autonomous(name = "5 Specimen Auto")
 public class auto_5Specimen extends LinearOpMode {
 
 /////////////////////////
-/////Mech Positions/////
-///////////////////////
+/////Mech Positions//////
+/////////////////////////
 
-    public static int spHeight1 = 300; //Not final
-    public static int spHeight2 = 800; //Not final
+    public static int spHeight1 = 700;
+    public static int spHeight2 = 1650;
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
     public static double AHPos2 = 0.27; //linkage out
     public static double BHPos2 = 0.45; //linkage out
-    public static double Bpos = 0.3; //bucket up (not final)
-    public static double Bpos2 = 0.33; //bucket down (not final)
+    public static double Bpos = 0.32; //bucket up (not final)
+    public static double Bpos2 = 0.39; //bucket down (not final)
     public static double Epos1 = .33; //Specimen grab
     public static double Epos2 = .58; //Specimen hang
     public static double Cpos = 0.72; //open
-    public static double Cpos2 = 0.92; //closed
+    public static double Cpos2 = 0.96; //closed
     public static double rwGrab = .46; //grab specimen
     public static double lwGrab = .5; //grab specimen
     public static double lwHang = 0.65; //hang specimen
@@ -50,10 +50,12 @@ public class auto_5Specimen extends LinearOpMode {
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
-    public static double x0 = 30;
-    public static double x1 = 25;
-    public static double y2 = -15; //this var and everything after isnt tested
+    public static double x0 = 28.5;
+    public static double x1 = 22;
+    public static double y2 = -6; //this var and everything after isnt tested
     public static double x3 = 15;
+
+    public static double y3 = -2;
     public static double y4 = -25;
     public static double x5 = 15;
     public static double y6 = -35;
@@ -66,17 +68,19 @@ public class auto_5Specimen extends LinearOpMode {
     public static double y16 = 30;
     public static double x16 = 3;
 /////////////////////
-/////Sleep vars/////
-///////////////////
+/////Sleep vars//////
+/////////////////////
     public static double hangSleep=1;
     public static double grabSleep=1;
+    public static double downSleep=1;
 
-
+    public static double outSleep=1;
     public class Intake {
         ServoImplEx backWrist;
 
         ServoImplEx frontWrist;
         Servo claw;
+        DcMotor intake;
         ServoImplEx elbow;
         ServoImplEx hSlide;
         ServoImplEx hSlide2;
@@ -97,7 +101,7 @@ public class auto_5Specimen extends LinearOpMode {
             backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
             frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "rw");
             frontWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-
+            intake = hardwareMap.get(DcMotor.class, "intake");
         }
 
         public class spHangPos implements Action {
@@ -202,7 +206,51 @@ public class auto_5Specimen extends LinearOpMode {
             return new bucketDown();
         }
 
+        public class intakeOff implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
 
+                intake.setPower(0);
+
+
+
+
+                return false;
+            }
+        }
+        public Action intakeOff() {
+            return new intakeOff();
+        }
+        public class intakeOn implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+
+                intake.setPower(1);
+
+
+
+
+                return false;
+            }
+        }
+        public Action intakeOn() {
+            return new intakeOn();
+        }
+        public class intakeExpel implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+
+                intake.setPower(-1);
+
+
+
+
+                return false;
+            }
+        }
+        public Action intakeExpel() {
+            return new intakeExpel();
+        }
 
 
 
@@ -312,7 +360,7 @@ public class auto_5Specimen extends LinearOpMode {
         TrajectoryActionBuilder segment17;
         segment1 = drive.actionBuilder(initialPose)
 
-                .strafeToConstantHeading(new Vector2d(x0, 0));
+                .strafeToLinearHeading(new Vector2d(x0, 0), 0);
 
         Action seg1 = segment1.build();
 
@@ -320,105 +368,105 @@ public class auto_5Specimen extends LinearOpMode {
 
         segment2 = segment1.endTrajectory().fresh()
 
-                .strafeToConstantHeading(new Vector2d(x1, 0));
+                .strafeToLinearHeading(new Vector2d(x1, 0), 0);
 
         Action seg2 = segment2.build();
 
         //segment 3 - gets into position to push first sample
         segment3 = segment2.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y2), Math.toRadians(-45));
+                .strafeToLinearHeading(new Vector2d(x0, y2), Math.toRadians(135));
 
         Action seg3 = segment3.build();
 
         //segment 4 - pushes first specimen to observation zone
         segment4 = segment3.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x3, y2), Math.toRadians(-135));
+                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(45));
 
         Action seg4 = segment4.build();
 
         //segment 5 - get into position to push 2nd sample
         segment5 = segment4.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y4), Math.toRadians(-45));
+                .strafeToLinearHeading(new Vector2d(x1, y4), Math.toRadians(135));
 
         Action seg5 = segment5.build();
 
         //segment 6 - push 2nd sample
         segment6 = segment5.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x5, y4), Math.toRadians(-135));
+                .strafeToLinearHeading(new Vector2d(x5, y4), Math.toRadians(45));
 
         Action seg6 = segment6.build();
 
         //segment 7 - get ready to push 3rd sample
         segment7 = segment6.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y6), Math.toRadians(-45));
+                .strafeToLinearHeading(new Vector2d(x1, y6), Math.toRadians(135));
 
         Action seg7 = segment7.build();
 
         //segment 8 - you get the point (push 3rd sample)
         segment8 = segment7.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x5, y6), Math.toRadians(-135));
+                .strafeToLinearHeading(new Vector2d(x5, y6), Math.toRadians(45));
 
         Action seg8 = segment8.build();
 
         //segment 9 - grab 2nd specimen
         segment9 = segment8.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(-180));
+                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(180));
 
         Action seg9 = segment9.build();
 
         //segment 10 - hang 2nd specimen
         segment10 = segment9.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y9), Math.toRadians(-180));
+                .strafeToLinearHeading(new Vector2d(x0, y9), Math.toRadians(180));
 
         Action seg10 = segment10.build();
 
         //segment 11 - grab 3rd specimen
         segment11 = segment10.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(-180));
+                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(180));
 
         Action seg11 = segment11.build();
 
         //segment 12 - hang 3rd specimen
         segment12 = segment11.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y11), Math.toRadians(-180));
+                .strafeToLinearHeading(new Vector2d(x0, y11), Math.toRadians(180));
 
         Action seg12 = segment12.build();
 
         //segment 13 - grab 4th specimen
         segment13 = segment12.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(-180));
+                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(180));
 
         Action seg13 = segment13.build();
 
         //segment 14 - hang 4th specimen
         segment14 = segment13.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y13), Math.toRadians(-180));
+                .strafeToLinearHeading(new Vector2d(x0, y13), Math.toRadians(180));
 
         Action seg14 = segment14.build();
 
         //segment 15 - grab 5th specimen
         segment15 = segment14.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(-180));
+                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(180));
 
         Action seg15 = segment15.build();
 
         //segment 16 - hang 5th specimen (yippee!!!)
         segment16 = segment15.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y15), Math.toRadians(-180));
+                .strafeToLinearHeading(new Vector2d(x0, y15), Math.toRadians(180));
 
         Action seg16 = segment16.build();
         waitForStart();
@@ -426,7 +474,7 @@ public class auto_5Specimen extends LinearOpMode {
         //segment 17 - park
         segment17 = segment16.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(-180));
+                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(180));
 
         Action seg17 = segment17.build();
         waitForStart();
@@ -441,6 +489,7 @@ public class auto_5Specimen extends LinearOpMode {
                 intake.closeClaw(),
                 intake.bucketUp(),
                 intake.spHangPos(),
+                intake.intakeIn(),
                 lift.scoreHeight(),
                 seg1,
                 lift.upABit(),
@@ -452,8 +501,13 @@ public class auto_5Specimen extends LinearOpMode {
                 //push samples in observation zone
                 seg2,
                 seg3,
+                new SleepAction(downSleep),
+                intake.intakeOut(),
                 intake.bucketDown(),
+                intake.intakeOn(),
                 seg4,
+                intake.intakeOut(),
+                new SleepAction(outSleep),
                 intake.bucketUp(),
                 seg5,
                 intake.bucketDown(),
@@ -462,6 +516,7 @@ public class auto_5Specimen extends LinearOpMode {
                 seg7,
                 intake.bucketDown(),
                 seg8,
+                intake.intakeIn(),
 
                 //score 2nd specimen
                 seg9,
