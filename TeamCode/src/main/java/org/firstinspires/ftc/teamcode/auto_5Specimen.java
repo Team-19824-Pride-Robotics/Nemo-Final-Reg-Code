@@ -31,14 +31,14 @@ public class auto_5Specimen extends LinearOpMode {
 /////Mech Positions//////
 /////////////////////////
 
-    public static int spHeight1 = 700;
+    public static int spHeight1 = 750;
     public static int spHeight2 = 1650;
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
     public static double AHPos2 = 0.27; //linkage out
     public static double BHPos2 = 0.45; //linkage out
     public static double Bpos = 0.32; //bucket up (not final)
-    public static double Bpos2 = 0.39; //bucket down (not final)
+    public static double Bpos2 = 0.33; //bucket down (not final)
     public static double Epos1 = .33; //Specimen grab
     public static double Epos2 = .58; //Specimen hang
     public static double Cpos = 0.72; //open
@@ -50,12 +50,13 @@ public class auto_5Specimen extends LinearOpMode {
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
-    public static double x0 = 28.5;
-    public static double x1 = 22;
-    public static double y2 = -6; //this var and everything after isnt tested
-    public static double x3 = 15;
+    public static double x0 = 29;
+    public static double x1 = 20;
+    public static double y2 = -30; //this var and everything after isnt tested
+    public static double x3 = 50;
 
-    public static double y3 = -2;
+    public static double y3 = -45;
+    public static double x4 = 25;
     public static double y4 = -25;
     public static double x5 = 15;
     public static double y6 = -35;
@@ -70,7 +71,7 @@ public class auto_5Specimen extends LinearOpMode {
 /////////////////////
 /////Sleep vars//////
 /////////////////////
-    public static double hangSleep=0.8;
+    public static double hangSleep=0.6;
     public static double grabSleep=0.5;
     public static double downSleep=0.8;
 
@@ -372,52 +373,52 @@ public class auto_5Specimen extends LinearOpMode {
 
         Action seg2 = segment2.build();
 
-        //segment 3 - gets into position to push first sample
+        //segment 3 - clear submersible
         segment3 = segment2.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y2), Math.toRadians(135));
+                .strafeToLinearHeading(new Vector2d(x0, y2), Math.toRadians(0));
 
         Action seg3 = segment3.build();
 
-        //segment 4 - pushes first specimen to observation zone
+        //segment 4 - get behind block
         segment4 = segment3.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(0));
 
         Action seg4 = segment4.build();
 
-        //segment 5 - get into position to push 2nd sample
+        //segment 5 - push block
         segment5 = segment4.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y4), Math.toRadians(135));
+                .strafeToLinearHeading(new Vector2d(x4, y3), Math.toRadians(0));
 
         Action seg5 = segment5.build();
 
-        //segment 6 - push 2nd sample
+        //segment 6 - get behind 2nd sample
         segment6 = segment5.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x5, y4), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x5, y4), Math.toRadians(0));
 
         Action seg6 = segment6.build();
 
-        //segment 7 - get ready to push 3rd sample
+        //segment 7 - Push 2nd sample
         segment7 = segment6.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y6), Math.toRadians(135));
+                .strafeToLinearHeading(new Vector2d(x1, y6), Math.toRadians(0));
 
         Action seg7 = segment7.build();
 
-        //segment 8 - you get the point (push 3rd sample)
+        //segment 8 - get behind 3rd sample
         segment8 = segment7.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x5, y6), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x5, y6), Math.toRadians(0));
 
         Action seg8 = segment8.build();
 
-        //segment 9 - grab 2nd specimen
+        //segment 9 - push 3rd sample
         segment9 = segment8.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(0));
 
         Action seg9 = segment9.build();
 
@@ -501,30 +502,25 @@ public class auto_5Specimen extends LinearOpMode {
                 //push samples in observation zone
                 seg2,
                 seg3,
-                new SleepAction(downSleep),
-                intake.intakeOut(),
-                intake.bucketDown(),
-                intake.intakeOn(),
                 seg4,
+                new SleepAction(downSleep),
                 intake.intakeOut(),
-                new SleepAction(outSleep),
-                intake.bucketUp(),
+                intake.bucketDown(),
+                intake.intakeExpel(),
                 seg5,
-                new SleepAction(downSleep),
-                intake.bucketDown(),
-                intake.intakeOn(),
-                seg6,
-                intake.intakeOut(),
-                new SleepAction(outSleep),
-                intake.bucketUp(),
-                seg7,
-                new SleepAction(downSleep),
-                intake.bucketDown(),
-                intake.intakeOn(),
-                seg8,
-                new SleepAction(outSleep),
                 intake.bucketUp(),
                 intake.intakeIn(),
+                seg6,
+                new SleepAction(downSleep),
+                intake.intakeOut(),
+                intake.bucketDown(),
+                intake.intakeExpel(),
+                seg7,
+                intake.bucketUp(),
+                intake.intakeIn(),
+                seg8,
+                intake.spGrabPos(),
+                
 
                 //score 2nd specimen
                 seg9,
