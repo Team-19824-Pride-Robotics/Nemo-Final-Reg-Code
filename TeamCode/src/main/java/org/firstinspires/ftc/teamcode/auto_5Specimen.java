@@ -70,11 +70,11 @@ public class auto_5Specimen extends LinearOpMode {
 /////////////////////
 /////Sleep vars//////
 /////////////////////
-    public static double hangSleep=1;
-    public static double grabSleep=1;
-    public static double downSleep=1;
+    public static double hangSleep=0.8;
+    public static double grabSleep=0.5;
+    public static double downSleep=0.8;
 
-    public static double outSleep=1;
+    public static double outSleep=0.8;
     public class Intake {
         ServoImplEx backWrist;
 
@@ -510,12 +510,20 @@ public class auto_5Specimen extends LinearOpMode {
                 new SleepAction(outSleep),
                 intake.bucketUp(),
                 seg5,
+                new SleepAction(downSleep),
                 intake.bucketDown(),
+                intake.intakeOn(),
                 seg6,
+                intake.intakeOut(),
+                new SleepAction(outSleep),
                 intake.bucketUp(),
                 seg7,
+                new SleepAction(downSleep),
                 intake.bucketDown(),
+                intake.intakeOn(),
                 seg8,
+                new SleepAction(outSleep),
+                intake.bucketUp(),
                 intake.intakeIn(),
 
                 //score 2nd specimen
