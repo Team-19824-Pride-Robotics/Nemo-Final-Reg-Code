@@ -13,8 +13,8 @@ public class bucketSubsystem {
     private final ServoImplEx bucket;
     private final AnalogInput encoderBucket;
 
-    public static double bucketDown = 0.37;
-    public static double bucketUp = .3;
+    public static double bucketDown = 0.35;
+    public static double bucketUp = .29;
 
     public double bucketTargetPosition =.31 ;
 

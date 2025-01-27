@@ -40,11 +40,11 @@ public class auto_4Sample extends LinearOpMode {
     public static double AHPos3 = 0.27;
     public static double BHPos3 = 0.45;
 
-    public static double Bpos = 0.31;
+    public static double Bpos = 0.29;
 
-    public static double Bpos2 = 0.37;
+    public static double Bpos2 = 0.35;
 
-    public static double Epos1 = .30; //Originpickup
+    public static double Epos1 = .31; //Originpickup
     public static double Epos2 = .4; //Origin
     public static double Epos3 = 0.7; //Specimen
     public static double Epos4 = 0.65; //Sample
@@ -60,29 +60,29 @@ public class auto_4Sample extends LinearOpMode {
     public static double rwPos3 = 0.46;
     public static double armOut= .66;
 
-    public static double x0 = 13;
+    public static double x0 = 14;
 
-    public static double y0 = 15;
-    public static double x1 = 11.5;
+    public static double y0 = 16;
+    public static double x1 = 11;
 
-    public static double y1 = 6; //9
+    public static double y1 = 5; //9
 
-    public static double x2 = 0;
+    public static double x2 = 2;
 
     public static double y2 = 12;
     public static double x3 = 7;
-    public static double y3 = 22; //24
+    public static double y3 = 14.5; //24
     public static double x4 = -2;
 
-    public static double y4 = 14;
+    public static double y4 = 10;
 
     public static double x5 = 61;
     public static double y5 = -4;
-    public static double x6 = 17;
-    public static double y6 = 16;
+    public static double x6 = 15;
+    public static double y6 = 11;
 
-    public static double x7 = -16; //-8
-    public static double y7 = 22;//25
+    public static double x7 = -13; //-8  //-9
+    public static double y7 = 16;//25 //16
     public static double x8 = 40;
     public static double y8 =14;
 
@@ -410,8 +410,8 @@ public static double sleepy = 1;
         Action seg7 = segment7.build();
         segment8 = segment7.endTrajectory().fresh()
                // .setTangent(Math.toRadians(tangent1))
-
-        .splineToLinearHeading(new Pose2d(x8,y8,Math.toRadians(h8)),Math.toRadians(tangent2));
+                .lineToX(8);
+        //.splineToLinearHeading(new Pose2d(x8,y8,Math.toRadians(h8)),Math.toRadians(tangent2));
 
         Action seg8 = segment8.build();
 
@@ -429,9 +429,9 @@ public static double sleepy = 1;
                 Mechs.closeClaw(),
                 lift.scoreHeight(),
                 Mechs.saScorePos(),
-                new SleepAction(0.1), //.75 //.25
+                new SleepAction(0.75), //.75 //.25
                 seg1,
-                //new SleepAction(0.25), //.5
+                new SleepAction(0.2), //.5
                 Mechs.openClaw(),
                 new SleepAction(0.2), //.5
                 Mechs.Return(),
@@ -457,15 +457,16 @@ public static double sleepy = 1;
                 lift.scoreHeight(),
                 new SleepAction(sleepy),
                 seg3,
+                new SleepAction(.2),
                 Mechs.openClaw(),
-                new SleepAction(0.2), //.3
+                new SleepAction(0.3), //.3
                 new ParallelAction(
                         seg4,
                         Mechs.Return(),
                         lift.baseHeight()
                 ),
                 Mechs.slideOut(),
-                new SleepAction(1),
+                new SleepAction(.75), //1
                 Mechs.intakeOff(),
                 new SleepAction(0.25),
                 Mechs.slideIn(),
@@ -515,9 +516,10 @@ public static double sleepy = 1;
                 seg8,
                 Mechs.Return(),
                 lift.baseHeight(),
-                new SleepAction(1),
-                Mechs.park(),
                 new SleepAction(2)
+                /*new SleepAction(1),
+                Mechs.park(),
+                new SleepAction(2)*/
 
 
         ));

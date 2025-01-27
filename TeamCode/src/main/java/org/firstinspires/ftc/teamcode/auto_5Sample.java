@@ -44,7 +44,7 @@ public class auto_5Sample extends LinearOpMode {
 
     public static double Bpos2 = 0.37;
 
-    public static double Epos1 = .30; //Originpickup
+    public static double Epos1 = .31; //Originpickup
     public static double Epos2 = .4; //Origin
     public static double Epos3 = 0.7; //Specimen
     public static double Epos4 = 0.65; //Sample
@@ -60,36 +60,36 @@ public class auto_5Sample extends LinearOpMode {
     public static double rwPos3 = 0.46;
     public static double armOut= .66;
 
-    public static double x0 = 13;
+    public static double x0 = 14;
 
-    public static double y0 = 15;
-    public static double x1 = 11.5;
+    public static double y0 = 16;
+    public static double x1 = 11;
 
-    public static double y1 = 6; //9
+    public static double y1 = 5; //9
 
-    public static double x2 = 0;
+    public static double x2 = 2;
 
     public static double y2 = 12;
     public static double x3 = 7;
-    public static double y3 = 22; //24
-    public static double x4 = -2;
+    public static double y3 = 16.5; //24
+    public static double x4 = -3;
 
-    public static double y4 = 14;
+    public static double y4 = 10;
 
     public static double x5 = 61;
     public static double y5 = -4;
-    public static double x6 = 17;
-    public static double y6 = 16;
+    public static double x6 = 16;
+    public static double y6 = 11;
 
-    public static double x7 = -16;
-    public static double y7 = 22;
-    public static double x8 = -27.5;  //9in away from wall
-    public static double y8 =16;
+    public static double x7 = -14; //-8  //-9
+    public static double y7 = 16;//25 //16
+    public static double x8 = -23;  //9in away from wall
+    public static double y8 =7;
 
     public static double h8 = 90;
 
-    public static double x9 = -17;
-    public static double y9 = 22.5;
+    public static double x9 = -13;
+    public static double y9 = 16;
     public static double h9 = 135;
 
 
@@ -446,7 +446,7 @@ public static double sleepy = 1;
                 Mechs.closeClaw(),
                 lift.scoreHeight(),
                 Mechs.saScorePos(),
-                new SleepAction(0.1), //.75 //.25
+                new SleepAction(0.75), //.75 //.25
                 seg1,
                 //new SleepAction(0.25), //.5
                 Mechs.openClaw(),
@@ -474,6 +474,7 @@ public static double sleepy = 1;
                 lift.scoreHeight(),
                 new SleepAction(sleepy),
                 seg3,
+                new SleepAction(.2),
                 Mechs.openClaw(),
                 new SleepAction(0.2), //.3
                 new ParallelAction(
@@ -550,6 +551,7 @@ public static double sleepy = 1;
                 new SleepAction(0.25), //.5
                 Mechs.saScorePos(),
                 lift.scoreHeight(),
+                new SleepAction(.2),
                 seg9,
                 new SleepAction(.6), //.4
                 Mechs.openClaw(),
