@@ -122,7 +122,7 @@ public class Teleop extends OpMode {
         //////////////////////////
         double d_power = .5 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
         double drive = gamepad1.left_stick_y * drive_speed_M;
-        double rotate = -((gamepad1.right_stick_x+gamepad1.right_stick_x)/2) * drive_speed_M;
+        double rotate = -Math.abs(gamepad1.right_stick_x-gamepad2.right_stick_x) * drive_speed_M;
 
         BL.setPower(drive + rotate);
         FL.setPower(drive + rotate);
