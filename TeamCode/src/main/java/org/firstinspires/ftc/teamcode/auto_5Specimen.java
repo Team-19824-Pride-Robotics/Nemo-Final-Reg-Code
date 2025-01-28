@@ -31,7 +31,7 @@ public class auto_5Specimen extends LinearOpMode {
 /////Mech Positions//////
 /////////////////////////
 
-    public static int spHeight1 = 750;
+    public static int spHeight1 = 950;
     public static int spHeight2 = 1650;
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
@@ -45,22 +45,24 @@ public class auto_5Specimen extends LinearOpMode {
     public static double Cpos2 = 0.96; //closed
     public static double rwGrab = .46; //grab specimen
     public static double lwGrab = .5; //grab specimen
-    public static double lwHang = 0.65; //hang specimen
-    public static double rwHang = 0.61; //hang specimen
+    public static double lwHang = 0.67; //hang specimen
+    public static double rwHang = 0.63; //hang specimen
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
-    public static double x0 = 29;
-    public static double x1 = 20;
-    public static double y2 = -30;
-    public static double x3 = 50;
+    public static double x0 = 29.5;
+    public static double x1 = 25;
+    public static double y1 = -17;
+    public static double x2 = 27;
+    public static double y2 = -21;
+    public static double x3 = 60;
 
     public static double y3 = -45;
     public static double x4 = 25;
     public static double y4 = -25;
-    public static double y5 = -55;
+    public static double y5 = -62.5;
     public static double x5 = 15;
-    public static double y6 = -60;
+    public static double y6 = -65;
     public static double x8 = 5;
     public static double y8 = -15;
     public static double y9 = 2.5;
@@ -72,9 +74,9 @@ public class auto_5Specimen extends LinearOpMode {
 /////////////////////
 /////Sleep vars//////
 /////////////////////
-    public static double hangSleep=0.6;
+    public static double hangSleep=0.7;
     public static double grabSleep=0.5;
-    public static double downSleep=0.8;
+    public static double downSleep=0.2;
 
     public static double outSleep=0.8;
     public class Intake {
@@ -370,21 +372,21 @@ public class auto_5Specimen extends LinearOpMode {
 
         segment2 = segment1.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, 0), 0);
+                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(135));
 
         Action seg2 = segment2.build();
 
         //segment 3 - clear submersible
         segment3 = segment2.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y2), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x2, y2), Math.toRadians(45));
 
         Action seg3 = segment3.build();
 
         //segment 4 - get behind block
         segment4 = segment3.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(45));
 
         Action seg4 = segment4.build();
 
@@ -502,12 +504,14 @@ public class auto_5Specimen extends LinearOpMode {
 
                 //push samples in observation zone
                 seg2,
-                seg3,
-                seg4,
                 new SleepAction(downSleep),
                 intake.intakeOut(),
                 intake.bucketDown(),
+                intake.intakeOn(),
+                new SleepAction(grabSleep),
+                seg3,
                 intake.intakeExpel(),
+                new SleepAction(grabSleep),
                 seg5,
                 intake.bucketUp(),
                 intake.intakeIn(),
