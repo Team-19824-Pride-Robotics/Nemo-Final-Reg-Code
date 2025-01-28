@@ -52,14 +52,15 @@ public class auto_5Specimen extends LinearOpMode {
     /////////////////////////
     public static double x0 = 29;
     public static double x1 = 20;
-    public static double y2 = -30; //this var and everything after isnt tested
+    public static double y2 = -30;
     public static double x3 = 50;
 
     public static double y3 = -45;
     public static double x4 = 25;
     public static double y4 = -25;
+    public static double y5 = -55;
     public static double x5 = 15;
-    public static double y6 = -35;
+    public static double y6 = -60;
     public static double x8 = 5;
     public static double y8 = -15;
     public static double y9 = 2.5;
@@ -397,77 +398,77 @@ public class auto_5Specimen extends LinearOpMode {
         //segment 6 - get behind 2nd sample
         segment6 = segment5.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x5, y4), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x3, y5), Math.toRadians(0));
 
         Action seg6 = segment6.build();
 
         //segment 7 - Push 2nd sample
         segment7 = segment6.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y6), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x4, y5), Math.toRadians(0));
 
         Action seg7 = segment7.build();
 
         //segment 8 - get behind 3rd sample
         segment8 = segment7.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x5, y6), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x3, y6), Math.toRadians(0));
 
         Action seg8 = segment8.build();
 
         //segment 9 - push 3rd sample
         segment9 = segment8.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x4, y6), Math.toRadians(0));
 
         Action seg9 = segment9.build();
 
         //segment 10 - hang 2nd specimen
         segment10 = segment9.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y9), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x0, y9), Math.toRadians(0));
 
         Action seg10 = segment10.build();
 
         //segment 11 - grab 3rd specimen
         segment11 = segment10.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(0));
 
         Action seg11 = segment11.build();
 
         //segment 12 - hang 3rd specimen
         segment12 = segment11.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y11), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x0, y11), Math.toRadians(0));
 
         Action seg12 = segment12.build();
 
         //segment 13 - grab 4th specimen
         segment13 = segment12.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(0));
 
         Action seg13 = segment13.build();
 
         //segment 14 - hang 4th specimen
         segment14 = segment13.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y13), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x0, y13), Math.toRadians(0));
 
         Action seg14 = segment14.build();
 
         //segment 15 - grab 5th specimen
         segment15 = segment14.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(0));
 
         Action seg15 = segment15.build();
 
         //segment 16 - hang 5th specimen (yippee!!!)
         segment16 = segment15.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y15), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x0, y15), Math.toRadians(0));
 
         Action seg16 = segment16.build();
         waitForStart();
@@ -475,7 +476,7 @@ public class auto_5Specimen extends LinearOpMode {
         //segment 17 - park
         segment17 = segment16.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(0));
 
         Action seg17 = segment17.build();
         waitForStart();
