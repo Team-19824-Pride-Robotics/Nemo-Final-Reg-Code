@@ -77,8 +77,8 @@ public class auto_5Specimen extends LinearOpMode {
     public static double hangSleep=0.7;
     public static double grabSleep=0.5;
     public static double downSleep=0.2;
-
-    public static double outSleep=0.8;
+    public static double inSleep=0.2;
+    public static double outSleep=0.2;
     public class Intake {
         ServoImplEx backWrist;
 
@@ -368,7 +368,7 @@ public class auto_5Specimen extends LinearOpMode {
 
         Action seg1 = segment1.build();
 
-        //segment 2 - backs off the sub
+        //segment 2 - goes to 1st ground sample
 
         segment2 = segment1.endTrajectory().fresh()
 
@@ -376,57 +376,57 @@ public class auto_5Specimen extends LinearOpMode {
 
         Action seg2 = segment2.build();
 
-        //segment 3 - clear submersible
+        //segment 3 - brings 1st sample to obs zone
         segment3 = segment2.endTrajectory().fresh()
 
                 .strafeToLinearHeading(new Vector2d(x2, y2), Math.toRadians(45));
 
         Action seg3 = segment3.build();
 
-        //segment 4 - get behind block
+        //segment 4 - goes to 2nd sample
         segment4 = segment3.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x1, y3), Math.toRadians(135));
 
         Action seg4 = segment4.build();
 
-        //segment 5 - push block
+        //segment 5 - brings 2nd sample to obs zone
         segment5 = segment4.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x4, y3), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x2, y3), Math.toRadians(45));
 
         Action seg5 = segment5.build();
 
-        //segment 6 - get behind 2nd sample
+        //segment 6 - goes to 3rd sample
         segment6 = segment5.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x3, y5), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x1, y5), Math.toRadians(135));
 
         Action seg6 = segment6.build();
 
-        //segment 7 - Push 2nd sample
+        //segment 7 - Brings 3rd sample to obs zone
         segment7 = segment6.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x4, y5), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x2, y5), Math.toRadians(45));
 
         Action seg7 = segment7.build();
 
-        //segment 8 - get behind 3rd sample
+        //segment 8 - go to grab 2nd specimen
         segment8 = segment7.endTrajectory().fresh()
 
                 .strafeToLinearHeading(new Vector2d(x3, y6), Math.toRadians(0));
 
         Action seg8 = segment8.build();
 
-        //segment 9 - push 3rd sample
-        segment9 = segment8.endTrajectory().fresh()
-
-                .strafeToLinearHeading(new Vector2d(x4, y6), Math.toRadians(0));
-
-        Action seg9 = segment9.build();
+        //segment 9 - Nothing
+//        segment9 = segment8.endTrajectory().fresh()
+//
+//                .strafeToLinearHeading(new Vector2d(x4, y6), Math.toRadians(0));
+//
+//        Action seg9 = segment9.build();
 
         //segment 10 - hang 2nd specimen
-        segment10 = segment9.endTrajectory().fresh()
+        segment10 = segment8.endTrajectory().fresh()
 
                 .strafeToLinearHeading(new Vector2d(x0, y9), Math.toRadians(0));
 
@@ -503,32 +503,47 @@ public class auto_5Specimen extends LinearOpMode {
                 intake.spGrabPos(),
 
                 //push samples in observation zone
+                //sample 1
                 seg2,
                 new SleepAction(downSleep),
                 intake.intakeOut(),
                 intake.bucketDown(),
                 intake.intakeOn(),
-                new SleepAction(grabSleep),
+                new SleepAction(inSleep),
                 seg3,
                 intake.intakeExpel(),
-                new SleepAction(grabSleep),
-                seg5,
+                new SleepAction(outSleep),
                 intake.bucketUp(),
-                intake.intakeIn(),
+                intake.intakeOff(),
+
+                //sample 2
+                seg4,
+                new SleepAction(downSleep),
+                intake.bucketDown(),
+                intake.intakeOn(),
+                seg5,
+                intake.intakeExpel(),
+                new SleepAction(outSleep),
+                intake.bucketUp(),
+                intake.intakeOff(),
+
+                //sample 3
                 seg6,
                 new SleepAction(downSleep),
-                intake.intakeOut(),
                 intake.bucketDown(),
-                intake.intakeExpel(),
+                intake.intakeOn(),
                 seg7,
+                intake.intakeExpel(),
+                new SleepAction(outSleep),
                 intake.bucketUp(),
+                intake.intakeOff(),
                 intake.intakeIn(),
-                seg8,
                 intake.spGrabPos(),
+                seg8,
+
                 
 
                 //score 2nd specimen
-                seg9,
                 new SleepAction(grabSleep),
                 intake.closeClaw(),
                 intake.spHangPos(),
