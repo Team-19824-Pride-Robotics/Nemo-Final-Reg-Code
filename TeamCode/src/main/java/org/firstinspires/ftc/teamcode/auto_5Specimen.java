@@ -31,7 +31,7 @@ public class auto_5Specimen extends LinearOpMode {
 /////Mech Positions//////
 /////////////////////////
 
-    public static int spHeight1 = 950;
+    public static int spHeight1 = 925;
     public static int spHeight2 = 1650;
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
@@ -51,19 +51,22 @@ public class auto_5Specimen extends LinearOpMode {
     /////Robot Positions//////
     /////////////////////////
     public static double x0 = 29.5;
-    public static double x1 = 22;
+    public static double x1 = 23;
     public static double y1 = -14;
-    public static double x2 = 27;
+    public static double x2 = 21;
     public static double y2 = -21;
-    public static double x3 = 24;
+    public static double x3 = 26;
 
     public static double y3 = -13;
-    public static double x4 = 25;
+    public static double x4 = 21;
     public static double y4 = -25;
-    public static double y5 = -62.5;
-    public static double x5 = 15;
-    public static double y6 = -65;
-    public static double x8 = 5;
+    public static double y5 = -22.5;
+    public static double x5 = 30;
+    public static double x6 = 19;
+    public static double y6 = -20;
+    public static double x7 = 12;
+    public static double y7 = -20;
+    public static double x8 = 12;
     public static double y8 = -15;
     public static double y9 = 2.5;
     public static double y11 = 5;
@@ -74,11 +77,12 @@ public class auto_5Specimen extends LinearOpMode {
 /////////////////////
 /////Sleep vars//////
 /////////////////////
-    public static double hangSleep=0.7;
+    public static double hangSleep=0.6;
     public static double grabSleep=0.5;
+    public static double clawSleep=0.5;
     public static double downSleep=0.2;
-    public static double inSleep=0.4;
-    public static double outSleep=0.4;
+    public static double inSleep=0.2;
+    public static double outSleep=1;
     public class Intake {
         ServoImplEx backWrist;
 
@@ -153,7 +157,7 @@ public class auto_5Specimen extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                elbow.setPosition(Epos2);
+                elbow.setPosition(Epos1);
                 frontWrist.setPosition(rwGrab);
                 backWrist.setPosition(lwGrab);
 
@@ -400,21 +404,21 @@ public class auto_5Specimen extends LinearOpMode {
         //segment 6 - goes to 3rd sample
         segment6 = segment5.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y5), Math.toRadians(135));
+                .strafeToLinearHeading(new Vector2d(x5, y5), Math.toRadians(120));
 
         Action seg6 = segment6.build();
 
         //segment 7 - Brings 3rd sample to obs zone
         segment7 = segment6.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x2, y5), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x6, y6), Math.toRadians(45));
 
         Action seg7 = segment7.build();
 
         //segment 8 - go to grab 2nd specimen
         segment8 = segment7.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x3, y6), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x7, y7), Math.toRadians(0));
 
         Action seg8 = segment8.build();
 
@@ -520,8 +524,8 @@ public class auto_5Specimen extends LinearOpMode {
                 seg4,
                 new SleepAction(downSleep),
                 intake.bucketDown(),
-                intake.intakeOn()
-                /*
+                intake.intakeOn(),
+                new SleepAction(inSleep),
                 seg5,
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
@@ -533,6 +537,7 @@ public class auto_5Specimen extends LinearOpMode {
                 new SleepAction(downSleep),
                 intake.bucketDown(),
                 intake.intakeOn(),
+                new SleepAction(inSleep),
                 seg7,
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
@@ -545,8 +550,9 @@ public class auto_5Specimen extends LinearOpMode {
                 
 
                 //score 2nd specimen
-                new SleepAction(grabSleep),
+
                 intake.closeClaw(),
+                new SleepAction(grabSleep),
                 intake.spHangPos(),
                 lift.scoreHeight(),
                 seg10,
@@ -596,7 +602,7 @@ public class auto_5Specimen extends LinearOpMode {
                 intake.spGrabPos(),
 
                 //park
-                seg17 */
+                seg17
 
 
 
