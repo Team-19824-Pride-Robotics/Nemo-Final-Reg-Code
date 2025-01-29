@@ -51,13 +51,13 @@ public class auto_5Specimen extends LinearOpMode {
     /////Robot Positions//////
     /////////////////////////
     public static double x0 = 29.5;
-    public static double x1 = 25;
-    public static double y1 = -17;
+    public static double x1 = 22;
+    public static double y1 = -14;
     public static double x2 = 27;
     public static double y2 = -21;
-    public static double x3 = 60;
+    public static double x3 = 24;
 
-    public static double y3 = -45;
+    public static double y3 = -13;
     public static double x4 = 25;
     public static double y4 = -25;
     public static double y5 = -62.5;
@@ -77,8 +77,8 @@ public class auto_5Specimen extends LinearOpMode {
     public static double hangSleep=0.7;
     public static double grabSleep=0.5;
     public static double downSleep=0.2;
-    public static double inSleep=0.2;
-    public static double outSleep=0.2;
+    public static double inSleep=0.4;
+    public static double outSleep=0.4;
     public class Intake {
         ServoImplEx backWrist;
 
@@ -386,14 +386,14 @@ public class auto_5Specimen extends LinearOpMode {
         //segment 4 - goes to 2nd sample
         segment4 = segment3.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y3), Math.toRadians(135));
+                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(135));
 
         Action seg4 = segment4.build();
 
         //segment 5 - brings 2nd sample to obs zone
         segment5 = segment4.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x2, y3), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x4, y4), Math.toRadians(45));
 
         Action seg5 = segment5.build();
 
@@ -520,7 +520,8 @@ public class auto_5Specimen extends LinearOpMode {
                 seg4,
                 new SleepAction(downSleep),
                 intake.bucketDown(),
-                intake.intakeOn(),
+                intake.intakeOn()
+                /*
                 seg5,
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
@@ -595,7 +596,7 @@ public class auto_5Specimen extends LinearOpMode {
                 intake.spGrabPos(),
 
                 //park
-                seg17
+                seg17 */
 
 
 
