@@ -62,6 +62,9 @@ public class Teleop extends OpMode {
     DcMotorEx BL;
     public static double drive_speed_M = 1;
 
+    public static double linkagePos = .18;
+    public static double linkageMin = .13;
+
 
     @Override
     public void init() {
@@ -202,7 +205,7 @@ public class Teleop extends OpMode {
 
         //linkage control
         if (gamepad2.start) {
-            linkage.enableStickControl(0.13, 0.2);
+            linkage.enableStickControl(linkageMin, linkagePos);
             arm.armPickup();
             liftPickup = false;
             intaking = true;
