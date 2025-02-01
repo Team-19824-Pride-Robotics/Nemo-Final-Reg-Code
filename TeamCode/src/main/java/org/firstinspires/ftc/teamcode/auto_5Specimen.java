@@ -31,13 +31,13 @@ public class auto_5Specimen extends LinearOpMode {
 /////Mech Positions//////
 /////////////////////////
 
-    public static int spHeight1 = 925;
+    public static int spHeight1 = 850;
     public static int spHeight2 = 1650;
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
     public static double AHPos2 = 0.27; //linkage out
     public static double BHPos2 = 0.45; //linkage out
-    public static double Bpos = 0.32; //bucket up (not final)
+    public static double Bpos = 0.3; //bucket up (not final)
     public static double Bpos2 = 0.33; //bucket down (not final)
     public static double Epos1 = .33; //Specimen grab
     public static double Epos2 = .58; //Specimen hang
@@ -50,21 +50,21 @@ public class auto_5Specimen extends LinearOpMode {
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
-    public static double x0 = 29.5;
-    public static double x1 = 23;
-    public static double y1 = -14;
-    public static double x2 = 21;
-    public static double y2 = -21;
+    public static double x0 = 37;
+    public static double x1 = 30;
+    public static double y1 = -33;
+    public static double x2 = 15;
+    public static double y2 = -27;
     public static double x3 = 26;
 
-    public static double y3 = -13;
-    public static double x4 = 21;
+    public static double y3 = -45;
+    public static double x4 = 14;
     public static double y4 = -25;
-    public static double y5 = -22.5;
-    public static double x5 = 30;
-    public static double x6 = 19;
+    public static double y5 = -48;
+    public static double x5 = 32;
+    public static double x6 = 14;
     public static double y6 = -20;
-    public static double x7 = 12;
+    public static double x7 = -8;
     public static double y7 = -20;
     public static double x8 = 12;
     public static double y8 = -15;
@@ -80,7 +80,7 @@ public class auto_5Specimen extends LinearOpMode {
     public static double hangSleep=0.6;
     public static double grabSleep=0.5;
     public static double clawSleep=0.5;
-    public static double downSleep=0.2;
+    public static double downSleep=0.1;
     public static double inSleep=0.2;
     public static double outSleep=1;
     public class Intake {
@@ -518,10 +518,12 @@ public class auto_5Specimen extends LinearOpMode {
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
                 intake.bucketUp(),
+                intake.intakeIn(),
                 intake.intakeOff(),
 
                 //sample 2
                 seg4,
+                intake.intakeOut(),
                 new SleepAction(downSleep),
                 intake.bucketDown(),
                 intake.intakeOn(),
