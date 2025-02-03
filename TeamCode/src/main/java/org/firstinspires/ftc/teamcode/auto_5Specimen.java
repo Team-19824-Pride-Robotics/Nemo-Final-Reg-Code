@@ -31,7 +31,7 @@ public class auto_5Specimen extends LinearOpMode {
 /////Mech Positions//////
 /////////////////////////
 
-    public static int spHeight1 = 750;
+    public static int spHeight1 = 800;
     public static int spHeight2 = 1650;
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
@@ -39,38 +39,47 @@ public class auto_5Specimen extends LinearOpMode {
     public static double BHPos2 = 0.45; //linkage out
     public static double Bpos = 0.3; //bucket up (not final)
     public static double Bpos2 = 0.33; //bucket down (not final)
-    public static double Epos1 = .32; //Specimen grab
+    public static double Epos1 = .33; //Specimen grab
     public static double Epos2 = .58; //Specimen hang
     public static double Cpos = 0.72; //open
     public static double Cpos2 = 0.97; //closed
-    public static double rwGrab = .46; //grab specimen
-    public static double lwGrab = .5; //grab specimen
+    public static double rwGrab = .47; //grab specimen
+    public static double lwGrab = .51; //grab specimen
     public static double lwHang = 0.67; //hang specimen
     public static double rwHang = 0.63; //hang specimen
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
-    public static double x0 = 39;
+    public static double x0 = 35;
+    public static double y0 = 7;
+
+
     public static double x1 = 30;
     public static double y1 = -33;
     public static double x2 = 15;
     public static double y2 = -27;
-    public static double x3 = 26;
+    public static double x3 = 27;
 
     public static double y3 = -45;
     public static double x4 = 15;
     public static double y4 = -25;
     public static double y5 = -49;
     public static double x5 = 31;
-    public static double x6 = 14;
+    public static double x6 = 16;
     public static double y6 = -20;
     public static double x7 = -8;
     public static double y7 = -22;
     public static double x8 = 12;
     public static double y8 = -15;
-    public static double x9 = 35;
-    public static double y9 = 20;
-    public static double y11 = 5;
+    public static double x9 = 37;
+    public static double y9 = 25;
+    public static double x10 = -8;
+    public static double y10 = -28;
+    public static double x11 = 37;
+    public static double y11 = 20;
+    public static double x12 = -8;
+    public static double y12 = -28;
+    public static double x13 = 7.5;
     public static double y13 = 7.5;
     public static double y15 = 30;
     public static double y16 = 30;
@@ -78,12 +87,13 @@ public class auto_5Specimen extends LinearOpMode {
 /////////////////////
 /////Sleep vars//////
 /////////////////////
-    public static double hangSleep=0.6;
-    public static double grabSleep=0.5;
+    public static double hangSleep=0.5;
+    public static double grabSleep=0.3;
     public static double clawSleep=0.5;
     public static double downSleep=0.1;
-    public static double inSleep=0.2;
-    public static double outSleep=1;
+    public static double inSleep=0.1;
+    public static double outSleep=0.6;
+    public static double outSleep2=1;
     public class Intake {
         ServoImplEx backWrist;
 
@@ -369,7 +379,7 @@ public class auto_5Specimen extends LinearOpMode {
         TrajectoryActionBuilder segment17;
         segment1 = drive.actionBuilder(initialPose)
 
-                .strafeToLinearHeading(new Vector2d(x0, 0), 0);
+                .strafeToLinearHeading(new Vector2d(x0, y0), 0);
 
         Action seg1 = segment1.build();
 
@@ -440,28 +450,28 @@ public class auto_5Specimen extends LinearOpMode {
         //segment 11 - grab 3rd specimen
         segment11 = segment10.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x10, y10), Math.toRadians(0));
 
         Action seg11 = segment11.build();
 
         //segment 12 - hang 3rd specimen
         segment12 = segment11.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y11), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x11, y11), Math.toRadians(0));
 
         Action seg12 = segment12.build();
 
         //segment 13 - grab 4th specimen
         segment13 = segment12.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x8, y8), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x12, y12), Math.toRadians(0));
 
         Action seg13 = segment13.build();
 
         //segment 14 - hang 4th specimen
         segment14 = segment13.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x0, y13), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x13, y13), Math.toRadians(0));
 
         Action seg14 = segment14.build();
 
@@ -569,8 +579,8 @@ public class auto_5Specimen extends LinearOpMode {
 
                 //score 3rd specimen
                 seg11,
-                new SleepAction(grabSleep),
                 intake.closeClaw(),
+                new SleepAction(grabSleep),
                 intake.spHangPos(),
                 lift.scoreHeight(),
                 seg12,
@@ -582,8 +592,8 @@ public class auto_5Specimen extends LinearOpMode {
 
                 //score 4th specimen
                 seg13,
-                new SleepAction(grabSleep),
                 intake.closeClaw(),
+                new SleepAction(grabSleep),
                 intake.spHangPos(),
                 lift.scoreHeight(),
                 seg14,
@@ -595,8 +605,8 @@ public class auto_5Specimen extends LinearOpMode {
 
                 //score 5th specimen
                 seg15,
-                new SleepAction(grabSleep),
                 intake.closeClaw(),
+                new SleepAction(grabSleep),
                 intake.spHangPos(),
                 lift.scoreHeight(),
                 seg16,
