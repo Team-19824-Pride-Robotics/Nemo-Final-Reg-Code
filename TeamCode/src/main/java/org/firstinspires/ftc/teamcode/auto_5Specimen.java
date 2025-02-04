@@ -40,7 +40,7 @@ public class auto_5Specimen extends LinearOpMode {
     public static double AHPos2 = 0.27; //linkage out
     public static double BHPos2 = 0.45; //linkage out
     public static double Bpos = 0.3; //bucket up
-    public static double Bpos2 = 0.32; //bucket Mid (not final)
+    public static double Bpos2 = 0.31; //bucket Mid (not final)
     public static double Bpos3 = 0.33; //bucket down
     public static double Epos1 = .33; //Specimen grab
     public static double Epos2 = .58; //Specimen hang
@@ -64,7 +64,7 @@ public class auto_5Specimen extends LinearOpMode {
     public static double y3 = -45;
     public static double x4 = 15;
     public static double y4 = -25;
-    public static double y5 = -49;
+    public static double y5 = -52;
     public static double x5 = 31;
     public static double x6 = 16;
     public static double y6 = -20;
@@ -77,7 +77,7 @@ public class auto_5Specimen extends LinearOpMode {
     public static double x10 = -8;
     public static double y10 = -28;
     public static double x11 = 37;
-    public static double y11 = 20;
+    public static double y11 = 30;
     public static double x12 = -8;
     public static double y12 = -28;
     public static double x13 = 7.5;
@@ -98,7 +98,7 @@ public class auto_5Specimen extends LinearOpMode {
     /////////////////////
     /////Speed vars//////
     /////////////////////
-    public static double hangSpeed = 10;
+    public static double hangSpeed = 50;
 
     public class Intake {
         ServoImplEx backWrist;
