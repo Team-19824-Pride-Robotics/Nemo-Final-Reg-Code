@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
+import com.acmerobotics.roadrunner.VelConstraint;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -37,12 +39,14 @@ public class auto_5Specimen extends LinearOpMode {
     public static double BHPos = 0.11; //linkage in
     public static double AHPos2 = 0.27; //linkage out
     public static double BHPos2 = 0.45; //linkage out
-    public static double Bpos = 0.3; //bucket up (not final)
-    public static double Bpos2 = 0.33; //bucket down (not final)
+    public static double Bpos = 0.3; //bucket up
+    public static double Bpos2 = 0.32; //bucket Mid (not final)
+    public static double Bpos3 = 0.33; //bucket down
     public static double Epos1 = .33; //Specimen grab
     public static double Epos2 = .58; //Specimen hang
     public static double Cpos = 0.72; //open
-    public static double Cpos2 = 0.97; //closed
+    public static double Cpos2 = 0.8; //open a little (to not descore other specimens)(not final)
+    public static double Cpos3 = 0.97; //closed
     public static double rwGrab = .47; //grab specimen
     public static double lwGrab = .51; //grab specimen
     public static double lwHang = 0.67; //hang specimen
@@ -52,14 +56,11 @@ public class auto_5Specimen extends LinearOpMode {
     /////////////////////////
     public static double x0 = 35;
     public static double y0 = 7;
-
-
     public static double x1 = 30;
     public static double y1 = -33;
     public static double x2 = 15;
     public static double y2 = -27;
     public static double x3 = 27;
-
     public static double y3 = -45;
     public static double x4 = 15;
     public static double y4 = -25;
@@ -94,6 +95,11 @@ public class auto_5Specimen extends LinearOpMode {
     public static double inSleep=0.1;
     public static double outSleep=0.6;
     public static double outSleep2=1;
+    /////////////////////
+    /////Speed vars//////
+    /////////////////////
+    public static double hangSpeed = 10;
+
     public class Intake {
         ServoImplEx backWrist;
 
@@ -150,12 +156,21 @@ public class auto_5Specimen extends LinearOpMode {
             return new openClaw();
         }
 
-
+        public class midClaw implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                claw.setPosition(Cpos2);
+                return false;
+            }
+        }
+        public Action midClaw() {
+            return new openClaw();
+        }
 
         public class closeClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(Cpos2);
+                claw.setPosition(Cpos3);
                 return false;
             }
         }
@@ -213,11 +228,22 @@ public class auto_5Specimen extends LinearOpMode {
         public Action bucketUp() {
             return new bucketUp();
         }
-        public class bucketDown implements Action {
+        public class bucketMid implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
                 bucket.setPosition(Bpos2);
+                return false;
+            }
+        }
+        public Action bucketMid() {
+            return new bucketMid();
+        }
+        public class bucketDown implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+
+                bucket.setPosition(Bpos3);
                 return false;
             }
         }
@@ -379,7 +405,7 @@ public class auto_5Specimen extends LinearOpMode {
         TrajectoryActionBuilder segment17;
         segment1 = drive.actionBuilder(initialPose)
 
-                .strafeToLinearHeading(new Vector2d(x0, y0), 0);
+                .strafeToLinearHeading(new Vector2d(x0, y0), 0,  new TranslationalVelConstraint(hangSpeed));
 
         Action seg1 = segment1.build();
 
@@ -526,6 +552,7 @@ public class auto_5Specimen extends LinearOpMode {
                 intake.intakeOn(),
                 new SleepAction(inSleep),
                 seg3,
+                intake.bucketMid(),
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
                 intake.bucketUp(),
@@ -540,6 +567,7 @@ public class auto_5Specimen extends LinearOpMode {
                 intake.intakeOn(),
                 new SleepAction(inSleep),
                 seg5,
+                intake.bucketMid(),
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
                 intake.bucketUp(),
@@ -554,6 +582,7 @@ public class auto_5Specimen extends LinearOpMode {
                 intake.intakeOn(),
                 new SleepAction(inSleep),
                 seg7,
+                intake.bucketMid(),
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
                 intake.bucketUp(),
@@ -586,9 +615,9 @@ public class auto_5Specimen extends LinearOpMode {
                 seg12,
                 lift.upABit(),
                 new SleepAction(hangSleep),
-                intake.openClaw(),
                 lift.baseHeight(),
                 intake.spGrabPos(),
+                intake.openClaw(),
 
                 //score 4th specimen
                 seg13,
@@ -599,9 +628,9 @@ public class auto_5Specimen extends LinearOpMode {
                 seg14,
                 lift.upABit(),
                 new SleepAction(hangSleep),
-                intake.openClaw(),
                 lift.baseHeight(),
                 intake.spGrabPos(),
+                intake.openClaw(),
 
                 //score 5th specimen
                 seg15,
@@ -612,9 +641,9 @@ public class auto_5Specimen extends LinearOpMode {
                 seg16,
                 lift.upABit(),
                 new SleepAction(hangSleep),
-                intake.openClaw(),
                 lift.baseHeight(),
                 intake.spGrabPos(),
+                intake.openClaw(),
 
                 //park
                 seg17
