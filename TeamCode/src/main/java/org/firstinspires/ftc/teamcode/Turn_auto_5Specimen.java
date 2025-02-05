@@ -24,7 +24,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 
 @Config
-@Autonomous(name = "Turn 5 Specimen Auto")
+@Autonomous(name = "5 Specimen Auto")
 public class Turn_auto_5Specimen extends LinearOpMode {
 
 /////////////////////////
@@ -35,8 +35,8 @@ public class Turn_auto_5Specimen extends LinearOpMode {
     public static int spHeight2 = 1650;
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
-    public static double AHPos1 = 0.24; //linkage in a little bit
-    public static double BHPos1 = 0.42; //linkage in a little bit
+    public static double AHPos1 = 0.2; //linkage in a little bit
+    public static double BHPos1 = 0.38; //linkage in a little bit
     public static double AHPos2 = 0.27; //linkage out
     public static double BHPos2 = 0.45; //linkage out
     public static double Bpos = 0.3; //bucket up
@@ -55,12 +55,12 @@ public class Turn_auto_5Specimen extends LinearOpMode {
     /////Robot Positions//////
     /////////////////////////
     public static double x0 = 35;
-    public static double y0 = 3;
-    public static double x1 = 22;
+    public static double y0 = -10;
+    public static double x1 = 24;
     public static double y1 = -34;
     public static double x2 = 15;
     public static double y2 = -27;
-    public static double x3 = 28;
+    public static double x3 = 29;
     public static double y3 = -40;
     public static double x4 = 15;
     public static double y4 = -25;
@@ -72,14 +72,14 @@ public class Turn_auto_5Specimen extends LinearOpMode {
     public static double y7 = -24;
     public static double x8 = 12;
     public static double y8 = -15;
-    public static double x9 = 39;
-    public static double y9 = 30;
+    public static double x9 = 40;
+    public static double y9 = 27;
     public static double x10 = -8;
     public static double y10 = -30;
     public static double x11 = 40;
     public static double y11 = 27;
     public static double x12 = -8;
-    public static double y12 = -32;
+    public static double y12 = -40;
     public static double x13 = 39;
     public static double y13 = 13;
     public static double x14 = -8;

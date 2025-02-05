@@ -27,6 +27,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Config
+@Disabled
 @Autonomous(name = "5 Specimen Auto")
 public class auto_5Specimen extends LinearOpMode {
 
