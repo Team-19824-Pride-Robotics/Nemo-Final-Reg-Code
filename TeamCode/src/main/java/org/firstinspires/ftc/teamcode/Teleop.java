@@ -64,6 +64,9 @@ public class Teleop extends OpMode {
     boolean ascent3 = false;
     public static double liftpos = 1000;
 
+    public static double linkagePos = .18;
+    public static double linkageMin = .13;
+
 
     @Override
     public void init() {
@@ -223,7 +226,7 @@ public class Teleop extends OpMode {
 
         //linkage control
         if (gamepad2.start) {
-            linkage.enableStickControl(0.13, 0.2);
+            linkage.enableStickControl(linkageMin, linkagePos);
             arm.armPickup();
             liftPickup = false;
             intaking = true;
