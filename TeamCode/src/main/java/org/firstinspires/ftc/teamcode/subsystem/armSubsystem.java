@@ -23,6 +23,7 @@ public class armSubsystem {
     public double armTargetPosition =.3;
 
     public static double park = .66;
+    public static double armHang = .95;
 
     public armSubsystem(HardwareMap hardwareMap) {
         arm = hardwareMap.get(ServoImplEx.class, "arm");
@@ -47,6 +48,9 @@ public class armSubsystem {
     }
     public void armPark() {
         armTargetPosition= park;
+    }
+    public void armHang () {
+        armTargetPosition= armHang;
     }
 
 

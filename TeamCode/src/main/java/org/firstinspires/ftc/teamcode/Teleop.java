@@ -61,6 +61,8 @@ public class Teleop extends OpMode {
     DcMotorEx BR;
     DcMotorEx BL;
     public static double drive_speed_M = 1;
+    boolean ascent3 = false;
+    public static double liftpos = 1000;
 
 
     @Override
@@ -155,7 +157,7 @@ public class Teleop extends OpMode {
         }
 
         //specimen control
-        if (gamepad1.x){
+     /*   if (gamepad1.x){
 
             lift.barHigh();
             specPos = true;
@@ -184,17 +186,36 @@ public class Teleop extends OpMode {
         if (gamepad2.right_bumper) {
             claw.clawClose();
         }
-       /* if (gamepad1.back){
+        if (gamepad1.back){
             arm.armPark();
             wrist.wristScore();
             lift.pickup();
-        } */
+        }
         if (gamepad1.start) {
             lift.ascent2();
         }
         if (gamepad1.back) {
             lift.ascent2Up();
+        } */
+        if (gamepad1.y) {
+            lift.ascent2();
         }
+        if (gamepad1.a) {
+            lift.ascent2Up();
+        }
+        if (gamepad1.x) {
+            lift.ascent3();
+        }
+        if (gamepad1.b) {
+            lift.ascent3();
+            arm.armHang();
+            ascent3 = true;
+        }
+
+        if (lift.getLift1Position() > liftpos && ascent3){
+            lift.ascent3Up();
+        }
+
 
         //////////////////////////
         /// Gamepad 2 controls ///
