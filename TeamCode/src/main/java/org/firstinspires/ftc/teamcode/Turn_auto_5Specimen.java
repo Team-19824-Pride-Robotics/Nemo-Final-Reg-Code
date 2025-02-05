@@ -31,7 +31,7 @@ public class Turn_auto_5Specimen extends LinearOpMode {
 /////Mech Positions//////
 /////////////////////////
 
-    public static int spHeight1 = 850;
+    public static int spHeight1 = 900;
     public static int spHeight2 = 1650;
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
@@ -46,7 +46,7 @@ public class Turn_auto_5Specimen extends LinearOpMode {
     public static double Epos2 = .58; //Specimen hang
     public static double Cpos = 0.72; //open
     public static double Cpos2 = 0.8; //open a little (to not descore other specimens)(not final)
-    public static double Cpos3 = 0.97; //closed
+    public static double Cpos3 = 0.96; //closed
     public static double rwGrab = .47; //grab specimen
     public static double lwGrab = .51; //grab specimen
     public static double lwHang = 0.67; //hang specimen
@@ -55,7 +55,7 @@ public class Turn_auto_5Specimen extends LinearOpMode {
     /////Robot Positions//////
     /////////////////////////
     public static double x0 = 35;
-    public static double y0 = 7;
+    public static double y0 = 3;
     public static double x1 = 22;
     public static double y1 = -34;
     public static double x2 = 15;
@@ -72,21 +72,21 @@ public class Turn_auto_5Specimen extends LinearOpMode {
     public static double y7 = -24;
     public static double x8 = 12;
     public static double y8 = -15;
-    public static double x9 = 38;
-    public static double y9 = 22;
+    public static double x9 = 39;
+    public static double y9 = 30;
     public static double x10 = -8;
-    public static double y10 = -24;
-    public static double x11 = 38;
-    public static double y11 = 30;
+    public static double y10 = -30;
+    public static double x11 = 40;
+    public static double y11 = 27;
     public static double x12 = -8;
-    public static double y12 = -30;
-    public static double x13 = 37;
-    public static double y13 = 20;
+    public static double y12 = -32;
+    public static double x13 = 39;
+    public static double y13 = 13;
     public static double x14 = -8;
-    public static double y14 = -30;
-    public static double x15 = 37;
-    public static double y15 = 35;
-    public static double y16 = 30;
+    public static double y14 = -32;
+    public static double x15 = 39;
+    public static double y15 = 15;
+    public static double y16 = 22;
     public static double x16 = 3;
 /////////////////////
 /////Sleep vars//////
@@ -651,8 +651,8 @@ public class Turn_auto_5Specimen extends LinearOpMode {
 
 
                 intake.closeClaw(),
-                new SleepAction(grabSleep)
-                /*
+                new SleepAction(grabSleep),
+
                 intake.spHangPos(),
                 lift.scoreHeight(),
                 seg14,
@@ -678,7 +678,7 @@ public class Turn_auto_5Specimen extends LinearOpMode {
                 //park
                 seg17
 
-*/
+
 
         ));
 
