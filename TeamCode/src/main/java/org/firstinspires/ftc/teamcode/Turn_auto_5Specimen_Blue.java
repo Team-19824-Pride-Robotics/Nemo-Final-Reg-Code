@@ -24,8 +24,8 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 
 @Config
-@Autonomous(name = "5 Specimen Auto")
-public class Turn_auto_5Specimen extends LinearOpMode {
+@Autonomous(name = "5 Specimen Auto Blue")
+public class Turn_auto_5Specimen_Blue extends LinearOpMode {
 
 /////////////////////////
 /////Mech Positions//////
@@ -72,20 +72,20 @@ public class Turn_auto_5Specimen extends LinearOpMode {
     public static double y7 = -24;
     public static double x8 = 12;
     public static double y8 = -15;
-    public static double x9 = 39;
-    public static double y9 = 23;
+    public static double x9 = 41;
+    public static double y9 = 26;
     public static double x10 = -4;
-    public static double y10 = -32;
-    public static double x11 = 39.5;
-    public static double y11 = 19;
+    public static double y10 = -28;
+    public static double x11 = 41.5;
+    public static double y11 = 26;
     public static double x12 = -4;
-    public static double y12 = -38;
-    public static double x13 = 40.5;
-    public static double y13 = 17;
+    public static double y12 = -35;
+    public static double x13 = 42.5;
+    public static double y13 = 26;
     public static double x14 = -4;
     public static double y14 = -44.5;
-    public static double x15 = 40;
-    public static double y15 = 15;
+    public static double x15 = 42;
+    public static double y15 = 25;
     public static double y16 = 20;
     public static double x16 = 3;
 /////////////////////
@@ -473,7 +473,7 @@ public class Turn_auto_5Specimen extends LinearOpMode {
         //segment 8 - go to grab 2nd specimen
         segment8 = segment7.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x7, y7), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x7, y7), Math.toRadians(356));
 
         Action seg8 = segment8.build();
 
@@ -487,49 +487,49 @@ public class Turn_auto_5Specimen extends LinearOpMode {
         //segment 10 - hang 2nd specimen
         segment10 = segment8.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x9, y9), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x9, y9), Math.toRadians(356));
 
         Action seg10 = segment10.build();
 
         //segment 11 - grab 3rd specimen
         segment11 = segment10.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x10, y10), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x10, y10), Math.toRadians(356));
 
         Action seg11 = segment11.build();
 
         //segment 12 - hang 3rd specimen
         segment12 = segment11.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x11, y11), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x11, y11), Math.toRadians(356));
 
         Action seg12 = segment12.build();
 
         //segment 13 - grab 4th specimen
         segment13 = segment12.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x12, y12), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x12, y12), Math.toRadians(356));
 
         Action seg13 = segment13.build();
 
         //segment 14 - hang 4th specimen
         segment14 = segment13.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x13, y13), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x13, y13), Math.toRadians(356));
 
         Action seg14 = segment14.build();
 
         //segment 15 - grab 5th specimen
         segment15 = segment14.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x14, y14), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x14, y14), Math.toRadians(356));
 
         Action seg15 = segment15.build();
 
         //segment 16 - hang 5th specimen (yippee!!!)
         segment16 = segment15.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x15, y15), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x15, y15), Math.toRadians(356));
 
         Action seg16 = segment16.build();
         waitForStart();
@@ -537,7 +537,7 @@ public class Turn_auto_5Specimen extends LinearOpMode {
         //segment 17 - park
         segment17 = segment16.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(356));
 
         Action seg17 = segment17.build();
         waitForStart();
