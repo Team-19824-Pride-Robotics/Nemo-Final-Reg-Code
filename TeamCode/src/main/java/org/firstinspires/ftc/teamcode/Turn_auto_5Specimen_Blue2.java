@@ -55,8 +55,8 @@ public class Turn_auto_5Specimen_Blue2 extends LinearOpMode {
     /////Robot Positions//////
     /////////////////////////
     public static double x0 = 36;
-    public static double y0 = -11;
-    public static double x1 = 16; //24
+    public static double y0 = -10;
+    public static double x1 = 16.5; //24
     public static double y1 = -45; //-34
     public static double x2 = 15;
     public static double y2 = -27;
@@ -65,40 +65,46 @@ public class Turn_auto_5Specimen_Blue2 extends LinearOpMode {
     public static double x4 = 15;
     public static double y4 = -25;
     public static double x5 = 24;
-    public static double y5 = -58;
+    public static double y5 = -55;
     public static double x6 = 16;
     public static double y6 = -20;
-    public static double x7 = -6;
+    public static double x7 = -5;
     public static double y7 = -24;
     public static double x8 = 12;
     public static double y8 = -15;
     public static double x9 = 42;
-    public static double y9 = 26;
+    public static double y9 = 22;
     public static double x10 = -4;
     public static double y10 = -28;
     public static double x11 = 42;
-    public static double y11 = 26;
+    public static double y11 = 22;
     public static double x12 = -4;
     public static double y12 = -35;
     public static double x13 = 42;
-    public static double y13 = 26;
-    public static double x14 = -4;
-    public static double y14 = -44.5;
+    public static double y13 = 19;
+    public static double x14 = -3;
+    public static double y14 = -38;
     public static double x15 = 42;
-    public static double y15 = 25;
-    public static double y16 = 25;
+    public static double y15 = 19;
+    public static double y16 = -40;
     public static double x16 = 10;
+    public static double sample1gr = 160;
+    public static double sample1ex = -140;
+    public static double sample2gr = 170;
+    public static double sample2ex = -150;
+    public static double sample3gr = 160;
+    public static double sample3er = -140;
 /////////////////////
 /////Sleep vars//////
 /////////////////////
     public static double hangSleep=0.4; //.5
     public static double grabSleep=0.2;
     public static double clawSleep=0.5;
-    public static double downSleep=0.1;
+    public static double downSleep=0;
     public static double inSleep=0.1;
     public static double inSleep2=0.3;
     public static double outSleep=0.3; //.5
-    public static double outSleep2=0.3;//.8
+    public static double outSleep2=0.4;//.8
     /////////////////////
     /////Speed vars//////
     /////////////////////
@@ -288,7 +294,7 @@ public class Turn_auto_5Specimen_Blue2 extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                intake.setPower(1);
+                intake.setPower(0.5);
 
 
 
@@ -296,8 +302,25 @@ public class Turn_auto_5Specimen_Blue2 extends LinearOpMode {
                 return false;
             }
         }
+
         public Action intakeOn() {
             return new intakeOn();
+        }
+        public class intakeOn2 implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+
+                intake.setPower(0.8);
+
+
+
+
+                return false;
+            }
+        }
+
+        public Action intakeOn2() {
+            return new intakeOn2();
         }
         public class intakeExpel implements Action {
             @Override
@@ -537,7 +560,7 @@ public class Turn_auto_5Specimen_Blue2 extends LinearOpMode {
         //segment 17 - park
         segment17 = segment16.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(356));
+                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(45));
 
         Action seg17 = segment17.build();
         waitForStart();
@@ -598,7 +621,7 @@ public class Turn_auto_5Specimen_Blue2 extends LinearOpMode {
                 intake.intakeOut(),
                 new SleepAction(downSleep),
                 intake.bucketDown(),
-                intake.intakeOn(),
+                intake.intakeOn2(),
                 new SleepAction(inSleep2),
                 new ParallelAction(
                         intake.intakeInABit(),
@@ -607,7 +630,7 @@ public class Turn_auto_5Specimen_Blue2 extends LinearOpMode {
 
 
 
-                //intake.intakeOut(),
+                intake.intakeOut(),
                 intake.bucketMid(),
                 intake.intakeExpel(),
                 new SleepAction(outSleep2),
@@ -682,6 +705,7 @@ public class Turn_auto_5Specimen_Blue2 extends LinearOpMode {
                 intake.openClaw(),
 
                 //park
+                intake.intakeOut(),
                 seg17
 
 
