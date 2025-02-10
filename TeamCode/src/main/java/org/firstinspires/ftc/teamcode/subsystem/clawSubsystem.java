@@ -9,7 +9,7 @@ public class clawSubsystem {
 
     private final Servo claw;
     public static double clawOpen = 0.72;
-    public static double clawClose = .92;
+    public static double clawClose = .96;
 
     public double clawTargetPosition = .72;
 

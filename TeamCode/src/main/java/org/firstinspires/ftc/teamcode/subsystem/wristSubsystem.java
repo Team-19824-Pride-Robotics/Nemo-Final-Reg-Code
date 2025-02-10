@@ -17,10 +17,10 @@ public class wristSubsystem {
     public static double lwPickup = .37;
     public static double rwIn = .3;
     public static double lwIn = .34;
-    public static double rwPickupSpeicmen = .46;
-    public static double lwPickupSpeicmen = .5;
-    public static double rwScoreSpeicmen = .61;
-    public static double lwScoreSpeicmen = .65;
+    public static double rwPickupSpeicmen = .47;
+    public static double lwPickupSpeicmen = .1;
+    public static double rwScoreSpeicmen = .63;
+    public static double lwScoreSpeicmen = .67;
 
 
     public static double rwScore = .46;
