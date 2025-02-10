@@ -14,7 +14,6 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -23,10 +22,10 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-@Disabled
+
 @Config
-@Autonomous(name = "5 Specimen Auto Blue")
-public class Turn_auto_5Specimen_Blue extends LinearOpMode {
+@Autonomous(name = "5 Specimen Auto Blue2")
+public class Turn_auto_5Specimen_Blue2 extends LinearOpMode {
 
 /////////////////////////
 /////Mech Positions//////
@@ -57,49 +56,49 @@ public class Turn_auto_5Specimen_Blue extends LinearOpMode {
     /////////////////////////
     public static double x0 = 36;
     public static double y0 = -11;
-    public static double x1 = 24;
-    public static double y1 = -34;
+    public static double x1 = 16; //24
+    public static double y1 = -45; //-34
     public static double x2 = 15;
     public static double y2 = -27;
-    public static double x3 = 29;
-    public static double y3 = -40;
+    public static double x3 = 24;
+    public static double y3 = -45;
     public static double x4 = 15;
     public static double y4 = -25;
-    public static double x5 = 25;
-    public static double y5 = -52;
+    public static double x5 = 24;
+    public static double y5 = -58;
     public static double x6 = 16;
     public static double y6 = -20;
     public static double x7 = -6;
     public static double y7 = -24;
     public static double x8 = 12;
     public static double y8 = -15;
-    public static double x9 = 41;
+    public static double x9 = 42;
     public static double y9 = 26;
     public static double x10 = -4;
     public static double y10 = -28;
-    public static double x11 = 41.5;
+    public static double x11 = 42;
     public static double y11 = 26;
     public static double x12 = -4;
     public static double y12 = -35;
-    public static double x13 = 42.5;
+    public static double x13 = 42;
     public static double y13 = 26;
     public static double x14 = -4;
     public static double y14 = -44.5;
     public static double x15 = 42;
     public static double y15 = 25;
-    public static double y16 = 20;
-    public static double x16 = 3;
+    public static double y16 = 25;
+    public static double x16 = 10;
 /////////////////////
 /////Sleep vars//////
 /////////////////////
-    public static double hangSleep=0.5;
+    public static double hangSleep=0.4; //.5
     public static double grabSleep=0.2;
     public static double clawSleep=0.5;
     public static double downSleep=0.1;
     public static double inSleep=0.1;
     public static double inSleep2=0.3;
-    public static double outSleep=0.5;
-    public static double outSleep2=0.8;
+    public static double outSleep=0.3; //.5
+    public static double outSleep2=0.3;//.8
     /////////////////////
     /////Speed vars//////
     /////////////////////
@@ -432,42 +431,42 @@ public class Turn_auto_5Specimen_Blue extends LinearOpMode {
 
         segment2 = segment1.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(140));
+                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(160));
 
         Action seg2 = segment2.build();
 
         //segment 3 - brings 1st sample to obs zone
         segment3 = segment2.endTrajectory().fresh()
 
-                .turn(Math.toRadians(-100));
+                .turn(Math.toRadians(-140));
 
         Action seg3 = segment3.build();
 
         //segment 4 - goes to 2nd sample
         segment4 = segment3.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(140));
+                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(170));
 
         Action seg4 = segment4.build();
 
         //segment 5 - brings 2nd sample to obs zone
         segment5 = segment4.endTrajectory().fresh()
 
-                .turn(Math.toRadians(-100));
+                .turn(Math.toRadians(-150));
 
         Action seg5 = segment5.build();
 
         //segment 6 - goes to 3rd sample
         segment6 = segment5.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x5, y5), Math.toRadians(140));
+                .strafeToLinearHeading(new Vector2d(x5, y5), Math.toRadians(160));
 
         Action seg6 = segment6.build();
 
         //segment 7 - Brings 3rd sample to obs zone
         segment7 = segment6.endTrajectory().fresh()
 
-                .turn(Math.toRadians(-120));
+                .turn(Math.toRadians(-140));
 
         Action seg7 = segment7.build();
 
