@@ -158,9 +158,21 @@ public class Teleop extends OpMode {
             BR.setPower(-d_power);
             FR.setPower(d_power);
         }
+        else if (gamepad2.dpad_right) {
+            BL.setPower(0.5);
+            FL.setPower(0.5);
+            BR.setPower(-0.5);
+            FR.setPower(-0.5);
+        }
+        else if (gamepad2.dpad_left) {
+            BL.setPower(-0.5);
+            FL.setPower(-0.5);
+            BR.setPower(0.5);
+            FR.setPower(0.5);
+        }
 
         //specimen control
-     /*   if (gamepad1.x){
+        if (gamepad1.x){
 
             lift.barHigh();
             specPos = true;
@@ -183,10 +195,10 @@ public class Teleop extends OpMode {
             lift.barLow();
         }
         //claw control
-        if (gamepad2.left_bumper) {
+        if (gamepad1.left_bumper||gamepad2.left_bumper) {
             claw.clawOpen();
         }
-        if (gamepad2.right_bumper) {
+        if (gamepad1.right_bumper||gamepad2.right_bumper) {
             claw.clawClose();
         }
         if (gamepad1.back){
@@ -199,7 +211,7 @@ public class Teleop extends OpMode {
         }
         if (gamepad1.back) {
             lift.ascent2Up();
-        } */
+        }
         if (gamepad1.y) {
             lift.ascent2();
         }
