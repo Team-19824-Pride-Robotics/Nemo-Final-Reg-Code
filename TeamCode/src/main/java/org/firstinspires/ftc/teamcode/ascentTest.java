@@ -7,8 +7,11 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystem.LinkageSubsystem;
@@ -31,6 +34,7 @@ public class ascentTest extends OpMode {
     private clawSubsystem claw;
     private armSubsystem arm;
     private wristSubsystem wrist;
+    private CRServo ascent;
 
 
 
@@ -39,7 +43,7 @@ public class ascentTest extends OpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-
+        ascent = hardwareMap.get(CRServo.class, "ascent");
         linkage = new LinkageSubsystem(hardwareMap);
         linkage.init();
         lift = new liftSubsystem(hardwareMap);
@@ -78,6 +82,12 @@ public class ascentTest extends OpMode {
             arm.armHang();
         }
 
+        if (gamepad1.back){
+            ascent.setPower(1);
+        }
+        else {
+            ascent.setPower(0);
+        }
 
 
         telemetry.addData("Run time", getRuntime());

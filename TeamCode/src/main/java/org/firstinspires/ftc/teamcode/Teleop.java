@@ -358,7 +358,7 @@ public class Teleop extends OpMode {
 
         telemetry.addData("Run time", getRuntime());
         //linkage
-      /*  telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
+        telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
         telemetry.addData("Stick Control Min", linkage.getStickControlMin());
         telemetry.addData("RL Position", linkage.getServo1Position());
         telemetry.addData("LL Position", linkage.getServo2Position());
@@ -387,7 +387,7 @@ public class Teleop extends OpMode {
         telemetry.addData("rwEncoder", wrist.getRwEncoderPosition());
 
 
-        telemetry.addData("Distance", distance);*/
+
         telemetry.addData ("pickup", pickup);
 
        /* telemetry.addData("Lift Position 1", lift.getLift1Position());
