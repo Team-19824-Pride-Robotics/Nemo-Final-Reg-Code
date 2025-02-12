@@ -14,9 +14,9 @@ public class bucketSubsystem {
     private final AnalogInput encoderBucket;
 
     public static double bucketDown = 0.35;
-    public static double bucketUp = .29;
+    public static double bucketUp = .28;
 
-    public double bucketTargetPosition =.31 ;
+    public double bucketTargetPosition =.28 ;
 
     public bucketSubsystem(HardwareMap hardwareMap) {
         bucket = hardwareMap.get(ServoImplEx.class, "bucket");
