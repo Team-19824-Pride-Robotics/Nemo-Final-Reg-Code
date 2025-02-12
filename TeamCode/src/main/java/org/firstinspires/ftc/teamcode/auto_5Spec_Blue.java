@@ -35,7 +35,7 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static int spHeight2 = 1550; //1650
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
-    public static double AHPos1 = 0.1; //linkage in a little bit
+    public static double AHPos1 = 0.05; //linkage in a little bit
     public static double BHPos1 = 0.11; //linkage in a little bit
     public static double AHPos2 = 0.27; //linkage out
     public static double BHPos2 = 0.45; //linkage out
@@ -55,11 +55,11 @@ public class auto_5Spec_Blue extends LinearOpMode {
     /////Robot Positions//////
     /////////////////////////
     public static double x0 = 36;
-    public static double y0 = -10;
-    public static double x1 = 16.5; //24
-    public static double y1 = -45; //-34
+    public static double y0 = -6;
+    public static double x1 = 20; //24
+    public static double y1 = -38; //-34
     public static double x2 = 15;
-    public static double y2 = -27;
+    public static double y2 = -24;
     public static double x3 = 24;
     public static double y3 = -45;
     public static double x4 = 15;
