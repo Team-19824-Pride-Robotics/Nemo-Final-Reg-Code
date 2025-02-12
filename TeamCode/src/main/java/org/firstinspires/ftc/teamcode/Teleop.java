@@ -127,7 +127,7 @@ public class Teleop extends OpMode {
         //////////////////////////
         double d_power = .5 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
         double drive = gamepad1.left_stick_y * drive_speed_M;
-        double rotate = gamepad1.right_stick_x * drive_speed_M;
+        double rotate = -gamepad1.right_stick_x * drive_speed_M;
 
         BL.setPower(drive + rotate);
         FL.setPower(drive + rotate);
@@ -201,6 +201,7 @@ public class Teleop extends OpMode {
         if (gamepad1.right_bumper||gamepad2.right_bumper) {
             claw.clawClose();
         }
+        /*
         if (gamepad1.back){
             arm.armPark();
             wrist.wristScore();
@@ -230,7 +231,7 @@ public class Teleop extends OpMode {
         if (lift.getLift1Position() > liftpos && ascent3){
             lift.ascent3Up();
         }
-
+*/
 
         //////////////////////////
         /// Gamepad 2 controls ///

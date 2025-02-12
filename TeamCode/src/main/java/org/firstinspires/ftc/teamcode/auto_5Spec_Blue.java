@@ -24,7 +24,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 
 @Config
-@Autonomous(name = "5 Specimen Auto Blue2")
+@Autonomous(name = "5 Specimen Auto Blue")
 public class auto_5Spec_Blue extends LinearOpMode {
 
 /////////////////////////
@@ -39,14 +39,14 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static double BHPos1 = 0.11; //linkage in a little bit
     public static double AHPos2 = 0.27; //linkage out
     public static double BHPos2 = 0.45; //linkage out
-    public static double Bpos = 0.3; //bucket up
+    public static double Bpos = 0.28; //bucket up
     public static double Bpos2 = 0.31; //bucket Mid (not final)
-    public static double Bpos3 = 0.33; //bucket down
-    public static double Epos1 = .33; //Specimen grab
-    public static double Epos2 = .58; //Specimen hang
-    public static double Cpos = 0.72; //open
+    public static double Bpos3 = 0.35; //bucket down
+    public static double Epos1 = .37; //Specimen grab
+    public static double Epos2 = .62; //Specimen hang
+    public static double Cpos = 0.6; //open
     public static double Cpos2 = 0.8; //open a little (to not descore other specimens)(not final)
-    public static double Cpos3 = 0.96; //closed
+    public static double Cpos3 = 0.72; //closed
     public static double rwGrab = .47; //grab specimen
     public static double lwGrab = .51; //grab specimen
     public static double lwHang = 0.67; //hang specimen
@@ -103,8 +103,8 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static double downSleep=0;
     public static double inSleep=0.1;
     public static double inSleep2=0.3;
-    public static double outSleep=0.3; //.5
-    public static double outSleep2=0.4;//.8
+    public static double outSleep=0.4; //.5
+    public static double outSleep2=0.5;//.8
     /////////////////////
     /////Speed vars//////
     /////////////////////
