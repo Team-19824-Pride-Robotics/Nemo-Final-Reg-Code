@@ -31,7 +31,7 @@ public class auto_5Spec_Blue extends LinearOpMode {
 /////Mech Positions//////
 /////////////////////////
 
-    public static int spHeight1 = 850;
+    public static int spHeight1 = 875;
     public static int spHeight2 = 1550; //1650
     public static double AHPos = 0.05; //linkage in
     public static double BHPos = 0.11; //linkage in
@@ -44,9 +44,9 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static double Bpos3 = 0.35; //bucket down
     public static double Epos1 = .37; //Specimen grab
     public static double Epos2 = .62; //Specimen hang
-    public static double Cpos = 0.6; //open
+    public static double Cpos = 0.57; //open
     public static double Cpos2 = 0.8; //open a little (to not descore other specimens)(not final)
-    public static double Cpos3 = 0.72; //closed
+    public static double Cpos3 = 0.83; //closed
     public static double rwGrab = .47; //grab specimen
     public static double lwGrab = .51; //grab specimen
     public static double lwHang = 0.67; //hang specimen
@@ -65,15 +65,15 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static double x4 = 15;
     public static double y4 = -25;
     public static double x5 = 24;
-    public static double y5 = -55;
+    public static double y5 = -58;
     public static double x6 = 16;
     public static double y6 = -20;
     public static double x7 = -5;
     public static double y7 = -24;
     public static double x8 = 12;
     public static double y8 = -15;
-    public static double x9 = 42;
-    public static double y9 = 22;
+    public static double x9 = 43;
+    public static double y9 = 27;
     public static double x10 = -4;
     public static double y10 = -28;
     public static double x11 = 42;
@@ -85,7 +85,7 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static double x14 = -3;
     public static double y14 = -38;
     public static double x15 = 42;
-    public static double y15 = 19;
+    public static double y15 = 24;
     public static double y16 = -40;
     public static double x16 = 10;
     public static double sample1gr = 160;
