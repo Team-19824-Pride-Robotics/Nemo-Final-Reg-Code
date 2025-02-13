@@ -33,10 +33,10 @@ public class auto_5Spec_Blue extends LinearOpMode {
 
     public static int spHeight1 = 875;
     public static int spHeight2 = 1550; //1650
-    public static double AHPos = 0.05; //linkage in
-    public static double BHPos = 0.11; //linkage in
-    public static double AHPos1 = 0.05; //linkage in a little bit
-    public static double BHPos1 = 0.11; //linkage in a little bit
+    public static double AHPos = 0.01; //linkage in
+    public static double BHPos = 0.07; //linkage in
+    public static double AHPos1 = 0.05; //linkage mostly in
+    public static double BHPos1 = 0.11; //linkage mostly in
     public static double AHPos2 = 0.27; //linkage out
     public static double BHPos2 = 0.45; //linkage out
     public static double Bpos = 0.28; //bucket up
@@ -77,20 +77,20 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static double x10 = 0;
     public static double y10 = -28;
     public static double x11 = 42;
-    public static double y11 = 22;
+    public static double y11 = 3;
     public static double x12 = 0;
     public static double y12 = -35;
     public static double x13 = 42;
-    public static double y13 = 19;
+    public static double y13 = 6;
     public static double x14 = 0;
-    public static double y14 = -38;
+    public static double y14 = 9;
     public static double x15 = 42;
     public static double y15 = 24;
     public static double y16 = -40;
     public static double x16 = 10;
     public static double sample1gr = 160;
     public static double sample1ex = -140;
-    public static double sample2gr = 170;
+    public static double sample2gr = 160;
     public static double sample2ex = -150;
     public static double sample3gr = 160;
     public static double sample3er = -140;
@@ -468,7 +468,7 @@ public class auto_5Spec_Blue extends LinearOpMode {
         //segment 4 - goes to 2nd sample
         segment4 = segment3.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(170));
+                .strafeToLinearHeading(new Vector2d(x3, y3), Math.toRadians(sample2gr));
 
         Action seg4 = segment4.build();
 
@@ -597,7 +597,7 @@ public class auto_5Spec_Blue extends LinearOpMode {
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
                 intake.bucketUp(),
-                intake.intakeIn(),
+                intake.intakeInABit(),
                 intake.intakeOff(),
                  //new
 
@@ -614,7 +614,7 @@ public class auto_5Spec_Blue extends LinearOpMode {
                 new SleepAction(outSleep),
                 intake.bucketUp(),
                 intake.intakeOff(),
-                intake.intakeIn(),
+                intake.intakeInABit(),
 
                 //sample 3
                 seg6,
