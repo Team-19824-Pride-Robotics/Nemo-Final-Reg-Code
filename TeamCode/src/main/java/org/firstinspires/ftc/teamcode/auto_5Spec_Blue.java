@@ -42,8 +42,8 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static double Bpos = 0.28; //bucket up
     public static double Bpos2 = 0.31; //bucket Mid (not final)
     public static double Bpos3 = 0.35; //bucket down
-    public static double Epos1 = .37; //Specimen grab
-    public static double Epos2 = .62; //Specimen hang
+    public static double Epos1 = .85; //Specimen grab
+    public static double Epos2 = .55; //Specimen hang
     public static double Cpos = 0.57; //open
     public static double Cpos2 = 0.8; //open a little (to not descore other specimens)(not final)
     public static double Cpos3 = 0.83; //closed
@@ -68,21 +68,21 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static double y5 = -58;
     public static double x6 = 16;
     public static double y6 = -20;
-    public static double x7 = -5;
+    public static double x7 = 0;
     public static double y7 = -24;
     public static double x8 = 12;
     public static double y8 = -15;
-    public static double x9 = 43;
-    public static double y9 = 27;
-    public static double x10 = -4;
+    public static double x9 = 20;
+    public static double y9 = 0;
+    public static double x10 = 0;
     public static double y10 = -28;
     public static double x11 = 42;
     public static double y11 = 22;
-    public static double x12 = -4;
+    public static double x12 = 0;
     public static double y12 = -35;
     public static double x13 = 42;
     public static double y13 = 19;
-    public static double x14 = -3;
+    public static double x14 = 0;
     public static double y14 = -38;
     public static double x15 = 42;
     public static double y15 = 24;
@@ -582,7 +582,7 @@ public class auto_5Spec_Blue extends LinearOpMode {
                 new SleepAction(hangSleep),
                 intake.openClaw(),
                 lift.baseHeight(),
-                intake.spGrabPos(),
+
 
                 //push samples in observation zone
                 //sample 1
@@ -637,7 +637,6 @@ public class auto_5Spec_Blue extends LinearOpMode {
                 intake.bucketUp(),
                 intake.intakeOff(),
                 intake.intakeIn(),
-
                 intake.spGrabPos(),
                 seg8,
 
