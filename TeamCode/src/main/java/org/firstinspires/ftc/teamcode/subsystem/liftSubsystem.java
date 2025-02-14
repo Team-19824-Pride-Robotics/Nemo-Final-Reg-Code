@@ -21,11 +21,9 @@ public class liftSubsystem {
     public static double barHigh = 850;
     public static double score = 1450;
 
-    public static double ascent2 = 2900;
-    public static double ascent2Up = 2200;
-
-    public static double ascent3 = 2900;
-    public static double ascent3Up = 2200;
+    public static double ascent2 = 1600;
+    public static double ascent2Up = 10;
+    public static double ascent2Down = 500;
 
 
     private double target = 0;
@@ -71,12 +69,10 @@ public class liftSubsystem {
     public void ascent2Up() {
         target = ascent2Up;
     }
-    public void ascent3() {
-        target = ascent3;
+    public void ascent2Down() {
+        target = ascent2Down;
     }
-    public void ascent3Up() {
-        target = ascent3Up;
-    }
+
     public double getTarget() {
         return target;
     }

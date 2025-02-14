@@ -563,8 +563,9 @@ public class auto_5Spec_Blue extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(45));
 
         Action seg17 = segment17.build();
-        waitForStart();
 
+
+        waitForStart();
 
         if (isStopRequested()) return;
 

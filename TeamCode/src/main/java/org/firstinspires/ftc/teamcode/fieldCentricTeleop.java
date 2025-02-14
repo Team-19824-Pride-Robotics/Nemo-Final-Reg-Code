@@ -381,7 +381,6 @@ public class fieldCentricTeleop extends OpMode {
         telemetry.addData("Encoder LL Position", linkage.getEncoderLlPosition());
         telemetry.addData("bucketEncoder", bucket.getBucketEncoderPosition());
         telemetry.addData("armEncoder", arm.getArmEncoderPosition());
-        telemetry.addData("lwEncoder", wrist.getLwEncoderPosition());
         telemetry.addData("rwEncoder", wrist.getRwEncoderPosition());
 
         telemetry.addData("Loop Times", elapsedtime.milliseconds());

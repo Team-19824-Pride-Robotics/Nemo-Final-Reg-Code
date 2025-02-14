@@ -15,7 +15,9 @@ public class LinkageSubsystem {
     public static final double SERVO1_MIN = 0.05, SERVO1_MAX = 0.26;
     public static final double SERVO2_MIN = 0.11, SERVO2_MAX = 0.44;
     public static final double SERVO_FULL_MIN = 0.01, SERVO_FULL_MAX = 0.99;
-    public static double rlHangIn = .06, llHangIn = .12;
+    public static double rlHangIn = .04, llHangIn = .08;
+    public static double rlHangIn2 = .02, llHangIn2 = .06;
+
 
     private boolean stickControlEnabled = false;
     private double stickControlMin = SERVO1_MIN;
@@ -52,6 +54,10 @@ public class LinkageSubsystem {
     public void hangIn(){
         rl.setPosition(rlHangIn);
         ll.setPosition(llHangIn);
+    }
+    public void hangIn2(){
+        rl.setPosition(rlHangIn2);
+        ll.setPosition(llHangIn2);
     }
 
     public boolean isStickControlEnabled() {
