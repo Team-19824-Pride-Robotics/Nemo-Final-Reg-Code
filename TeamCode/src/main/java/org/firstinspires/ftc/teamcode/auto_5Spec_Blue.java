@@ -43,14 +43,14 @@ public class auto_5Spec_Blue extends LinearOpMode {
     public static double Bpos2 = 0.31; //bucket Mid (not final)
     public static double Bpos3 = 0.35; //bucket down
     public static double Epos1 = .82; //Specimen grab
-    public static double Epos2 = .55; //Specimen hang
-    public static double Cpos = 0.57; //open
+    public static double Epos2 = .54; //Specimen hang
+    public static double Cpos = 0.48; //open
     public static double Cpos2 = 0.8; //open a little (to not descore other specimens)(not final)
-    public static double Cpos3 = 0.83; //closed
-    public static double rwGrab = .47; //grab specimen
-    public static double lwGrab = .51; //grab specimen
-    public static double lwHang = 0.67; //hang specimen
-    public static double rwHang = 0.63; //hang specimen
+    public static double Cpos3 = 0.98; //closed
+    public static double rwGrab = .34; //grab specimen
+    public static double lwGrab = .3; //grab specimen
+    public static double lwHang = 0.54; //hang specimen
+    public static double rwHang = 0.54; //hang specimen
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
