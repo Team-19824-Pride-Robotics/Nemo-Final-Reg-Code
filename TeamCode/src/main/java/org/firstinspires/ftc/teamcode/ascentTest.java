@@ -27,14 +27,9 @@ import java.util.List;
 @Config
 @TeleOp(name="ascentTest")
 public class ascentTest extends OpMode {
-    private LinkageSubsystem linkage;
     private liftSubsystem lift;
-    private intakeSubsystem intake;
-    private bucketSubsystem bucket;
-    private clawSubsystem claw;
-    private armSubsystem arm;
-    private wristSubsystem wrist;
-    private CRServo ascent;
+    private LinkageSubsystem linkage;
+
 
 
 
@@ -43,21 +38,10 @@ public class ascentTest extends OpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        ascent = hardwareMap.get(CRServo.class, "ascent");
-        linkage = new LinkageSubsystem(hardwareMap);
-        linkage.init();
         lift = new liftSubsystem(hardwareMap);
         lift.init();
-        intake = new intakeSubsystem(hardwareMap);
-        intake.init();
-        bucket = new bucketSubsystem(hardwareMap);
-        bucket.init();
-        claw = new clawSubsystem(hardwareMap);
-        claw.init();
-        arm = new armSubsystem(hardwareMap);
-        arm.init();
-        wrist = new wristSubsystem(hardwareMap);
-        wrist.init();
+        linkage = new LinkageSubsystem(hardwareMap);
+        linkage.init();
 
 
     }
@@ -68,28 +52,25 @@ public class ascentTest extends OpMode {
 
         if (gamepad1.y) {
             lift.ascent2();
+            linkage.hangIn();
         }
         if (gamepad1.a) {
             lift.ascent2Up();
         }
         if (gamepad1.x) {
-            lift.ascent3();
-        }
-        if (gamepad1.b) {
-            lift.ascent3Up();
-        }
-        if (gamepad1.start){
-            arm.armHang();
-        }
-
-        if (gamepad1.back){
-            ascent.setPower(1);
-        }
-        else {
-            ascent.setPower(0);
+            lift.ascent2Down();
+            linkage.hangIn2();
         }
 
 
+
+        lift.update();
+
+        telemetry.addData("targetpos", lift.getTarget());
+        telemetry.addData("lift1 pos", lift.getLift1Position());
+        telemetry.addData("lift2 pos", lift.getLift2Position());
+        telemetry.addData("lift1 power", lift.getLift1Power());
+        telemetry.addData("lift2 power", lift.getLift2Power());
         telemetry.addData("Run time", getRuntime());
 
 

@@ -382,8 +382,6 @@ public class Teleop extends OpMode {
         telemetry.addData("armEncoder", arm.getArmEncoderPosition());
         //wrist
         telemetry.addData("rwTarget", wrist.getRwTargetPosition());
-        telemetry.addData("lwTarget", wrist.getlwTargetPosition());
-        telemetry.addData("lwEncoder", wrist.getLwEncoderPosition());
         telemetry.addData("rwEncoder", wrist.getRwEncoderPosition());
 
 
