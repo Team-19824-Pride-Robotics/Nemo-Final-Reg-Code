@@ -34,50 +34,54 @@ public class auto_4Samp_Red extends LinearOpMode {
 
     public static double AHPos = 0.05;
     public static double BHPos = 0.11;
-    public static double AHPos3 = 0.27;
-    public static double BHPos3 = 0.45;
+    public static double AHPos3 = 0.26;
+    public static double BHPos3 = 0.44;
     public static double Bpos = 0.29;
     public static double Bpos2 = 0.35;
-    public static double Epos1 = .31; //Originpickup
-    public static double Epos2 = .4; //Origin
-    public static double Epos3 = 0.7; //Specimen
+    public static double Epos1 = .9; //Origin
+    public static double Epos2 = .8; //Origin pickup
+    public static double Epos3 = 0.44; //Specimen
     public static double Epos4 = 0.65; //Sample
-    public static double Cpos = 0.73; //open
-    public static double Cpos2 = 0.935; //closed
-    public static double rwIn = .33;
-    public static double lwIn = .37;
+    public static double Cpos = 0.8; //open
+    public static double Cpos2 = 0.95; //closed
+    public static double rwIn = .24;
+    public static double lwIn = .24;
     public static double lwPos3 = 0.5;
-    public static double rwPos3 = 0.46;
+    public static double rwPos3 = 0.35;
     public static double armOut= .66;
 
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
-    public static double x0 = 14;
-    public static double y0 = 16;
-    public static double x1 = 11;
-    public static double y1 = 5; //9
-    public static double x2 = 2;
-    public static double y2 = 12;
-    public static double x3 = 7;
-    public static double y3 = 14.5; //24
-    public static double x4 = -2;
-    public static double y4 = 10;
-    public static double x5 = 61;
-    public static double y5 = -4;
-    public static double x6 = 15;
-    public static double y6 = 11;
+    public static double x0 = 10;
+    public static double y0 = 22;
+    public static double x1 = 23;
+    public static double y1 = 7; //9
+    public static double x2 = 4;
+    public static double y2 = 22;
+    public static double x3 = 23;
+    public static double y3 = 24; //24
+    public static double x4 = 7;
+    public static double y4 = 19;
+    public static double x5 = 27;
+    public static double y5 = 20;
+    public static double x6 = 10;
+    public static double y6 = 15;
     public static double x7 = -13;
     public static double y7 = 16;
-
+    /////////////////////
+    /////Ang vars////////
+    /////////////////////
+    public static double grabAng = 185;
     /////////////////////
     /////Sleep vars//////
     /////////////////////
 
-    public static double firstLiftWait = 0.75;
+    public static double firstLiftWait = 1;
     public static double armStabilizeWait = 0.2;
-    public static double clawOpenWait = 0.2;
-    public static double intakeWait = 1;
+    public static double clawOpenWait = 0.3;
+    public static double intakeWait = 0.8;
+    public static double inWait = 0.8;
     public static double linkInWait = 0.25;
     public static double intakeInsureWait = 0.1;
     public static double armDownWait = 0.25;
@@ -370,34 +374,34 @@ public class auto_4Samp_Red extends LinearOpMode {
         //segment 2 - grab 2nd sample
 
         segment2 = segment1.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(grabAng));
 
 
         Action seg2 = segment2.build();
 
         //segment 3 - score 2nd sample
         segment3 = segment2.endTrajectory().fresh()
-        .splineToLinearHeading(new Pose2d(x2,y2,Math.toRadians(135)),Math.toRadians(135));
+        .strafeToLinearHeading(new Vector2d(x2,y2),Math.toRadians(135));
 
         Action seg3 = segment3.build();
 
         //segment 4 - grab 3rd sample
         segment4 = segment3.endTrajectory().fresh()
-                .splineToLinearHeading(new Pose2d(x3,y3,Math.toRadians(180)),Math.toRadians(180));
+                .strafeToLinearHeading(new Vector2d(x3, y3),Math.toRadians(grabAng));
 
         //segment 5 - score 3rd sample
         Action seg4 = segment4.build();
         segment5 = segment4.endTrajectory().fresh()
-                .splineToLinearHeading(new Pose2d(x4,y4,Math.toRadians(135)),Math.toRadians(135));
+                .strafeToLinearHeading(new Vector2d(x4,y4),Math.toRadians(135));
 
         Action seg5 = segment5.build();
         //segment 6 - grab 4th sample
         segment6 = segment5.endTrajectory().fresh()
-                .splineToLinearHeading(new Pose2d(x5,y5,Math.toRadians(230)),Math.toRadians(230));
+                .strafeToLinearHeading(new Vector2d(x5,y5),Math.toRadians(230));
         Action seg6 = segment6.build();
         //segment 7 - score 4th sample
         segment7 = segment6.endTrajectory().fresh()
-                .splineToLinearHeading(new Pose2d(x6,y6,Math.toRadians(135)),Math.toRadians(135));
+                .strafeToLinearHeading(new Vector2d(x6,y6),Math.toRadians(135));
 
 
         Action seg7 = segment7.build();
@@ -436,6 +440,7 @@ public class auto_4Samp_Red extends LinearOpMode {
                 Mechs.slideOut(),
                 new SleepAction(intakeWait),
                 Mechs.intakeOff(),
+                new SleepAction(inWait),
                 Mechs.slideIn(),
                 new SleepAction(linkInWait),
                 Mechs.intakeOn(),
@@ -462,6 +467,7 @@ public class auto_4Samp_Red extends LinearOpMode {
                 Mechs.slideOut(),
                 new SleepAction(intakeWait), //1
                 Mechs.intakeOff(),
+                new SleepAction(inWait),
                 Mechs.slideIn(),
                 new SleepAction(linkInWait), //.5 //.25
                 Mechs.intakeOn(),
@@ -488,6 +494,7 @@ public class auto_4Samp_Red extends LinearOpMode {
                 Mechs.slideOut(),
                 new SleepAction(lastIntakeWait),
                 Mechs.intakeOff(),
+                new SleepAction(inWait),
                 Mechs.slideIn(),
                 new SleepAction(linkInWait), //.5 //.25
                 Mechs.intakeOn(),
