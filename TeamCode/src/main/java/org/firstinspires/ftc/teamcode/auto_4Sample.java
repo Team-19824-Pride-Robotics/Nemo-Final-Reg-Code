@@ -32,8 +32,8 @@ public class auto_4Sample extends LinearOpMode {
     public static int spHeight1 = 0;
     public static int saHeight2 = 2850;
 
-    public static double AHPos = 0.05;
-    public static double BHPos = 0.11;
+    public static double AHPos = 0.11;
+    public static double BHPos = 0.05;
     public static double AHPos3 = 0.26;
     public static double BHPos3 = 0.44;
     public static double Bpos = 0.29;
@@ -42,12 +42,12 @@ public class auto_4Sample extends LinearOpMode {
     public static double Epos2 = .8; //Origin pickup
     public static double Epos3 = 0.44; //Specimen
     public static double Epos4 = 0.65; //Sample
-    public static double Cpos = 0.6; //open
-    public static double Cpos2 = 0.9; //closed
+    public static double Cpos = 0.55; //open
+    public static double Cpos2 = 0.75; //closed
     public static double rwIn = .24;
     public static double lwIn = .24;
     public static double lwPos3 = 0.5;
-    public static double rwPos3 = 0.35;
+    public static double rwPos3 = 0.33;
     public static double armOut= .4;
 
     ///////////////////////////
