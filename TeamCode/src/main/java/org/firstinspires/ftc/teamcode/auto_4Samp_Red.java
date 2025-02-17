@@ -42,33 +42,33 @@ public class auto_4Samp_Red extends LinearOpMode {
     public static double Epos2 = .8; //Origin pickup
     public static double Epos3 = 0.44; //Specimen
     public static double Epos4 = 0.65; //Sample
-    public static double Cpos = 0.8; //open
-    public static double Cpos2 = 0.95; //closed
+    public static double Cpos = 0.6; //open
+    public static double Cpos2 = 0.9; //closed
     public static double rwIn = .24;
     public static double lwIn = .24;
     public static double lwPos3 = 0.5;
     public static double rwPos3 = 0.35;
-    public static double armOut= .66;
+    public static double armOut= .4;
 
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
     public static double x0 = 10;
     public static double y0 = 22;
-    public static double x1 = 23;
+    public static double x1 = 25;
     public static double y1 = 7; //9
-    public static double x2 = 4;
+    public static double x2 = 6;
     public static double y2 = 22;
-    public static double x3 = 23;
-    public static double y3 = 24; //24
+    public static double x3 = 25;
+    public static double y3 = 22; //24
     public static double x4 = 7;
     public static double y4 = 19;
-    public static double x5 = 27;
+    public static double x5 = 30;
     public static double y5 = 20;
     public static double x6 = 10;
-    public static double y6 = 15;
-    public static double x7 = -13;
-    public static double y7 = 16;
+    public static double y6 = 17.5;
+    public static double x7 = 80;
+    public static double y7 = -17.5;
     /////////////////////
     /////Ang vars////////
     /////////////////////
@@ -78,19 +78,19 @@ public class auto_4Samp_Red extends LinearOpMode {
     /////////////////////
 
     public static double firstLiftWait = 1;
-    public static double armStabilizeWait = 0.2;
+    public static double armStabilizeWait = 0.1;
     public static double clawOpenWait = 0.3;
     public static double intakeWait = 0.8;
-    public static double inWait = 0.8;
+    public static double inWait = 0.2;
     public static double linkInWait = 0.25;
-    public static double intakeInsureWait = 0.1;
+    public static double intakeInsureWait = 0.2;
     public static double armDownWait = 0.25;
     public static double clawCloseWait = 0.25;
-    public static double secondLiftWait = 1;
-    public static double thirdLiftWait = 1.5;
+    public static double secondLiftWait = 0.85;
+    public static double thirdLiftWait = 1;
     public static double lastIntakeWait = 1;
-    public static double lastLiftWait = 1.5;
-
+    public static double lastLiftWait = 1;
+    public static double parkWait = 1;
 
 
 
@@ -515,7 +515,9 @@ public class auto_4Samp_Red extends LinearOpMode {
                 Mechs.Return(),
                 lift.baseHeight(),
                 seg8,
-                Mechs.park()
+                Mechs.park(),
+                new SleepAction(parkWait)
+
 
 
 
