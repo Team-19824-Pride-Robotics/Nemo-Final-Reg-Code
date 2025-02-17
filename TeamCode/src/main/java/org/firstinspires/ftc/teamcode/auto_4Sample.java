@@ -25,7 +25,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 @Config
 @Autonomous(name = "4 Sample Auto")
-public class auto_4Samp_Red extends LinearOpMode {
+public class auto_4Sample extends LinearOpMode {
     /////////////////////////
     /////Mech Positions//////
     /////////////////////////

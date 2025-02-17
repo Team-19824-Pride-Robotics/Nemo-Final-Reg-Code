@@ -158,18 +158,7 @@ public class Teleop extends OpMode {
             BR.setPower(-d_power);
             FR.setPower(d_power);
         }
-        else if (gamepad2.dpad_right) {
-            BL.setPower(0.5);
-            FL.setPower(0.5);
-            BR.setPower(-0.5);
-            FR.setPower(-0.5);
-        }
-        else if (gamepad2.dpad_left) {
-            BL.setPower(-0.5);
-            FL.setPower(-0.5);
-            BR.setPower(0.5);
-            FR.setPower(0.5);
-        }
+
 
         //specimen control
         if (gamepad1.x){
@@ -201,37 +190,7 @@ public class Teleop extends OpMode {
         if (gamepad1.right_bumper||gamepad2.right_bumper) {
             claw.clawClose();
         }
-        /*
-        if (gamepad1.back){
-            arm.armPark();
-            wrist.wristScore();
-            lift.pickup();
-        }
-        if (gamepad1.start) {
-            lift.ascent2();
-        }
-        if (gamepad1.back) {
-            lift.ascent2Up();
-        }
-        if (gamepad1.y) {
-            lift.ascent2();
-        }
-        if (gamepad1.a) {
-            lift.ascent2Up();
-        }
-        if (gamepad1.x) {
-            lift.ascent3();
-        }
-        if (gamepad1.b) {
-            lift.ascent3();
-            arm.armHang();
-            ascent3 = true;
-        }
 
-        if (lift.getLift1Position() > liftpos && ascent3){
-            lift.ascent3Up();
-        }
-*/
 
         //////////////////////////
         /// Gamepad 2 controls ///
@@ -243,20 +202,24 @@ public class Teleop extends OpMode {
             arm.armPickup();
             liftPickup = false;
             intaking = true;
-        } else if (gamepad2.back) {
+        }
+        if (gamepad2.back) {
             linkage.disableStickControl();
             bucket.bucketUp();
             pickup2= true;
             intaking = false;
         }
-        if (linkage.getEncoderRlPosition() <= 38 && pickup2) {
+        if (linkage.getEncoderRlPosition() <= 42 && pickup2) {
             arm.armPickup2();
-            wrist.wristIn();
-        }
-        if(arm.getArmEncoderPosition()<=120 && pickup2){
             wrist.wristPickup();
             pickup2= false;
+
+            //wrist.wristIn();
         }
+     /*   if(arm.getArmEncoderPosition()<=70 && pickup2){
+            wrist.wristPickup();
+            pickup2= false;
+        } */
         if (linkage.isStickControlEnabled()) {
             double stickY = Math.max(-gamepad2.left_stick_y, 0);
             linkage.updateServoPositions(stickY);
@@ -270,7 +233,7 @@ public class Teleop extends OpMode {
             pickup = true;
             liftPickup = true;
         }
-        if (arm.getArmPosition() <= 120&& pickup) {
+        if (arm.getArmEncoderPosition() <= 120&& pickup) {
             lift.pickup();
             pickup = false;
         }

@@ -13,9 +13,9 @@ public class wristSubsystem {
     public final ServoImplEx rw;
     private final AnalogInput encoderRw;
 
-    public static double rwPickup = .24;
+    public static double rwPickup = .2;
   //  public static double lwPickup = .38;
-    public static double rwIn = .33;
+    public static double rwIn = .24;
   //  public static double lwIn = .37;
     public static double rwPickupSpeicmen = .34;
  //   public static double lwPickupSpeicmen = .5;
@@ -23,7 +23,7 @@ public class wristSubsystem {
    // public static double lwScoreSpeicmen = .67;
 
 
-    public static double rwScore = .3;
+    public static double rwScore = .31;
     //public static double lwScore = .5;
 
     public static double rwOut = .18;
