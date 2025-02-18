@@ -56,6 +56,8 @@ public class Teleop extends OpMode {
     public double green;
     public double blue;
 
+    public double d_power;
+
     DcMotorEx FR;
     DcMotorEx FL;
     DcMotorEx BR;
@@ -66,6 +68,11 @@ public class Teleop extends OpMode {
 
     public static double linkagePos = .18;
     public static double linkageMin = .13;
+
+    public boolean spec = false;
+    public boolean startPressedLast = false;
+    public boolean ascent = false;
+    public boolean backPressedLast = false;
 
 
     @Override
@@ -117,6 +124,17 @@ public class Teleop extends OpMode {
         for (LynxModule hub : allHubs){
             hub.clearBulkCache();
         }
+        // spec drive mode
+        if (gamepad1.start && !startPressedLast) {
+            spec = !spec;  // Toggle the value of spec
+        }
+        startPressedLast = gamepad1.start;
+        //ascent control mode
+
+        if (gamepad1.back && !backPressedLast) {
+            ascent = !ascent;  // Toggle the value of spec
+        }
+        backPressedLast = gamepad1.back;
 
      //   distance = distanceSensor.getDistance(DistanceUnit.MM);
         red= colorSensor.red();
@@ -125,7 +143,12 @@ public class Teleop extends OpMode {
         //////////////////////////
         /// Gamepad 1 controls ///
         //////////////////////////
-        double d_power = .5 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
+        if (spec) {
+            d_power = 1 - .4 * gamepad1.right_trigger + (.5 * gamepad1.left_trigger);
+        }
+        else {
+            d_power = .5 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
+        }
         double drive = gamepad1.left_stick_y * drive_speed_M;
         double rotate = -gamepad1.right_stick_x * drive_speed_M;
 
@@ -159,9 +182,22 @@ public class Teleop extends OpMode {
             FR.setPower(d_power);
         }
 
-
+    if (ascent){
+        if (gamepad1.y) {
+            lift.ascent2();
+            linkage.hangIn();
+        }
+        if (gamepad1.a) {
+            lift.ascent2Up();
+        }
+        if (gamepad1.x) {
+            lift.ascent2Down();
+            linkage.hangIn2();
+        }
+    }
+    else {
         //specimen control
-        if (gamepad1.x){
+        if (gamepad1.x) {
 
             lift.barHigh();
             specPos = true;
@@ -171,25 +207,30 @@ public class Teleop extends OpMode {
             wrist.wristScoreSpeicmen();
             specPos = false;
         }
-        if (gamepad1.y){
+        if (gamepad1.y) {
             lift.score();
         }
-        if (gamepad1.a){
+        if (gamepad1.a) {
             arm.armPickupSpeicmen();
             lift.pickup();
             wrist.wristPickupSpeicmen();
         }
 
-        if (gamepad1.b){
+        if (gamepad1.b) {
             lift.barLow();
         }
-        //claw control
-        if (gamepad1.left_bumper||gamepad2.left_bumper) {
-            claw.clawOpen();
-        }
-        if (gamepad1.right_bumper||gamepad2.right_bumper) {
-            claw.clawClose();
-        }
+    }
+
+
+
+    //claw control
+    if (gamepad1.left_bumper || gamepad2.left_bumper) {
+        claw.clawOpen();
+    }
+    if (gamepad1.right_bumper || gamepad2.right_bumper) {
+        claw.clawClose();
+    }
+
 
 
         //////////////////////////
