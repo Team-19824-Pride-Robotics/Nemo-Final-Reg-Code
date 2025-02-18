@@ -42,11 +42,11 @@ public class auto_5Spec extends LinearOpMode {
     public static double Bpos = 0.28; //bucket up
     public static double Bpos2 = 0.31; //bucket Mid (not final)
     public static double Bpos3 = 0.35; //bucket down
-    public static double Epos1 = .83; //Specimen grab
-    public static double Epos2 = .8; //Specimen hang
+    public static double Epos1 = .8; //Specimen grab
+    public static double Epos2 = .58; //Specimen hang
     public static double Cpos = 0.55; //open
     public static double Cpos2 = 0.9; //open a little (to not descore other specimens)(not final)
-    public static double Cpos3 = 0.75; //closed
+    public static double Cpos3 = 0.8; //closed
     public static double rwGrab = .37; //grab specimen
     public static double lwGrab = .3; //grab specimen
     public static double lwHang = 0.54; //hang specimen

@@ -44,7 +44,7 @@ public class wristSubsystem {
     }
 
     public void init() {
-        rw.setPosition(rwPickup);
+        rw.setPosition(rwPickupSpeicmen);
        // lw.setPosition(lwPickup);
     }
 

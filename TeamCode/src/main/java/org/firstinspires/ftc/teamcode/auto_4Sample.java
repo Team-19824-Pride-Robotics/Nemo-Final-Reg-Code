@@ -38,13 +38,12 @@ public class auto_4Sample extends LinearOpMode {
     public static double BHPos3 = 0.44;
     public static double Bpos = 0.29;
     public static double Bpos2 = 0.35;
-    public static double Epos1 = .9; //Origin
-    public static double Epos2 = .8; //Origin pickup
-    public static double Epos3 = 0.44; //Specimen
-    public static double Epos4 = 0.65; //Sample
-    public static double Cpos = 0.55; //open
+    public static double Epos1 = 0.81; //Origin Pickuo
+    public static double Epos2 = .76; //Origin
+    public static double Epos3 = 0.4; //Sample
+    public static double Cpos = 0.57; //open
     public static double Cpos2 = 0.75; //closed
-    public static double rwIn = .24;
+    public static double rwIn = .2;
     public static double lwIn = .24;
     public static double lwPos3 = 0.5;
     public static double rwPos3 = 0.33;
@@ -57,7 +56,7 @@ public class auto_4Sample extends LinearOpMode {
     public static double y0 = 22;
     public static double x1 = 25;
     public static double y1 = 7; //9
-    public static double x2 = 6;
+    public static double x2 = 7;
     public static double y2 = 22;
     public static double x3 = 25;
     public static double y3 = 22; //24
@@ -65,7 +64,7 @@ public class auto_4Sample extends LinearOpMode {
     public static double y4 = 19;
     public static double x5 = 30;
     public static double y5 = 20;
-    public static double x6 = 10;
+    public static double x6 = 8;
     public static double y6 = 17.5;
     public static double x7 = 80;
     public static double y7 = -17.5;
@@ -408,7 +407,7 @@ public class auto_4Sample extends LinearOpMode {
         //segment 6 - park
         segment8 = segment7.endTrajectory().fresh()
 
-                .splineToLinearHeading(new Pose2d(x7,y7,Math.toRadians(-90)),Math.toRadians(-90));
+                .strafeToLinearHeading(new Vector2d(x7,y7),Math.toRadians(-90));
 
         Action seg8 = segment8.build();
 
