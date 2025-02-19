@@ -32,10 +32,10 @@ public class auto_4Sample extends LinearOpMode {
     public static int spHeight1 = 0;
     public static int saHeight2 = 2850;
 
-    public static double AHPos = 0.11;
-    public static double BHPos = 0.05;
-    public static double AHPos3 = 0.26;
-    public static double BHPos3 = 0.44;
+    public static double AHPos = 0.06; //left  linkage in
+    public static double BHPos = 0.035; //right linkage in
+    public static double AHPos3 = 0.43; //left linkage out
+    public static double BHPos3 = 0.245; //right linkage out
     public static double Bpos = 0.29;
     public static double Bpos2 = 0.35;
     public static double Epos1 = 0.81; //Origin Pickuo
