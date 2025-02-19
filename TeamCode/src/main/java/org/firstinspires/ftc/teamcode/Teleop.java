@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystem.LinkageSubsystem;
@@ -25,6 +26,7 @@ import java.util.List;
 @Config
 @TeleOp(name="A_Teleop")
 public class Teleop extends OpMode {
+    public LynxModule CONTROL_HUB, EXPANSION_HUB;
     private LinkageSubsystem linkage;
     private liftSubsystem lift;
     private intakeSubsystem intake;
@@ -86,8 +88,13 @@ public class Teleop extends OpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         allHubs = hardwareMap.getAll(LynxModule.class);
-        for (LynxModule hub : allHubs){
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+
+        if(allHubs.get(0).isParent() && LynxConstants.isEmbeddedSerialNumber(allHubs.get(0).getSerialNumber())) {
+            CONTROL_HUB = allHubs.get(0);
+            EXPANSION_HUB = allHubs.get(1);
+        } else {
+            CONTROL_HUB = allHubs.get(1);
+            EXPANSION_HUB = allHubs.get(0);
         }
 
         linkage = new LinkageSubsystem(hardwareMap);
@@ -112,7 +119,6 @@ public class Teleop extends OpMode {
         BR.setDirection(DcMotorEx.Direction.REVERSE);
         FR.setDirection(DcMotorEx.Direction.REVERSE);
 
-        //distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
 
@@ -133,9 +139,15 @@ public class Teleop extends OpMode {
     @Override
     public void loop() {
 
+            for (LynxModule hub : allHubs) {
+                if (hub.getDeviceName().equals("Servo Hub 3")) return;
+                CONTROL_HUB.clearBulkCache();
+                EXPANSION_HUB.clearBulkCache();
+            }
+/*
         for (LynxModule hub : allHubs){
             hub.clearBulkCache();
-        }
+        } */
         if (gamepad1.start && !startPressedLast) {
             spec = !spec;
         }
@@ -152,7 +164,7 @@ public class Teleop extends OpMode {
         if (spec) {
             d_power = 1 - .4 * gamepad1.right_trigger + (.5 * gamepad1.left_trigger);
         }
-        else {
+        if (!spec) {
             d_power = .5 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
         }
         double drive = gamepad1.left_stick_y * drive_speed_M;
@@ -201,7 +213,7 @@ public class Teleop extends OpMode {
             linkage.hangIn2();
         }
     }
-    else {
+    if (!ascent) {
         //specimen control
         if (gamepad1.x) {
 
@@ -326,6 +338,9 @@ public class Teleop extends OpMode {
         if (gamepad2.dpad_down) {
             bucket.bucketDown();
         }
+        if (gamepad2.x){
+            bucket.bucketEjec();
+        }
 
         if (spec){
             green1.setState(true);
@@ -352,7 +367,7 @@ public class Teleop extends OpMode {
 
 
         telemetry.addData("Run time", getRuntime());
-        //linkage
+/*        //linkage
         telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
         telemetry.addData("Stick Control Min", linkage.getStickControlMin());
         telemetry.addData("RL Position", linkage.getServo1Position());

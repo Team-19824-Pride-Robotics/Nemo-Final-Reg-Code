@@ -16,6 +16,8 @@ public class bucketSubsystem {
     public static double bucketDown = 0.35;
     public static double bucketUp = .28;
 
+    public static double bucketEject = .2;
+
     public double bucketTargetPosition =.28 ;
 
     public bucketSubsystem(HardwareMap hardwareMap) {
@@ -35,6 +37,10 @@ public class bucketSubsystem {
 
     public void bucketUp(){
         bucketTargetPosition = bucketUp;
+    }
+
+    public void bucketEjec() {
+        bucketTargetPosition = bucketEject;
     }
 
     public double getBucketPosition() {
