@@ -39,7 +39,7 @@ public class auto_4Sample extends LinearOpMode {
     public static double Bpos = 0.29;
     public static double Bpos2 = 0.35;
     public static double Epos1 = 0.81; //Origin Pickuo
-    public static double Epos2 = .76; //Origin
+    public static double Epos2 = .71; //Origin
     public static double Epos3 = 0.4; //Sample
     public static double Cpos = 0.57; //open
     public static double Cpos2 = 0.75; //closed
@@ -83,7 +83,7 @@ public class auto_4Sample extends LinearOpMode {
     public static double inWait = 0.2;
     public static double linkInWait = 0.25;
     public static double intakeInsureWait = 0.2;
-    public static double armDownWait = 0.25;
+    public static double armDownWait = 0.75;
     public static double clawCloseWait = 0.25;
     public static double secondLiftWait = 0.85;
     public static double thirdLiftWait = 1;

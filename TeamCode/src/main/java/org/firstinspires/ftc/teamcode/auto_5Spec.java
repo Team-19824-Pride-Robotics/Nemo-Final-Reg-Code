@@ -36,9 +36,9 @@ public class auto_5Spec extends LinearOpMode {
     public static double AHPos = 0.06; //left  linkage in
     public static double BHPos = 0.035; //right linkage in
     public static double AHPos1 = 0.13; //left linkage mostly in
-    public static double BHPos1 = 0.5; //right linkage mostly in
-    public static double AHPos2 = 0.43; //left linkage out
-    public static double BHPos2 = 0.245; //right linkage out
+    public static double BHPos1 = 0.075; //right linkage mostly in
+    public static double AHPos2 = 0.36; //left linkage out
+    public static double BHPos2 = 0.2; //right linkage out
     public static double Bpos = 0.28; //bucket up
     public static double Bpos2 = 0.31; //bucket Mid (not final)
     public static double Bpos3 = 0.35; //bucket down
@@ -46,7 +46,7 @@ public class auto_5Spec extends LinearOpMode {
     public static double Epos2 = .58; //Specimen hang
     public static double Cpos = 0.55; //open
     public static double Cpos2 = 0.9; //open a little (to not descore other specimens)(not final)
-    public static double Cpos3 = 0.8; //closed
+    public static double Cpos3 = 0.81; //closed
     public static double rwGrab = .37; //grab specimen
     public static double lwGrab = .3; //grab specimen
     public static double lwHang = 0.54; //hang specimen
@@ -58,13 +58,13 @@ public class auto_5Spec extends LinearOpMode {
     public static double y0 = -5;
     public static double x1 = 22; //24
     public static double y1 = -37; //-34
-    public static double x2 = 15;
+    public static double x2 = 16;
     public static double y2 = -24;
-    public static double x3 = 24;
-    public static double y3 = -45;
+    public static double x3 = 23;
+    public static double y3 = -46;
     public static double x4 = 15;
     public static double y4 = -25;
-    public static double x5 = 25;
+    public static double x5 = 26;
     public static double y5 = -58;
     public static double x6 = 16;
     public static double y6 = -20;
@@ -86,26 +86,27 @@ public class auto_5Spec extends LinearOpMode {
     public static double y14 = -41;
     public static double x15 = 43;
     public static double y15 = 12;
-    public static double y16 = -40;
-    public static double x16 = 20;
+    public static double y16 = -30;
+    public static double x16 = 10;
+    public static  double parkTurn = 60;
     public static double sample1gr = 160;
     public static double sample1ex = -140;
     public static double sample2gr = 160;
     public static double sample2ex = -150;
     public static double sample3gr = 160;
     public static double sample3er = -160;
-    public static double spec4PickAng = 356;
+    public static double spec4PickAng = 358;
     public static double spec5PickAng = 362;
 /////////////////////
 /////Sleep vars//////
 /////////////////////
     public static double hangSleep=0.4; //.5
     public static double hangSleep2=0.4; //.5
-    public static double grabSleep=0.2;
+    public static double grabSleep=0.3;
     public static double abramSleep=0;
     public static double clawSleep=0.1;
     public static double downSleep=0;
-    public static double inSleep=0.1;
+    public static double inSleep=0.05;
     public static double inSleep2=0.4;
     public static double outSleep=0.4; //.5
     public static double outSleep2=0.5;//.8
@@ -565,7 +566,7 @@ public class auto_5Spec extends LinearOpMode {
         //segment 17 - park
         segment17 = segment16.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(x16, y16), Math.toRadians(parkTurn));
 
         Action seg17 = segment17.build();
         Actions.runBlocking(
