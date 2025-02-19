@@ -64,8 +64,8 @@ public class Teleop extends OpMode {
     boolean ascent3 = false;
     public static double liftpos = 1000;
 
-    public static double linkagePos = .18;
-    public static double linkageMin = .13;
+    public static double linkagePos = .1;
+    public static double linkageMin = .1;
 
     public boolean spec = false;
     public boolean startPressedLast = false;
@@ -268,7 +268,7 @@ public class Teleop extends OpMode {
             pickup2= true;
             intaking = false;
         }
-        if (linkage.getEncoderRlPosition() <= 42 && pickup2) {
+        if (linkage.getEncoderRlPosition() <= 30 && pickup2) {
             arm.armPickup2();
             wrist.wristPickup();
             pickup2= false;
@@ -367,7 +367,7 @@ public class Teleop extends OpMode {
 
 
         telemetry.addData("Run time", getRuntime());
-/*        //linkage
+        //linkage
         telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
         telemetry.addData("Stick Control Min", linkage.getStickControlMin());
         telemetry.addData("RL Position", linkage.getServo1Position());
