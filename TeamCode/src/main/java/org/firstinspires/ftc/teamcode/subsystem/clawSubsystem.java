@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class clawSubsystem {
 
     private final Servo claw;
-    public static double clawOpen = 0.55;
-    public static double clawClose = .75;
+    public static double clawOpen = 0.6;
+    public static double clawClose = .74;
 
-    public double clawTargetPosition = .8;
+    public double clawTargetPosition = .55;
 
     public clawSubsystem(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "claw");

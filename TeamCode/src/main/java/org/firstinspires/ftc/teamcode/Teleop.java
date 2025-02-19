@@ -4,15 +4,14 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystem.LinkageSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.armSubsystem;
 import org.firstinspires.ftc.teamcode.subsystem.bucketSubsystem;
@@ -47,14 +46,11 @@ public class Teleop extends OpMode {
     private List<LynxModule> allHubs;
 
     //sensor
-    RevBlinkinLedDriver LED;
-    RevBlinkinLedDriver.BlinkinPattern pattern;
+
   /*  DistanceSensor distanceSensor;
     public double distance; */
     ColorSensor colorSensor;
-    public double red;
-    public double green;
-    public double blue;
+
 
     public double d_power;
 
@@ -73,6 +69,15 @@ public class Teleop extends OpMode {
     public boolean startPressedLast = false;
     public boolean ascent = false;
     public boolean backPressedLast = false;
+
+    //led
+    private DigitalChannel red1;
+    private DigitalChannel green1;
+    private DigitalChannel red2;
+    private DigitalChannel green2;
+
+
+
 
 
     @Override
@@ -107,12 +112,19 @@ public class Teleop extends OpMode {
         BR.setDirection(DcMotorEx.Direction.REVERSE);
         FR.setDirection(DcMotorEx.Direction.REVERSE);
 
-        LED = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
         //distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
-        pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-        LED.setPattern(pattern);
+
+        red1 = hardwareMap.get(DigitalChannel.class, "red1");
+        green1 = hardwareMap.get(DigitalChannel.class, "green1");
+        red2 = hardwareMap.get(DigitalChannel.class, "red2");
+        green2 = hardwareMap.get(DigitalChannel.class, "green2");
+
+        red1.setMode(DigitalChannel.Mode.OUTPUT);
+        green1.setMode(DigitalChannel.Mode.OUTPUT);
+        red2.setMode(DigitalChannel.Mode.OUTPUT);
+        green2.setMode(DigitalChannel.Mode.OUTPUT);
 
         elapsedtime = new ElapsedTime();
         elapsedtime.reset();
@@ -124,22 +136,16 @@ public class Teleop extends OpMode {
         for (LynxModule hub : allHubs){
             hub.clearBulkCache();
         }
-        // spec drive mode
         if (gamepad1.start && !startPressedLast) {
-            spec = !spec;  // Toggle the value of spec
+            spec = !spec;
         }
         startPressedLast = gamepad1.start;
-        //ascent control mode
 
         if (gamepad1.back && !backPressedLast) {
-            ascent = !ascent;  // Toggle the value of spec
+            ascent = !ascent;
         }
         backPressedLast = gamepad1.back;
 
-     //   distance = distanceSensor.getDistance(DistanceUnit.MM);
-        red= colorSensor.red();
-        green = colorSensor.green();
-        blue = colorSensor.blue();
         //////////////////////////
         /// Gamepad 1 controls ///
         //////////////////////////
@@ -274,7 +280,7 @@ public class Teleop extends OpMode {
             pickup = true;
             liftPickup = true;
         }
-        if (arm.getArmEncoderPosition() <= 120&& pickup) {
+        if (arm.getArmEncoderPosition() <= 105&& pickup) {
             lift.pickup();
             pickup = false;
         }
@@ -296,7 +302,7 @@ public class Teleop extends OpMode {
             wrist.wristOut();
         }
 
-        if ((arm.getArmEncoderPosition() >= 200 && dpad_up) || (arm.getArmEncoderPosition() >= 200 && dpad_down)) {
+        if ((arm.getArmEncoderPosition() >= 100 && dpad_up) || (arm.getArmEncoderPosition() >= 100 && dpad_down)) {
             wrist.wristScore();
             pickup = false;
             liftPickup = false;
@@ -321,6 +327,20 @@ public class Teleop extends OpMode {
             bucket.bucketDown();
         }
 
+        if (spec){
+            green1.setState(true);
+            red1.setState(false);
+        }
+        if (ascent){
+            green1.setState(false);
+            red1.setState(true);
+        }
+        if (!spec && !ascent){
+                green1.setState(false);
+                red1.setState(false);
+        }
+
+
 
         lift.update();
         intake.update();
@@ -329,36 +349,7 @@ public class Teleop extends OpMode {
         arm.update();
         wrist.update();
 
-        //led
-        if (intaking){
-            if ((red>=405&& red<=1631)&&(green>=235&&green<=900)&&(blue>=117&&blue<=524)) {
-                pattern = RevBlinkinLedDriver.BlinkinPattern.RED;
-            }
-            // Check for Blue Block
-            else if ((green>=214&&green<=826)&&(blue>=500&&blue<=1828)&&(red<455)) {
-                pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;
-            }
-            // Check for Yellow Block
-            else if ((red>=690&&red<=2380)&&(green>=925&&green<=3100)&&(blue>=200&&blue<=790)) {
-                pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
-            }
-            else {
-                pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
-            }
-        }
-      /*  if (!intaking){
-            if (distance <=250&& distance>25 ){
-                pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-            }
-            else if(distance<=25){
-                pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE;
-            }
-            else {
-                pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
-            }
-        } */
 
-        LED.setPattern(pattern);
 
         telemetry.addData("Run time", getRuntime());
         //linkage

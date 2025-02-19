@@ -30,7 +30,7 @@ public class wristSubsystem {
  //   public static double lwOut = .3;
 
 
-    public double rwTargetPosition =.24;
+    public double rwTargetPosition =.2;
     //public double lwTargetPosition = .37;
 
     public wristSubsystem(HardwareMap hardwareMap) {
