@@ -26,7 +26,7 @@ import java.util.List;
 @Config
 @TeleOp(name="A_Teleop")
 public class Teleop extends OpMode {
-    public LynxModule CONTROL_HUB, EXPANSION_HUB;
+  //  public LynxModule CONTROL_HUB, EXPANSION_HUB;
     private LinkageSubsystem linkage;
     private liftSubsystem lift;
     private intakeSubsystem intake;
@@ -52,6 +52,10 @@ public class Teleop extends OpMode {
   /*  DistanceSensor distanceSensor;
     public double distance; */
     ColorSensor colorSensor;
+
+    public double red;
+    public double green;
+    public double blue;
 
 
     public double d_power;
@@ -88,14 +92,16 @@ public class Teleop extends OpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         allHubs = hardwareMap.getAll(LynxModule.class);
-
-        if(allHubs.get(0).isParent() && LynxConstants.isEmbeddedSerialNumber(allHubs.get(0).getSerialNumber())) {
+        for (LynxModule hub : allHubs){
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
+      /*  if(allHubs.get(0).isParent() && LynxConstants.isEmbeddedSerialNumber(allHubs.get(0).getSerialNumber())) {
             CONTROL_HUB = allHubs.get(0);
             EXPANSION_HUB = allHubs.get(1);
         } else {
             CONTROL_HUB = allHubs.get(1);
             EXPANSION_HUB = allHubs.get(0);
-        }
+        } */
 
         linkage = new LinkageSubsystem(hardwareMap);
         linkage.init();
@@ -139,15 +145,30 @@ public class Teleop extends OpMode {
     @Override
     public void loop() {
 
-            for (LynxModule hub : allHubs) {
+       /*     for (LynxModule hub : allHubs) {
                 if (hub.getDeviceName().equals("Servo Hub 3")) return;
                 CONTROL_HUB.clearBulkCache();
                 EXPANSION_HUB.clearBulkCache();
-            }
-/*
+            } */
+
         for (LynxModule hub : allHubs){
             hub.clearBulkCache();
-        } */
+        }
+        // colorsensor
+
+        red= colorSensor.red();
+        green = colorSensor.green();
+        blue = colorSensor.blue();
+
+        if ( (red>300 && red < 340)&& (green>500 && green <540) && (blue>370&& blue<410)){
+            green2.setState(false);
+            red2.setState(false);
+        }
+        else {
+            green2.setState(true);
+            red2.setState(false);
+        }
+
         if (gamepad1.start && !startPressedLast) {
             spec = !spec;
         }
@@ -357,6 +378,7 @@ public class Teleop extends OpMode {
 
 
 
+
         lift.update();
         intake.update();
         bucket.update();
@@ -368,7 +390,7 @@ public class Teleop extends OpMode {
 
         telemetry.addData("Run time", getRuntime());
         //linkage
-        telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
+        /* telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
         telemetry.addData("Stick Control Min", linkage.getStickControlMin());
         telemetry.addData("RL Position", linkage.getServo1Position());
         telemetry.addData("LL Position", linkage.getServo2Position());

@@ -17,6 +17,8 @@ public class bucketSubsystem {
     public static double bucketUp = .28;
 
     public static double bucketEject = .2;
+    public static double bucketSampleOut = .3;
+
 
     public double bucketTargetPosition =.28 ;
 
@@ -42,6 +44,10 @@ public class bucketSubsystem {
     public void bucketEjec() {
         bucketTargetPosition = bucketEject;
     }
+    public void sampleOut() {
+        bucketTargetPosition = bucketSampleOut;
+    }
+
 
     public double getBucketPosition() {
         return bucketTargetPosition;
