@@ -31,7 +31,7 @@ public class auto_5Spec extends LinearOpMode {
 /////Mech Positions//////
 /////////////////////////
 
-    public static int spHeight1 = 950;
+    public static int spHeight1 = 50;
     public static int spHeight2 = 1550; //1650
     public static double AHPos = 0.06; //left  linkage in
     public static double BHPos = 0.035; //right linkage in

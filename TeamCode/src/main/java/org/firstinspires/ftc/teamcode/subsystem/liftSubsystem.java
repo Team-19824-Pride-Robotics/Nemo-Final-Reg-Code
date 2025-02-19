@@ -18,8 +18,8 @@ public class liftSubsystem {
     public static double bucketLow = 1000;
     public static double bucketHigh = 2850;
     public static double barLow = 700;
-    public static double barHigh = 850;
-    public static double score = 1500;
+    public static double barHigh = 900;
+    public static double score = 1450;
 
     public static double ascent2 = 1600;
     public static double ascent2Up = 10;
