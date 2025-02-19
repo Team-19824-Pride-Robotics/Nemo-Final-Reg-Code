@@ -35,8 +35,8 @@ public class auto_5Spec extends LinearOpMode {
     public static int spHeight2 = 1550; //1650
     public static double AHPos = 0.06; //left  linkage in
     public static double BHPos = 0.035; //right linkage in
-    public static double AHPos1 = 0.05; //left linkage mostly in
-    public static double BHPos1 = 0.11; //right linkage mostly in
+    public static double AHPos1 = 0.13; //left linkage mostly in
+    public static double BHPos1 = 0.5; //right linkage mostly in
     public static double AHPos2 = 0.43; //left linkage out
     public static double BHPos2 = 0.245; //right linkage out
     public static double Bpos = 0.28; //bucket up
