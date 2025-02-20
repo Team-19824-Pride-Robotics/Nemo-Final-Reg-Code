@@ -31,7 +31,7 @@ public class auto_5Spec extends LinearOpMode {
 /////Mech Positions//////
 /////////////////////////
 
-    public static int spHeight1 = 50;
+    public static int spHeight1 = 900;
     public static int spHeight2 = 1550; //1650
     public static double AHPos = 0.06; //left  linkage in
     public static double BHPos = 0.035; //right linkage in
@@ -90,11 +90,11 @@ public class auto_5Spec extends LinearOpMode {
     public static double x16 = 10;
     public static  double parkTurn = 60;
     public static double sample1gr = 160;
-    public static double sample1ex = -140;
+    public static double sample1ex = -130;
     public static double sample2gr = 160;
-    public static double sample2ex = -150;
+    public static double sample2ex = -130;
     public static double sample3gr = 160;
-    public static double sample3er = -160;
+    public static double sample3ex = -130;
     public static double spec4PickAng = 358;
     public static double spec5PickAng = 362;
 /////////////////////
@@ -102,11 +102,11 @@ public class auto_5Spec extends LinearOpMode {
 /////////////////////
     public static double hangSleep=0.4; //.5
     public static double hangSleep2=0.4; //.5
-    public static double grabSleep=0.3;
+    public static double grabSleep=0.2;
     public static double abramSleep=0;
     public static double clawSleep=0.1;
     public static double downSleep=0;
-    public static double inSleep=0.05;
+    public static double inSleep=0.1;
     public static double inSleep2=0.4;
     public static double outSleep=0.4; //.5
     public static double outSleep2=0.5;//.8
@@ -460,14 +460,14 @@ public class auto_5Spec extends LinearOpMode {
 
         segment2 = segment1.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(160));
+                .strafeToLinearHeading(new Vector2d(x1, y1), Math.toRadians(sample1gr));
 
         Action seg2 = segment2.build();
 
         //segment 3 - brings 1st sample to obs zone
         segment3 = segment2.endTrajectory().fresh()
 
-                .turn(Math.toRadians(-140));
+                .turn(Math.toRadians(sample1ex));
 
         Action seg3 = segment3.build();
 
@@ -481,21 +481,21 @@ public class auto_5Spec extends LinearOpMode {
         //segment 5 - brings 2nd sample to obs zone
         segment5 = segment4.endTrajectory().fresh()
 
-                .turn(Math.toRadians(sample3er));
+                .turn(Math.toRadians(sample2ex));
 
         Action seg5 = segment5.build();
 
         //segment 6 - goes to 3rd sample
         segment6 = segment5.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x5, y5), Math.toRadians(160));
+                .strafeToLinearHeading(new Vector2d(x5, y5), Math.toRadians(sample3gr));
 
         Action seg6 = segment6.build();
 
         //segment 7 - Brings 3rd sample to obs zone
         segment7 = segment6.endTrajectory().fresh()
 
-                .turn(Math.toRadians(-140));
+                .turn(Math.toRadians(sample3ex));
 
         Action seg7 = segment7.build();
 
