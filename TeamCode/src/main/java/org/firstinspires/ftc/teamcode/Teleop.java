@@ -232,6 +232,8 @@ public class Teleop extends OpMode {
         if (gamepad1.x) {
             lift.ascent2Down();
             linkage.hangIn2();
+            arm.armHang();
+            wrist.wristScore();
         }
     }
     if (!ascent) {

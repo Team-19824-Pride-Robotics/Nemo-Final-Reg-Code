@@ -23,7 +23,7 @@ public class wristSubsystem {
    // public static double lwScoreSpeicmen = .67;
 
 
-    public static double rwScore = .31;
+    public static double rwScore = .36;
     //public static double lwScore = .5;
 
     public static double rwOut = .18;
@@ -32,6 +32,7 @@ public class wristSubsystem {
 
     public double rwTargetPosition =.2;
     //public double lwTargetPosition = .37;
+
 
     public wristSubsystem(HardwareMap hardwareMap) {
         rw = hardwareMap.get(ServoImplEx.class, "rw");
