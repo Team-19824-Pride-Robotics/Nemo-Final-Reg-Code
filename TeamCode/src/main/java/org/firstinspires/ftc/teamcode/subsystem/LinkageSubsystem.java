@@ -15,7 +15,7 @@ public class LinkageSubsystem {
     public static final double SERVO1_MIN = 0.035, SERVO1_MAX = 0.245; //RIGHT
     public static final double SERVO2_MIN = 0.06, SERVO2_MAX = 0.43; //LEFT
     public static final double SERVO_FULL_MIN = 0.01, SERVO_FULL_MAX = 0.99;
-    public static double rlHangIn = .04, llHangIn = .08;
+    public static double rlHangIn = .02, llHangIn = .06;
     public static double rlHangIn2 = .02, llHangIn2 = .06;
 
     public static double rlSampleOut = .245, llSampleOut = .43;
