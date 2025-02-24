@@ -15,6 +15,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -22,7 +23,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
-
+@Disabled
 @Config
 @Autonomous(name = "4 Sample Auto")
 public class auto_4Sample extends LinearOpMode {
@@ -54,12 +55,12 @@ public class auto_4Sample extends LinearOpMode {
     /////////////////////////
     public static double x0 = 10;
     public static double y0 = 22;
-    public static double x1 = 25;
+    public static double x1 = 27;
     public static double y1 = 7; //9
     public static double x2 = 7;
     public static double y2 = 22;
     public static double x3 = 25;
-    public static double y3 = 22; //24
+    public static double y3 = 24; //24
     public static double x4 = 7;
     public static double y4 = 19;
     public static double x5 = 30;

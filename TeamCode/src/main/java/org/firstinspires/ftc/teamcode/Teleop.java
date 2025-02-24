@@ -315,7 +315,7 @@ public class Teleop extends OpMode {
             pickup = true;
             liftPickup = true;
         }
-        if (arm.getArmEncoderPosition() <= 105&& pickup) {
+        if (arm.getArmEncoderPosition() <= 125&& pickup) {
             lift.pickup();
             pickup = false;
         }
@@ -392,7 +392,7 @@ public class Teleop extends OpMode {
 
         telemetry.addData("Run time", getRuntime());
         //linkage
-        /* telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
+         telemetry.addData("Stick Control Enabled", linkage.isStickControlEnabled());
         telemetry.addData("Stick Control Min", linkage.getStickControlMin());
         telemetry.addData("RL Position", linkage.getServo1Position());
         telemetry.addData("LL Position", linkage.getServo2Position());

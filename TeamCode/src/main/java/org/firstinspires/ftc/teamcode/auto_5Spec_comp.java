@@ -40,7 +40,7 @@ public class auto_5Spec_comp extends LinearOpMode {
     public static double AHPos2 = 0.36; //left linkage out
     public static double BHPos2 = 0.2; //right linkage out
     public static double Bpos = 0.28; //bucket up
-    public static double Bpos2 = 0.31; //bucket Mid (not final)
+    public static double Bpos2 = 0.35; //bucket Mid (not final)
     public static double Bpos3 = 0.35; //bucket down
     public static double Epos1 = .8; //Specimen grab
     public static double Epos2 = .58; //Specimen hang
@@ -54,37 +54,37 @@ public class auto_5Spec_comp extends LinearOpMode {
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
-    public static double x0 = 38.2375;
-    public static double y0 = -5.03125;
+    public static double x0 = 39;
+    public static double y0 = -2;
     public static double x1 = 22.1375;
-    public static double y1 = -37.23125;
+    public static double y1 = -36.23125;
     public static double x2 = 16.1;
     public static double y2 = -24.15;
     public static double x3 = 23.14375;
     public static double y3 = -46.2875;
     public static double x4 = 15.09375;
     public static double y4 = -25.15625;
-    public static double x5 = 26.1625;
-    public static double y5 = -58.3625;
+    public static double x5 = 24.5;
+    public static double y5 = -57.3625;
     public static double x6 = 16.1;
     public static double y6 = -20.125;
-    public static double x7 = -1.00625;
+    public static double x7 = -1.5;
     public static double y7 = -28.175;
     public static double x8 = 12.075;
     public static double y8 = -15.09375;
-    public static double x9 = 44.778125;
-    public static double y9 = -1.00625;
+    public static double x9 = 44.8;
+    public static double y9 = -1.5;
     public static double x10 = 0.0;
     public static double y10 = -35.21875;
-    public static double x11 = 44.275;
+    public static double x11 = 44.8;
     public static double y11 = 3.01875;
-    public static double x12 = 1.00625;
+    public static double x12 = -1.5;
     public static double y12 = -37.23125;
-    public static double x13 = 43.26875;
+    public static double x13 = 45;
     public static double y13 = 7.04375;
-    public static double x14 = 1.00625;
+    public static double x14 = -1.5;
     public static double y14 = -41.25625;
-    public static double x15 = 43.26875;
+    public static double x15 = 45;
     public static double y15 = 12.075;
     public static double x16 = 10.0625;
     public static double y16 = -30.1875;
@@ -95,14 +95,14 @@ public class auto_5Spec_comp extends LinearOpMode {
     public static double sample2gr = 160;
     public static double sample2ex = -130;
     public static double sample3gr = 160;
-    public static double sample3ex = -130;
+    public static double sample3ex = -140;
     public static double spec4PickAng = 358;
     public static double spec5PickAng = 362;
 /////////////////////
 /////Sleep vars//////
 /////////////////////
     public static double hangSleep=0.4; //.5
-    public static double hangSleep2=0.4; //.5
+    public static double hangSleep2=0.5; //.5
     public static double grabSleep=0.2;
     public static double abramSleep=0;
     public static double clawSleep=0.1;
@@ -648,10 +648,10 @@ new SequentialAction(
                 intake.intakeExpel(),
                 new SleepAction(outSleep2),
                 intake.bucketUp(),
-                intake.intakeOff(),
                 intake.intakeIn(),
                 intake.spGrabPos(),
                 seg8,
+                intake.intakeOff(),
 
                 
 

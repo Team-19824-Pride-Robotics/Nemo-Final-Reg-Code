@@ -16,7 +16,7 @@ public class bucketSubsystem {
     public static double bucketDown = 0.35;
     public static double bucketUp = .28;
 
-    public static double bucketEject = .2;
+    public static double bucketEject = .14;
     public static double bucketSampleOut = .3;
 
 

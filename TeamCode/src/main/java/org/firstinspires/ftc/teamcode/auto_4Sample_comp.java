@@ -36,13 +36,13 @@ public class auto_4Sample_comp extends LinearOpMode {
     public static double BHPos = 0.035; //right linkage in
     public static double AHPos3 = 0.43; //left linkage out
     public static double BHPos3 = 0.245; //right linkage out
-    public static double Bpos = 0.29;
+    public static double Bpos = 0.3;
     public static double Bpos2 = 0.35;
-    public static double Epos1 = 0.81; //Origin Pickuo
+    public static double Epos1 = 0.8; //Origin Pickuo
     public static double Epos2 = .71; //Origin
     public static double Epos3 = 0.4; //Sample
     public static double Cpos = 0.57; //open
-    public static double Cpos2 = 0.75; //closed
+    public static double Cpos2 = 0.77; //closed
     public static double rwIn = .2;
     public static double lwIn = .24;
     public static double lwPos3 = 0.5;
@@ -55,13 +55,13 @@ public class auto_4Sample_comp extends LinearOpMode {
     public static double x0 = 10.0625;
     public static double y0 = 22.1375;
     public static double x1 = 25;
-    public static double y1 = 7.04375;
-    public static double x2 = 7.04375;
-    public static double y2 = 22.1375;
+    public static double y1 = 8;
+    public static double x2 = 7.5;
+    public static double y2 = 21.5;
     public static double x3 = 25;
-    public static double y3 = 22.1375;
+    public static double y3 = 24.5;
     public static double x4 = 7.04375;
-    public static double y4 = 19.11875;
+    public static double y4 = 18.75;
     public static double x5 = 30;
     public static double y5 = 20.125;
     public static double x6 = 8.05;
@@ -80,7 +80,7 @@ public class auto_4Sample_comp extends LinearOpMode {
     public static double armStabilizeWait = 0.1;
     public static double clawOpenWait = 0.3;
     public static double intakeWait = 0.8;
-    public static double inWait = 0.2;
+    public static double inWait = 1;
     public static double linkInWait = 0.25;
     public static double intakeInsureWait = 0.2;
     public static double armDownWait = 0.75;
@@ -89,6 +89,7 @@ public class auto_4Sample_comp extends LinearOpMode {
     public static double thirdLiftWait = 1;
     public static double lastIntakeWait = 1;
     public static double lastLiftWait = 1;
+    public static double bucketWait = 0.5;
     public static double parkWait = 1;
 
 
@@ -206,7 +207,7 @@ public class auto_4Sample_comp extends LinearOpMode {
                 hSlide2.setPosition(BHPos3);
                 bucket.setPosition(Bpos2);
                 elbow.setPosition(Epos2);
-                intake.setPower(1);
+
 
 
 
@@ -265,6 +266,36 @@ public class auto_4Sample_comp extends LinearOpMode {
             }
             public Action intakeOn() {
                 return new intakeOn();
+            }
+            public class intakeOnFr implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+
+                    intake.setPower(0.7);
+
+
+
+
+                    return false;
+                }
+            }
+            public Action intakeOnFr() {
+                return new intakeOnFr();
+            }
+            public class intakeOnFrFr implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+
+                    intake.setPower(0.8);
+
+
+
+
+                    return false;
+                }
+            }
+            public Action intakeOnFrFr() {
+                return new intakeOnFrFr();
             }
             public class armDownALil implements Action {
                 @Override
@@ -437,6 +468,7 @@ public class auto_4Sample_comp extends LinearOpMode {
                 //grab 2nd sample
                 seg2,
                 Mechs.slideOut(),
+                Mechs.intakeOnFr(),
                 new SleepAction(intakeWait),
                 Mechs.intakeOff(),
                 new SleepAction(inWait),
@@ -464,6 +496,7 @@ public class auto_4Sample_comp extends LinearOpMode {
                         lift.baseHeight()
                 ),
                 Mechs.slideOut(),
+                Mechs.intakeOnFr(),
                 new SleepAction(intakeWait), //1
                 Mechs.intakeOff(),
                 new SleepAction(inWait),
@@ -491,6 +524,7 @@ public class auto_4Sample_comp extends LinearOpMode {
 
 
                 Mechs.slideOut(),
+                Mechs.intakeOnFrFr(),
                 new SleepAction(lastIntakeWait),
                 Mechs.intakeOff(),
                 new SleepAction(inWait),

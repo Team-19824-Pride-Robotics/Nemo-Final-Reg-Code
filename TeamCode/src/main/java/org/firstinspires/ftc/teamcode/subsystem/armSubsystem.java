@@ -12,7 +12,7 @@ public class armSubsystem {
 
     private final ServoImplEx arm;
     private final AnalogInput encoderArm;
-    public static double armPickup = 0.75;
+    public static double armPickup = 0.7;
     public static double armPickupSpcimen = .78;
 
     public static double armSample = .44;
@@ -23,7 +23,7 @@ public class armSubsystem {
     public double armTargetPosition =.8;
 
     public static double park = .66;
-    public static double armHang = .1;
+    public static double armHang = .18;
 
     public armSubsystem(HardwareMap hardwareMap) {
         arm = hardwareMap.get(ServoImplEx.class, "arm");
