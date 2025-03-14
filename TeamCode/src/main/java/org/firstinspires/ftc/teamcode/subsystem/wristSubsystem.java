@@ -24,6 +24,7 @@ public class wristSubsystem {
 
 
     public static double rwScore = .36;
+    public static double rwLift = .36;
     //public static double lwScore = .5;
 
     public static double rwOut = .18;
@@ -45,7 +46,7 @@ public class wristSubsystem {
     }
 
     public void init() {
-        rw.setPosition(rwPickupSpeicmen);
+        rw.setPosition(rwIn);
        // lw.setPosition(lwPickup);
     }
 
@@ -67,6 +68,10 @@ public class wristSubsystem {
     }
     public void wristScore() {
         rwTargetPosition = rwScore;
+        //lwTargetPosition = lwScore;
+    }
+    public void wristLift() {
+        rwTargetPosition = rwLift;
         //lwTargetPosition = lwScore;
     }
     public void wristOut() {

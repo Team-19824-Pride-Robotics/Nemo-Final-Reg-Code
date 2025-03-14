@@ -14,8 +14,9 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -23,7 +24,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
-@Disabled
+
 @Config
 @Autonomous(name = "4 Sample Auto")
 public class auto_4Sample extends LinearOpMode {
@@ -35,6 +36,8 @@ public class auto_4Sample extends LinearOpMode {
 
     public static double AHPos = 0.06; //left  linkage in
     public static double BHPos = 0.035; //right linkage in
+    public static double AHPos2 = 0.16; //left linkage out a lil
+    public static double BHPos2 = 0.135; //right linkage out a lil
     public static double AHPos3 = 0.43; //left linkage out
     public static double BHPos3 = 0.245; //right linkage out
     public static double Bpos = 0.29;
@@ -55,8 +58,8 @@ public class auto_4Sample extends LinearOpMode {
     /////////////////////////
     public static double x0 = 10;
     public static double y0 = 22;
-    public static double x1 = 27;
-    public static double y1 = 7; //9
+    public static double x1 = 25;
+    public static double y1 = 8; //9
     public static double x2 = 7;
     public static double y2 = 22;
     public static double x3 = 25;
@@ -69,10 +72,17 @@ public class auto_4Sample extends LinearOpMode {
     public static double y6 = 17.5;
     public static double x7 = 80;
     public static double y7 = -17.5;
+    public double xSub = 80.1;
+    public double ySub = -7;
+    public static double x9 = 80;
+    public static double y9 = -17.5;
+
+
     /////////////////////
     /////Ang vars////////
     /////////////////////
     public static double grabAng = 185;
+    public double subAngle = -90;
     /////////////////////
     /////Sleep vars//////
     /////////////////////
@@ -91,8 +101,8 @@ public class auto_4Sample extends LinearOpMode {
     public static double lastIntakeWait = 1;
     public static double lastLiftWait = 1;
     public static double parkWait = 1;
-
-
+public boolean exit=false;
+public boolean fifthSamp=false;
 
         public class Mechs {
             ServoImplEx backWrist;
@@ -107,6 +117,7 @@ public class auto_4Sample extends LinearOpMode {
 
             ServoImplEx bucket;
             DcMotor intake;
+            private Limelight3A limelight;
             public Mechs(HardwareMap hardwareMap) {
                 elbow = (ServoImplEx)hardwareMap.servo.get("arm");
                 elbow.setPwmRange(new PwmControl.PwmRange(505, 2495));
@@ -122,7 +133,7 @@ public class auto_4Sample extends LinearOpMode {
                 backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
                 frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "rw");
                 frontWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-
+                limelight = hardwareMap.get(Limelight3A.class, "limelight");
             }
 
             public class saScorePos implements Action {
@@ -183,15 +194,52 @@ public class auto_4Sample extends LinearOpMode {
             public Action Return() {
                 return new Return();
             }
+            public class intakeIntoSub implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                   hSlide.setPosition(AHPos2);
+                   hSlide2.setPosition(BHPos2);;
+                    intake.setPower(-1);
 
+                    return false;
+                }
+            }
+            public Action intakeIntoSub() {
+                return new intakeIntoSub();
+            }
+            public class scan implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                    limelight.pipelineSwitch(0);
+                    limelight.start();
+
+                    LLResult result = limelight.getLatestResult();
+
+                        while (!result.isValid() || !exit) {
+                            result = limelight.getLatestResult();
+                        }
+                        if(result.isValid()){
+                            xSub=x7-result.getTx(); //I need to figure out what kinda value Tx will give me proportional to the robot so not final
+                            ySub=-17;
+                            subAngle = 90;
+                            fifthSamp=true;
+                        }
+
+                    return false;
+                }
+            }
+            public Action scan() {
+                return new scan();
+            }
             public class park implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-
-
                     elbow.setPosition(armOut);
                     frontWrist.setPosition(rwPos3);
                     backWrist.setPosition(lwPos3);
+
+
+
 
                     return false;
                 }
@@ -199,7 +247,6 @@ public class auto_4Sample extends LinearOpMode {
             public Action park() {
                 return new park();
             }
-
             public class slideOut implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
@@ -337,6 +384,24 @@ public class auto_4Sample extends LinearOpMode {
             return new scoreHeight();
         }
 
+        public class maybeScoreHeight implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (fifthSamp) {
+                    lift1.setTargetPosition(spHeight1);
+                    lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift2.setTargetPosition(spHeight1);
+                    lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift1.setPower(1);
+                    lift2.setPower(1);
+                }
+                return false;
+            }
+        }
+
+            public Action maybeScoreHeight() {
+                return new maybeScoreHeight();
+            }
 
     }
 
@@ -345,6 +410,7 @@ public class auto_4Sample extends LinearOpMode {
     public void runOpMode(){
         Mechs Mechs = new Mechs(hardwareMap);
         lift lift = new lift(hardwareMap);
+
 
         // instantiate your MecanumDrive at a particular pose.
         Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(180));
@@ -361,6 +427,8 @@ public class auto_4Sample extends LinearOpMode {
         TrajectoryActionBuilder segment6;
         TrajectoryActionBuilder segment7;
         TrajectoryActionBuilder segment8;
+        TrajectoryActionBuilder segment9;
+        TrajectoryActionBuilder segment10;
 
 
 
@@ -405,12 +473,26 @@ public class auto_4Sample extends LinearOpMode {
 
 
         Action seg7 = segment7.build();
-        //segment 6 - park
+        //segment 8 - scan for blocks
         segment8 = segment7.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x7,y7),Math.toRadians(-90));
+                .strafeToLinearHeading(new Vector2d(x7,y7),Math.toRadians(90));
 
         Action seg8 = segment8.build();
+
+        //segment 9 - backup to rotate or score next block
+        segment9 = segment8.endTrajectory().fresh()
+
+                .strafeToLinearHeading(new Vector2d(xSub,ySub),Math.toRadians(subAngle));
+
+        Action seg9 = segment9.build();
+
+        //segment 10 park
+        segment10 = segment9.endTrajectory().fresh()
+
+                .strafeToLinearHeading(new Vector2d(xSub,ySub),Math.toRadians(subAngle));
+
+        Action seg10 = segment10.build();
 
         waitForStart();
 
@@ -515,7 +597,11 @@ public class auto_4Sample extends LinearOpMode {
                 Mechs.Return(),
                 lift.baseHeight(),
                 seg8,
+                Mechs.intakeIntoSub(),
                 Mechs.park(),
+                new SleepAction(20-getRuntime()),
+                seg9,
+                seg10,
                 new SleepAction(parkWait)
 
 

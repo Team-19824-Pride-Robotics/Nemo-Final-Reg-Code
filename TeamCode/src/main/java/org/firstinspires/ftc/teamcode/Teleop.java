@@ -104,7 +104,7 @@ public class Teleop extends OpMode {
         } */
 
         linkage = new LinkageSubsystem(hardwareMap);
-        linkage.init();
+        //linkage.init();
         lift = new liftSubsystem(hardwareMap);
         lift.init();
         intake = new intakeSubsystem(hardwareMap);
@@ -224,10 +224,12 @@ public class Teleop extends OpMode {
     if (ascent){
         if (gamepad1.y) {
             lift.ascent2();
+            linkage.hangIn2();
             linkage.hangIn();
         }
         if (gamepad1.a) {
             lift.ascent2Up();
+            linkage.hangIn2();
         }
         if (gamepad1.x) {
             lift.ascent2Down();
