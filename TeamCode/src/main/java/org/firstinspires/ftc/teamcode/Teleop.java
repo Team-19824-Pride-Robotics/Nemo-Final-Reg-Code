@@ -77,10 +77,10 @@ public class Teleop extends OpMode {
     public boolean backPressedLast = false;
 
     //led
-    private DigitalChannel red1;
-    private DigitalChannel green1;
-    private DigitalChannel red2;
-    private DigitalChannel green2;
+//    private DigitalChannel red1;
+//    private DigitalChannel green1;
+//    private DigitalChannel red2;
+//    private DigitalChannel green2;
 
 
 
@@ -128,15 +128,15 @@ public class Teleop extends OpMode {
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
 
-        red1 = hardwareMap.get(DigitalChannel.class, "red1");
-        green1 = hardwareMap.get(DigitalChannel.class, "green1");
-        red2 = hardwareMap.get(DigitalChannel.class, "red2");
-        green2 = hardwareMap.get(DigitalChannel.class, "green2");
-
-        red1.setMode(DigitalChannel.Mode.OUTPUT);
-        green1.setMode(DigitalChannel.Mode.OUTPUT);
-        red2.setMode(DigitalChannel.Mode.OUTPUT);
-        green2.setMode(DigitalChannel.Mode.OUTPUT);
+//        red1 = hardwareMap.get(DigitalChannel.class, "red1");
+//        green1 = hardwareMap.get(DigitalChannel.class, "green1");
+//        red2 = hardwareMap.get(DigitalChannel.class, "red2");
+//        green2 = hardwareMap.get(DigitalChannel.class, "green2");
+//
+//        red1.setMode(DigitalChannel.Mode.OUTPUT);
+//        green1.setMode(DigitalChannel.Mode.OUTPUT);
+//        red2.setMode(DigitalChannel.Mode.OUTPUT);
+//        green2.setMode(DigitalChannel.Mode.OUTPUT);
 
         elapsedtime = new ElapsedTime();
         elapsedtime.reset();
@@ -160,14 +160,7 @@ public class Teleop extends OpMode {
         green = colorSensor.green();
         blue = colorSensor.blue();
 
-        if ( (red>300 && red < 340)&& (green>500 && green <540) && (blue>370&& blue<410)){
-            green2.setState(false);
-            red2.setState(false);
-        }
-        else {
-            green2.setState(true);
-            red2.setState(false);
-        }
+//         ,
 
         if (gamepad1.start && !startPressedLast) {
             spec = !spec;
@@ -367,18 +360,18 @@ public class Teleop extends OpMode {
             bucket.bucketEjec();
         }
 
-        if (spec){
-            green1.setState(true);
-            red1.setState(false);
-        }
-        if (ascent){
-            green1.setState(false);
-            red1.setState(true);
-        }
-        if (!spec && !ascent){
-                green1.setState(false);
-                red1.setState(false);
-        }
+//        if (spec){
+//            green1.setState(true);
+//            red1.setState(false);
+//        }
+//        if (ascent){
+//            green1.setState(false);
+//            red1.setState(true);
+//        }
+//        if (!spec && !ascent){
+//                green1.setState(false);
+//                red1.setState(false);
+//        }
 
 
 

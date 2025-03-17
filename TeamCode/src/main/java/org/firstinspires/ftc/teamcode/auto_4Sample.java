@@ -596,13 +596,8 @@ public boolean fifthSamp=false;
                 new SleepAction(clawOpenWait), //.3
                 Mechs.Return(),
                 lift.baseHeight(),
-                seg8,
-                Mechs.intakeIntoSub(),
-                Mechs.park(),
-                new SleepAction(20-getRuntime()),
-                seg9,
-                seg10,
-                new SleepAction(parkWait)
+                seg8
+
 
 
 

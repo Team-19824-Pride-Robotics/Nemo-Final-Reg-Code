@@ -23,7 +23,7 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-@Disabled
+
 @Config
 @Autonomous(name = "5 Specimen Auto")
 public class auto_5Spec extends LinearOpMode {
