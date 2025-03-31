@@ -203,13 +203,13 @@ public boolean fifthSamp=false;
                     LLResult result = limelight.getLatestResult();
 
                         while (!exit) {
+                           
                             if(result != null) {
-                                result = limelight.getLatestResult();
 
                                 if (result.isValid()) {
                                     xSub = 5; //I need to figure out what kinda value Tx will give me proportional to the robot so not final
                                     ySub = 1;
-                                    subAngle = -90 + result.getTy();
+                                    subAngle = -90 + result.getTx();
                                     fifthSamp = true;
                                     exit = true;
                                 }
@@ -495,7 +495,7 @@ public boolean fifthSamp=false;
 
         Actions.runBlocking(new SequentialAction(
                 //Score 1st sample
-                //Mechs.scan(),
+                Mechs.scan(),
                 new SleepAction(scanWait),
                 seg1,
                 new SleepAction(10)

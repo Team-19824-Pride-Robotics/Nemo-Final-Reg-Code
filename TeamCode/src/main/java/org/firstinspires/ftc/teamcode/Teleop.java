@@ -26,7 +26,7 @@ import java.util.List;
 @Config
 @TeleOp(name="A_Teleop")
 public class Teleop extends OpMode {
-  //  public LynxModule CONTROL_HUB, EXPANSION_HUB;
+    public LynxModule CONTROL_HUB, EXPANSION_HUB;
     private LinkageSubsystem linkage;
     private liftSubsystem lift;
     private intakeSubsystem intake;
@@ -51,7 +51,7 @@ public class Teleop extends OpMode {
 
   /*  DistanceSensor distanceSensor;
     public double distance; */
-    ColorSensor colorSensor;
+   //ColorSensor colorSensor;
 
     public double red;
     public double green;
@@ -95,13 +95,13 @@ public class Teleop extends OpMode {
         for (LynxModule hub : allHubs){
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
-      /*  if(allHubs.get(0).isParent() && LynxConstants.isEmbeddedSerialNumber(allHubs.get(0).getSerialNumber())) {
+        if(allHubs.get(0).isParent() && LynxConstants.isEmbeddedSerialNumber(allHubs.get(0).getSerialNumber())) {
             CONTROL_HUB = allHubs.get(0);
             EXPANSION_HUB = allHubs.get(1);
         } else {
             CONTROL_HUB = allHubs.get(1);
             EXPANSION_HUB = allHubs.get(0);
-        } */
+        }
 
         linkage = new LinkageSubsystem(hardwareMap);
         //linkage.init();
@@ -125,7 +125,7 @@ public class Teleop extends OpMode {
         BR.setDirection(DcMotorEx.Direction.REVERSE);
         FR.setDirection(DcMotorEx.Direction.REVERSE);
 
-        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+        //colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
 
 //        red1 = hardwareMap.get(DigitalChannel.class, "red1");
@@ -145,20 +145,20 @@ public class Teleop extends OpMode {
     @Override
     public void loop() {
 
-       /*     for (LynxModule hub : allHubs) {
+            for (LynxModule hub : allHubs) {
                 if (hub.getDeviceName().equals("Servo Hub 3")) return;
                 CONTROL_HUB.clearBulkCache();
                 EXPANSION_HUB.clearBulkCache();
-            } */
+            }
 
         for (LynxModule hub : allHubs){
             hub.clearBulkCache();
         }
         // colorsensor
 
-        red= colorSensor.red();
-        green = colorSensor.green();
-        blue = colorSensor.blue();
+//        red= colorSensor.red();
+//        green = colorSensor.green();
+//        blue = colorSensor.blue();
 
 //         ,
 
@@ -218,7 +218,7 @@ public class Teleop extends OpMode {
         if (gamepad1.y) {
             lift.ascent2();
             linkage.hangIn2();
-            linkage.hangIn();
+
         }
         if (gamepad1.a) {
             lift.ascent2Up();

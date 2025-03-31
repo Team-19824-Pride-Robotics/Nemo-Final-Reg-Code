@@ -18,7 +18,7 @@ public class armSubsystem {
     public static double armSample = .44;
     public static double armSpecimen = 0.58 ;
 
-    public static double armPickup2 = 0.8;
+    public static double armPickup2 = 0.79;
 
     public double armTargetPosition =.8;
 
