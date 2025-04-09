@@ -277,18 +277,20 @@ public class Teleop extends OpMode {
         if (gamepad2.start) {
             linkage.enableStickControl(linkageMin, linkagePos);
             arm.armPickup();
+            bucket.coverClose();
             liftPickup = false;
             intaking = true;
         }
         if (gamepad2.back) {
             linkage.disableStickControl();
             bucket.bucketUp();
+            bucket.coverOpen();
             pickup2= true;
             intaking = false;
         }
         if (linkage.getEncoderRlPosition() <= 30 && pickup2) {
             arm.armPickup2();
-            wrist.wristPickup();
+            wrist.wristPickup2();
             pickup2= false;
 
             //wrist.wristIn();
@@ -306,7 +308,7 @@ public class Teleop extends OpMode {
 
         if (gamepad2.a) {
             wrist.wristPickup();
-            arm.armPickup();
+            arm.armPickup2();
             pickup = true;
             liftPickup = true;
         }
@@ -316,6 +318,7 @@ public class Teleop extends OpMode {
         }
         if (lift.getLift1Position() <= 10 && liftPickup) {
             arm.armPickup2();
+            wrist.wristPickup2();
             liftPickup = false;
         }
         if (gamepad2.y) {

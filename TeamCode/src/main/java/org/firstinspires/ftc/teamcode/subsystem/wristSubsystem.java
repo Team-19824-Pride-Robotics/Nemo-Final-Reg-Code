@@ -13,7 +13,8 @@ public class wristSubsystem {
     public final ServoImplEx rw;
     private final AnalogInput encoderRw;
 
-    public static double rwPickup = .18;
+    public static double rwPickup = .1;
+    public static double rwPickup2 = .24;
   //  public static double lwPickup = .38;
     public static double rwIn = .22;
   //  public static double lwIn = .37;
@@ -50,6 +51,10 @@ public class wristSubsystem {
        // lw.setPosition(lwPickup);
     }
 
+    public void wristPickup2() {
+        rwTargetPosition = rwPickup2;
+        //lwTargetPosition = lwPickup;
+    }
     public void wristPickup() {
         rwTargetPosition = rwPickup;
         //lwTargetPosition = lwPickup;

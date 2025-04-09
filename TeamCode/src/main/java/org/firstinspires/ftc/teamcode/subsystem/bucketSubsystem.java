@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 @Config
@@ -12,27 +13,30 @@ public class bucketSubsystem {
 
     private final ServoImplEx bucket;
     private final AnalogInput encoderBucket;
+    private final Servo cover;
 
-    public static double bucketDown = 0.35;
-    public static double bucketUp = .28;
+    public static double bucketDown = 0.3;
+    public static double bucketUp = 0.25;
 
-    public static double bucketEject = .14;
+    public static double bucketEject = .05;
     public static double bucketSampleOut = .3;
 
-
+    public static double coverOpen = 0.85;
+    public static double coverClose = 0.5;
     public double bucketTargetPosition =.28 ;
-
+    public double coverTargetPosition = coverOpen;
     public bucketSubsystem(HardwareMap hardwareMap) {
         bucket = hardwareMap.get(ServoImplEx.class, "bucket");
         bucket.setPwmRange(new PwmControl.PwmRange(505, 2495));
         encoderBucket = hardwareMap.get(AnalogInput.class, "eBucket");
+        cover = hardwareMap.get(Servo.class, "cover");
 
     }
 
     public void init() {
         bucket.setPosition(bucketUp);
+        cover.setPosition(coverOpen);
     }
-
     public void bucketDown() {
         bucketTargetPosition = bucketDown;
     }
@@ -47,7 +51,13 @@ public class bucketSubsystem {
     public void sampleOut() {
         bucketTargetPosition = bucketSampleOut;
     }
+    public void coverOpen() {
+        coverTargetPosition = coverOpen;
+    }
 
+    public void coverClose() {
+        coverTargetPosition = coverClose;
+    }
 
     public double getBucketPosition() {
         return bucketTargetPosition;
@@ -57,6 +67,7 @@ public class bucketSubsystem {
     }
     public void update() {
         bucket.setPosition(bucketTargetPosition);
+        cover.setPosition(coverTargetPosition);
     }
 
 }
