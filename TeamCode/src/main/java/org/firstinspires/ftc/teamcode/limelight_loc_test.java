@@ -186,7 +186,7 @@ public boolean fifthSamp=false;
                 public boolean run(@NonNull TelemetryPacket packet) {
                    hSlide.setPosition(AHPos2);
                    hSlide2.setPosition(BHPos2);;
-                    intake.setPower(-1);
+                   intake.setPower(-1);
 
                     return false;
                 }

@@ -65,7 +65,7 @@ public class Teleop extends OpMode {
     DcMotorEx BR;
     DcMotorEx BL;
     public static double drive_speed_M = 1;
-    boolean ascent3 = false;
+    boolean liftWait = false;
     public static double liftpos = 1000;
 
     public static double linkagePos = .1;
@@ -182,12 +182,13 @@ public class Teleop extends OpMode {
             d_power = .5 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
         }
         double drive = gamepad1.left_stick_y * drive_speed_M;
+        double driveX = -gamepad1.left_stick_x * drive_speed_M;
         double rotate = -gamepad1.right_stick_x * drive_speed_M;
 
-        BL.setPower(drive + rotate);
-        FL.setPower(drive + rotate);
-        BR.setPower(drive - rotate);
-        FR.setPower(drive - rotate);
+        BL.setPower(drive - driveX + rotate);
+        FL.setPower(drive + driveX + rotate);
+        BR.setPower(drive + driveX - rotate);
+        FR.setPower(drive - driveX - rotate);
 
         if (gamepad1.dpad_up) {
             BL.setPower(-d_power);
@@ -277,6 +278,7 @@ public class Teleop extends OpMode {
         if (gamepad2.start) {
             linkage.enableStickControl(linkageMin, linkagePos);
             arm.armPickup();
+            wrist.wristPickup();
             bucket.coverClose();
             liftPickup = false;
             intaking = true;
@@ -284,16 +286,13 @@ public class Teleop extends OpMode {
         if (gamepad2.back) {
             linkage.disableStickControl();
             bucket.bucketUp();
-            bucket.coverOpen();
             pickup2= true;
             intaking = false;
         }
-        if (linkage.getEncoderRlPosition() <= 30 && pickup2) {
+        if (linkage.getEncoderRlPosition() <= 5 && pickup2) {
             arm.armPickup2();
             wrist.wristPickup2();
             pickup2= false;
-
-            //wrist.wristIn();
         }
      /*   if(arm.getArmEncoderPosition()<=70 && pickup2){
             wrist.wristPickup();
@@ -307,7 +306,7 @@ public class Teleop extends OpMode {
         //lift control
 
         if (gamepad2.a) {
-            wrist.wristPickup();
+            wrist.wristPickup2();
             arm.armPickup2();
             pickup = true;
             liftPickup = true;
@@ -316,23 +315,23 @@ public class Teleop extends OpMode {
             lift.pickup();
             pickup = false;
         }
-        if (lift.getLift1Position() <= 10 && liftPickup) {
-            arm.armPickup2();
-            wrist.wristPickup2();
-            liftPickup = false;
-        }
+//        if (lift.getLift1Position() <= 10 && liftPickup) {
+//            arm.armPickup2();
+//            wrist.wristPickup2();
+//            liftPickup = false;
+//        }
         if (gamepad2.y) {
             dpad_up = true;
+            liftWait = true;
             lift.bucketHigh();
-            arm.armSample();
-            wrist.wristOut();
+            bucket.coverOpen();
         }
 
         if (gamepad2.b) {
             dpad_down =true;
+            liftWait = true;
             lift.bucketLow();
-            arm.armSample();
-            wrist.wristOut();
+            bucket.coverOpen();
         }
 
         if ((arm.getArmEncoderPosition() >= 100 && dpad_up) || (arm.getArmEncoderPosition() >= 100 && dpad_down)) {
@@ -341,6 +340,11 @@ public class Teleop extends OpMode {
             liftPickup = false;
             dpad_down = false;
             dpad_up = false;
+        }
+        if(lift.getLift1Position() > 500 && liftWait){
+            arm.armSample();
+            wrist.wristOut();
+            liftWait=false;
         }
 
         //intake control
