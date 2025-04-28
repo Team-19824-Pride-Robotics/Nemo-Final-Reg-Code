@@ -75,6 +75,8 @@ public class Teleop extends OpMode {
     public boolean startPressedLast = false;
     public boolean ascent = false;
     public boolean backPressedLast = false;
+    public boolean lowCoverWait = false;
+    public boolean highCoverWait = false;
 
     //led
 //    private DigitalChannel red1;
@@ -323,25 +325,34 @@ public class Teleop extends OpMode {
         if (gamepad2.y) {
             dpad_up = true;
             liftWait = true;
-            lift.bucketHigh();
+            highCoverWait=true;
             bucket.coverOpen();
+            lift.bucketHigh();
         }
 
         if (gamepad2.b) {
             dpad_down =true;
             liftWait = true;
-            lift.bucketLow();
+            lowCoverWait=true;
             bucket.coverOpen();
+            lift.bucketLow();
         }
-
+        if(highCoverWait && bucket.getCoverEncoderPosition()>=305){
+            lift.bucketHigh();
+            highCoverWait=false;
+        }
+        if(lowCoverWait && bucket.getCoverEncoderPosition()>=270){
+            lift.bucketLow();
+            lowCoverWait=false;
+        }
         if ((arm.getArmEncoderPosition() >= 100 && dpad_up) || (arm.getArmEncoderPosition() >= 100 && dpad_down)) {
-            wrist.wristScore();
+            //wrist.wristScore();
             pickup = false;
             liftPickup = false;
             dpad_down = false;
             dpad_up = false;
         }
-        if(lift.getLift1Position() > 500 && liftWait){
+        if(lift.getLift1Position() > 900 && liftWait){
             arm.armSample();
             wrist.wristOut();
             liftWait=false;
@@ -420,6 +431,8 @@ public class Teleop extends OpMode {
         telemetry.addData("rwTarget", wrist.getRwTargetPosition());
         telemetry.addData("rwEncoder", wrist.getRwEncoderPosition());
 
+        telemetry.addData("coverTarget", bucket.getCoverPosition());
+        telemetry.addData("coverEncoder", bucket.getCoverEncoderPosition());
 
 
         telemetry.addData ("pickup", pickup);
