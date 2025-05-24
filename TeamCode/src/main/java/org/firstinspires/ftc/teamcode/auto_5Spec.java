@@ -23,6 +23,14 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import org.firstinspires.ftc.teamcode.subsystem.LinkageSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.armSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.bucketSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.clawSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.intakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.liftSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.wristSubsystem;
+
 
 @Config
 @Autonomous(name = "5 Specimen Auto")
@@ -31,7 +39,13 @@ public class auto_5Spec extends LinearOpMode {
 /////////////////////////
 /////Mech Positions//////
 /////////////////////////
-
+    private LinkageSubsystem linkage;
+    private liftSubsystem lift;
+    private intakeSubsystem intake;
+    private bucketSubsystem bucket;
+    private clawSubsystem claw;
+    private armSubsystem arm;
+    private wristSubsystem wrist;
     public static int spHeight1 = 900;
     public static int spHeight2 = 1550; //1650
     public static double AHPos = 0.06; //left  linkage in
@@ -118,42 +132,16 @@ public class auto_5Spec extends LinearOpMode {
     public static double grabSpeed = 30;
 
     public class Intake {
-        ServoImplEx backWrist;
-
-        ServoImplEx frontWrist;
-        Servo claw;
-        DcMotor intake;
-        ServoImplEx elbow;
-        ServoImplEx hSlide;
-        ServoImplEx hSlide2;
-        ServoImplEx bucket;
 
 
-        public Intake(HardwareMap hardwareMap) {
-            elbow = (ServoImplEx)hardwareMap.servo.get("arm");
-            elbow.setPwmRange(new PwmControl.PwmRange(505, 2495));
-            claw = hardwareMap.servo.get("claw");
-            hSlide = (ServoImplEx)hardwareMap.servo.get("ll");
-            hSlide.setPwmRange(new PwmControl.PwmRange(505, 2495));
-            hSlide2 = (ServoImplEx)hardwareMap.servo.get("rl");
-            hSlide2.setPwmRange(new PwmControl.PwmRange(505, 2495));
-            bucket = (ServoImplEx)hardwareMap.servo.get("bucket");
-            bucket.setPwmRange(new PwmControl.PwmRange(505, 2495));
-            backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "lw");
-            backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-            frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "rw");
-            frontWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-            intake = hardwareMap.get(DcMotor.class, "intake");
-        }
+
 
         public class spHangPos implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 //bring claw to origin
-                elbow.setPosition(Epos2);
-                frontWrist.setPosition(rwHang);
-                backWrist.setPosition(lwHang);
-
+                wrist.wristScoreSpeicmen();
+                arm.armSpecimen();
 
                 return false;
             }
@@ -165,7 +153,7 @@ public class auto_5Spec extends LinearOpMode {
         public class openClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(Cpos);
+                claw.clawOpen();
                 return false;
             }
         }
@@ -173,21 +161,13 @@ public class auto_5Spec extends LinearOpMode {
             return new openClaw();
         }
 
-        public class midClaw implements Action {
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(Cpos2);
-                return false;
-            }
-        }
-        public Action midClaw() {
-            return new openClaw();
-        }
+
+
 
         public class closeClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                claw.setPosition(Cpos3);
+                claw.clawClose();
                 return false;
             }
         }
@@ -200,9 +180,8 @@ public class auto_5Spec extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                elbow.setPosition(Epos1);
-                frontWrist.setPosition(rwGrab);
-                backWrist.setPosition(lwGrab);
+                arm.armPickupSpeicmen();
+                wrist.wristPickupSpeicmen();
 
                 return false;
             }
@@ -214,8 +193,7 @@ public class auto_5Spec extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                hSlide.setPosition(AHPos2);
-                hSlide2.setPosition(BHPos2);
+               linkage.linkOut();
                 return false;
             }
         }
@@ -226,8 +204,7 @@ public class auto_5Spec extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                hSlide.setPosition(AHPos);
-                hSlide2.setPosition(BHPos);
+                linkage.linkIn();
                 return false;
             }
         }
@@ -239,8 +216,7 @@ public class auto_5Spec extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                hSlide.setPosition(AHPos1);
-                hSlide2.setPosition(BHPos1);
+                linkage.linkMid();
                 return false;
             }
         }
@@ -252,29 +228,18 @@ public class auto_5Spec extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                bucket.setPosition(Bpos);
+                bucket.bucketUp();
                 return false;
             }
         }
         public Action bucketUp() {
             return new bucketUp();
         }
-        public class bucketMid implements Action {
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-
-                bucket.setPosition(Bpos2);
-                return false;
-            }
-        }
-        public Action bucketMid() {
-            return new bucketMid();
-        }
         public class bucketDown implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                bucket.setPosition(Bpos3);
+                bucket.bucketDown();
                 return false;
             }
         }
@@ -286,7 +251,7 @@ public class auto_5Spec extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                intake.setPower(0);
+                intake.intakeSetIdle();
 
 
 
@@ -301,8 +266,9 @@ public class auto_5Spec extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                intake.setPower(0.5);
-
+                intakeSubsystem.intakeIn=0.5;
+                intakeSubsystem.intakeOut=0;
+                intake.intakeSetPower();
 
 
 
@@ -317,7 +283,9 @@ public class auto_5Spec extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                intake.setPower(0.8);
+                intakeSubsystem.intakeIn=0.8;
+                intakeSubsystem.intakeOut=0;
+                intake.intakeSetPower();
 
 
 
@@ -333,7 +301,9 @@ public class auto_5Spec extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
 
-                intake.setPower(-1);
+                intakeSubsystem.intakeIn=0;
+                intakeSubsystem.intakeOut=-1;
+                intake.intakeSetPower();
 
 
 
@@ -345,7 +315,36 @@ public class auto_5Spec extends LinearOpMode {
             return new intakeExpel();
         }
 
+        public class coverOpen implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
 
+                bucket.coverOpen();
+
+
+
+
+                return false;
+            }
+        }
+        public Action coverOpen() {
+            return new intakeExpel();
+        }
+        public class coverClose implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+
+                bucket.coverOpen();
+
+
+
+
+                return false;
+            }
+        }
+        public Action coverClose() {
+            return new intakeExpel();
+        }
 
 
     }
@@ -357,26 +356,13 @@ public class auto_5Spec extends LinearOpMode {
         private DcMotorEx lift2;
         
             
-        public lift(HardwareMap hardwareMap) {
 
-            lift1 = hardwareMap.get(DcMotorEx.class, "lift1");
-            lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            lift2 = hardwareMap.get(DcMotorEx.class, "lift2");
-            lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            lift1.setDirection(DcMotorEx.Direction.REVERSE);
-        }
 
         public class upABit implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                lift1.setTargetPosition(spHeight2);
-                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setTargetPosition(spHeight2);
-                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift1.setPower(1);
-                lift2.setPower(1);
+
+                lift.score();
                 return false;
             }
         }
@@ -386,12 +372,7 @@ public class auto_5Spec extends LinearOpMode {
         public class baseHeight implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                lift1.setTargetPosition(0);
-                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setTargetPosition(0);
-                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift1.setPower(1);
-                lift2.setPower(1);
+                lift.pickup();
                 return false;
             }
         }
@@ -402,12 +383,7 @@ public class auto_5Spec extends LinearOpMode {
         public class scoreHeight implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                lift1.setTargetPosition(spHeight1);
-                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setTargetPosition(spHeight1);
-                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift1.setPower(1);
-                lift2.setPower(1);
+                lift.barHigh();
                 return false;
             }
         }
@@ -428,8 +404,8 @@ public class auto_5Spec extends LinearOpMode {
         Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(0));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         // make an Intake instance
-        Intake intake = new Intake(hardwareMap);
-        lift lift = new lift(hardwareMap);
+        Intake intake = new Intake();
+        lift lift = new lift();
         // make a Lift instance
 
 
@@ -588,6 +564,7 @@ new SequentialAction(
                 intake.bucketUp(),
                 intake.spHangPos(),
                 intake.intakeIn(),
+                intake.coverClose(),
                 lift.scoreHeight(),
                 seg1,
                 lift.upABit(),
@@ -606,7 +583,8 @@ new SequentialAction(
                 intake.intakeOn(),
                 new SleepAction(inSleep),
                 seg3,
-                intake.bucketMid(),
+                intake.bucketDown(),
+                intake.coverOpen(),
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
                 intake.bucketUp(),
@@ -617,12 +595,14 @@ new SequentialAction(
                 //sample 2
                 seg4,
                 intake.intakeOut(),
+                intake.coverClose(),
                 new SleepAction(downSleep),
                 intake.bucketDown(),
                 intake.intakeOn(),
                 new SleepAction(inSleep),
                 seg5,
-                intake.bucketMid(),
+                intake.coverOpen(),
+                intake.bucketDown(),
                 intake.intakeExpel(),
                 new SleepAction(outSleep),
                 intake.bucketUp(),
@@ -633,6 +613,7 @@ new SequentialAction(
                 seg6,
                 intake.intakeOut(),
                 new SleepAction(downSleep),
+                intake.coverClose(),
                 intake.bucketDown(),
                 intake.intakeOn2(),
                 new SleepAction(inSleep2),
@@ -644,7 +625,8 @@ new SequentialAction(
 
 
                 intake.intakeOut(),
-                intake.bucketMid(),
+                intake.coverOpen(),
+                intake.bucketDown(),
                 intake.intakeExpel(),
                 new SleepAction(outSleep2),
                 intake.bucketUp(),

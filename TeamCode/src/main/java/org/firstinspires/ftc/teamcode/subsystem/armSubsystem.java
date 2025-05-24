@@ -12,19 +12,19 @@ public class armSubsystem {
 
     private final ServoImplEx arm;
     private final AnalogInput encoderArm;
-    public static double armPickup = 0.74;
-    public static double armPickupSpcimen = .75;
+    public static double armPickup = 0.7; //Arm pos to clear linkage
+    public static double armPickupSpcimen = .71; //Grab Spec from wall
 
-    public static double armSample = .44;
-    public static double armSpecimen = 0.58 ;
+    public static double armSample = .4; //Score Sample
+    public static double armSpecimen = 0.54 ; //Score Specimen
 
-    public static double armPickup2 = 0.78;
+    public static double armPickup2 = 0.76; //Arm pos to grab from bucket
 
-    public double armTargetPosition =.8;
+    public double armTargetPosition = armPickup2;
 
-    public static double park = .66;
-    public static double armHang = .05;
-    public static double armAscent = .05;
+    public static double park = .62;
+    public static double armHang = .01;
+    public static double armAscent = .01;
 
     public armSubsystem(HardwareMap hardwareMap) {
         arm = hardwareMap.get(ServoImplEx.class, "arm");

@@ -70,13 +70,15 @@ public class Teleop extends OpMode {
 
     public static double linkagePos = .1;
     public static double linkageMin = .1;
+    public double rotateMod = 1;
 
     public boolean spec = false;
     public boolean startPressedLast = false;
     public boolean ascent = false;
     public boolean backPressedLast = false;
-    public boolean lowCoverWait = false;
-    public boolean highCoverWait = false;
+    public boolean bucketDown = false;
+    public boolean hold = false;
+
 
     //led
 //    private DigitalChannel red1;
@@ -183,9 +185,14 @@ public class Teleop extends OpMode {
         if (!spec) {
             d_power = .5 - .4 * gamepad1.left_trigger + (.5 * gamepad1.right_trigger);
         }
-        double drive = gamepad1.left_stick_y * drive_speed_M;
-        double driveX = -gamepad1.left_stick_x * drive_speed_M;
-        double rotate = -gamepad1.right_stick_x * drive_speed_M;
+        if(intaking){
+            rotateMod=0.3;
+        } else{
+            rotateMod=1;
+        }
+        double drive = gamepad2.left_stick_y * drive_speed_M;
+        double driveX = -gamepad2.left_stick_x * drive_speed_M;
+        double rotate = -gamepad2.right_stick_x * drive_speed_M * rotateMod;
 
         BL.setPower(drive - driveX + rotate);
         FL.setPower(drive + driveX + rotate);
@@ -290,6 +297,8 @@ public class Teleop extends OpMode {
             bucket.bucketUp();
             pickup2= true;
             intaking = false;
+            bucketDown = false;
+            hold=false;
         }
         if (linkage.getEncoderRlPosition() <= 5 && pickup2) {
             arm.armPickup2();
@@ -300,8 +309,8 @@ public class Teleop extends OpMode {
             wrist.wristPickup();
             pickup2= false;
         } */
-        if (linkage.isStickControlEnabled()) {
-            double stickY = Math.max(-gamepad2.left_stick_y, 0);
+        if (linkage.isStickControlEnabled() && !hold) {
+            double stickY = Math.max(-gamepad2.right_stick_y, 0);
             linkage.updateServoPositions(stickY);
         }
 
@@ -325,7 +334,6 @@ public class Teleop extends OpMode {
         if (gamepad2.y) {
             dpad_up = true;
             liftWait = true;
-            highCoverWait=true;
             bucket.coverOpen();
             lift.bucketHigh();
         }
@@ -333,18 +341,13 @@ public class Teleop extends OpMode {
         if (gamepad2.b) {
             dpad_down =true;
             liftWait = true;
-            lowCoverWait=true;
             bucket.coverOpen();
             lift.bucketLow();
         }
-        if(highCoverWait && bucket.getCoverEncoderPosition()>=305){
-            lift.bucketHigh();
-            highCoverWait=false;
+        if (gamepad2.x) {
+            hold=true;
         }
-        if(lowCoverWait && bucket.getCoverEncoderPosition()>=270){
-            lift.bucketLow();
-            lowCoverWait=false;
-        }
+
         if ((arm.getArmEncoderPosition() >= 100 && dpad_up) || (arm.getArmEncoderPosition() >= 100 && dpad_down)) {
             //wrist.wristScore();
             pickup = false;
@@ -363,19 +366,31 @@ public class Teleop extends OpMode {
             intakeSubsystem.intakeIn = Math.pow(gamepad2.right_trigger, 3);
             intakeSubsystem.intakeOut = Math.pow(-gamepad2.left_trigger, 3);
             intake.intakeSetPower();
-        } else {
+        }
+         else {
             intake.intakeSetIdle();
         }
-
+        if(gamepad2.left_trigger > .1){
+            bucket.coverOpen();
+        }
+        if(gamepad2.right_trigger > .1){
+            bucket.coverClose();
+        }
         //bucket control
         if (gamepad2.dpad_up) {
             bucket.bucketUp();
+            bucketDown=false;
         }
         if (gamepad2.dpad_down) {
-            bucket.bucketDown();
+            bucket.bucketAlmostDown();
+            bucketDown=true;
         }
-        if (gamepad2.x){
-            bucket.bucketEjec();
+        if(bucketDown) {
+            if (intake.getIntakePower() > 0.1){
+                bucket.bucketDown();
+        } else {
+                bucket.bucketAlmostDown();
+            }
         }
 
 //        if (spec){

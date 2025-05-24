@@ -25,6 +25,14 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import org.firstinspires.ftc.teamcode.subsystem.LinkageSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.armSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.bucketSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.clawSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.intakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.liftSubsystem;
+import org.firstinspires.ftc.teamcode.subsystem.wristSubsystem;
+
 @Config
 @Autonomous(name = "4 Sample Auto")
 public class auto_4Sample extends LinearOpMode {
@@ -52,24 +60,30 @@ public class auto_4Sample extends LinearOpMode {
     public static double lwPos3 = 0.5;
     public static double rwPos3 = 0.33;
     public static double armOut= .4;
-
+    private LinkageSubsystem linkage;
+    private liftSubsystem lift;
+    private intakeSubsystem intake;
+    private bucketSubsystem bucket;
+    private clawSubsystem claw;
+    private armSubsystem arm;
+    private wristSubsystem wrist;
     ///////////////////////////
     /////Robot Positions//////
     /////////////////////////
     public static double x0 = 10;
-    public static double y0 = 22;
-    public static double x1 = 25;
-    public static double y1 = 8; //9
-    public static double x2 = 7;
-    public static double y2 = 22;
-    public static double x3 = 25;
-    public static double y3 = 24; //24
-    public static double x4 = 7;
-    public static double y4 = 19;
-    public static double x5 = 30;
-    public static double y5 = 20;
-    public static double x6 = 8;
-    public static double y6 = 17.5;
+    public static double y0 = 25;
+    public static double x1 = 20;
+    public static double y1 = 5.5; //9
+    public static double x2 = 5;
+    public static double y2 = 23;
+    public static double x3 = 23;
+    public static double y3 = 23.5; //24
+    public static double x4 = 4;
+    public static double y4 = 22;
+    public static double x5 = 27;
+    public static double y5 = 13;
+    public static double x6 = 6;
+    public static double y6 = 22;
     public static double x7 = 80;
     public static double y7 = -17.5;
     public double xSub = 80.1;
@@ -90,6 +104,8 @@ public class auto_4Sample extends LinearOpMode {
     public static double firstLiftWait = 1;
     public static double armStabilizeWait = 0.1;
     public static double clawOpenWait = 0.3;
+
+    public static double slideWait = 0.3;
     public static double intakeWait = 0.8;
     public static double inWait = 0.2;
     public static double linkInWait = 0.25;
@@ -105,45 +121,32 @@ public boolean exit=false;
 public boolean fifthSamp=false;
 
         public class Mechs {
-            ServoImplEx backWrist;
 
-            ServoImplEx frontWrist;
-
-            Servo claw;
-            ServoImplEx elbow;
-
-            ServoImplEx hSlide;
-            ServoImplEx hSlide2;
-
-            ServoImplEx bucket;
-            DcMotor intake;
+            private LinkageSubsystem linkage;
+            private liftSubsystem lift;
+            private intakeSubsystem intake;
+            private bucketSubsystem bucket;
+            private clawSubsystem claw;
+            private armSubsystem arm;
+            private wristSubsystem wrist;
             private Limelight3A limelight;
-            public Mechs(HardwareMap hardwareMap) {
-                elbow = (ServoImplEx)hardwareMap.servo.get("arm");
-                elbow.setPwmRange(new PwmControl.PwmRange(505, 2495));
-                claw = hardwareMap.servo.get("claw");
-                hSlide = (ServoImplEx)hardwareMap.servo.get("ll");
-                hSlide.setPwmRange(new PwmControl.PwmRange(505, 2495));
-                hSlide2 = (ServoImplEx)hardwareMap.servo.get("rl");
-                hSlide2.setPwmRange(new PwmControl.PwmRange(505, 2495));
-                bucket = (ServoImplEx)hardwareMap.servo.get("bucket");
-                bucket.setPwmRange(new PwmControl.PwmRange(505, 2495));
-                intake = hardwareMap.get(DcMotor.class, "intake");
-                backWrist = (ServoImplEx) hardwareMap.get(Servo.class, "lw");
-                backWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-                frontWrist = (ServoImplEx) hardwareMap.get(Servo.class, "rw");
-                frontWrist.setPwmRange(new PwmControl.PwmRange(505, 2495));
-                limelight = hardwareMap.get(Limelight3A.class, "limelight");
-            }
-
+        public Mechs(HardwareMap hardwareMap){
+            linkage = new LinkageSubsystem(hardwareMap);
+            lift = new liftSubsystem(hardwareMap);
+            intake = new intakeSubsystem(hardwareMap);
+            bucket = new bucketSubsystem(hardwareMap);
+            claw = new clawSubsystem(hardwareMap);
+            arm = new armSubsystem(hardwareMap);
+            wrist = new wristSubsystem(hardwareMap);
+        }
             public class saScorePos implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
                     //bring claw to origin
-                    elbow.setPosition(Epos3);
-                    frontWrist.setPosition(rwPos3);
-                    backWrist.setPosition(lwPos3);
-
+                    arm.armSample();
+                    wrist.wristScore();
+                    arm.update();
+                    wrist.update();
 
                     return false;
                 }
@@ -155,7 +158,8 @@ public boolean fifthSamp=false;
             public class openClaw implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                    claw.setPosition(Cpos);
+                    claw.clawOpen();
+                    claw.update();
                     return false;
                 }
             }
@@ -168,7 +172,8 @@ public boolean fifthSamp=false;
             public class closeClaw implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                    claw.setPosition(Cpos2);
+                    claw.clawClose();
+                    claw.update();
                     return false;
                 }
             }
@@ -184,59 +189,25 @@ public boolean fifthSamp=false;
                 public boolean run(@NonNull TelemetryPacket packet) {
 
 
-                    elbow.setPosition(Epos1);
-                    frontWrist.setPosition(rwIn);
-                    backWrist.setPosition(lwIn);
-
+                    arm.armPickup2();
+                    wrist.wristPickup2();
+                    arm.update();
+                    wrist.update();
                     return false;
                 }
             }
             public Action Return() {
                 return new Return();
             }
-            public class intakeIntoSub implements Action {
-                @Override
-                public boolean run(@NonNull TelemetryPacket packet) {
-                   hSlide.setPosition(AHPos2);
-                   hSlide2.setPosition(BHPos2);;
-                    intake.setPower(-1);
 
-                    return false;
-                }
-            }
-            public Action intakeIntoSub() {
-                return new intakeIntoSub();
-            }
-            public class scan implements Action {
-                @Override
-                public boolean run(@NonNull TelemetryPacket packet) {
-                    limelight.pipelineSwitch(0);
-                    limelight.start();
 
-                    LLResult result = limelight.getLatestResult();
-
-                        while (!result.isValid() || !exit) {
-                            result = limelight.getLatestResult();
-                        }
-                        if(result.isValid()){
-                            xSub=x7-result.getTx(); //I need to figure out what kinda value Tx will give me proportional to the robot so not final
-                            ySub=-17;
-                            subAngle = 90;
-                            fifthSamp=true;
-                        }
-
-                    return false;
-                }
-            }
-            public Action scan() {
-                return new scan();
-            }
             public class park implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                    elbow.setPosition(armOut);
-                    frontWrist.setPosition(rwPos3);
-                    backWrist.setPosition(lwPos3);
+                    arm.armPark();
+                    wrist.wristScoreSpeicmen();
+                    arm.update();
+                    wrist.update();
 
 
 
@@ -250,11 +221,15 @@ public boolean fifthSamp=false;
             public class slideOut implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                hSlide.setPosition(AHPos3);
-                hSlide2.setPosition(BHPos3);
-                bucket.setPosition(Bpos2);
-                elbow.setPosition(Epos2);
-                intake.setPower(1);
+                linkage.linkOut();
+                bucket.bucketAlmostDown();
+                arm.armPickup();
+                wrist.wristPickup();
+                bucket.coverClose();
+                bucket.update();
+                arm.update();
+                wrist.update();
+
 
 
 
@@ -265,19 +240,49 @@ public boolean fifthSamp=false;
             public Action slideOut() {
                 return new slideOut();
             }
-
+            public class intakeOn implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                    intakeSubsystem.intakeIn=1;
+                    intakeSubsystem.intakeOut=0;
+                    intake.intakeSetPower();
+                    intake.update();
+                    return false;
+                }
+            }
+            public Action intakeOn() {
+                return new intakeOn();
+            }
+            public class bucketWayUp implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                    bucket.bucketEjec();
+                    bucket.update();
+                    return false;
+                }
+            }
+            public Action bucketWayUp() {
+                return new bucketWayUp();
+            }
+            public class coverOpen implements Action {
+                @Override
+                public boolean run(@NonNull TelemetryPacket packet) {
+                    bucket.coverOpen();
+                    bucket.update();
+                    return false;
+                }
+            }
+            public Action coverOpen() {
+                return new coverOpen();
+            }
             public class slideIn implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                    hSlide.setPosition(AHPos);
-                    hSlide2.setPosition(BHPos);
-                    bucket.setPosition(Bpos);
-
-
-
-
-
-
+                    linkage.linkIn();
+                    bucket.bucketUp();
+                    intakeSubsystem.intakeIn=0;
+                    intakeSubsystem.intakeOut=0;
+                    bucket.update();
                     return false;
                 }
             }
@@ -287,8 +292,12 @@ public boolean fifthSamp=false;
             public class intakeOff implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-
-                    intake.setPower(0);
+                    intakeSubsystem.intakeIn=0;
+                    intakeSubsystem.intakeOut=0;
+                    intake.intakeSetPower();
+                    bucket.bucketUp();
+                    intake.update();
+                    bucket.update();
 
 
 
@@ -299,11 +308,14 @@ public boolean fifthSamp=false;
             public Action intakeOff() {
                 return new intakeOff();
             }
-            public class intakeOn implements Action {
+            public class intakeALil implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
 
-                    intake.setPower(0.5);
+                    intakeSubsystem.intakeIn=0.3;
+                    intakeSubsystem.intakeOut=0;
+                    intake.intakeSetPower();
+                    intake.update();
 
 
 
@@ -311,13 +323,16 @@ public boolean fifthSamp=false;
                     return false;
                 }
             }
-            public Action intakeOn() {
-                return new intakeOn();
+            public Action intakeALil() {
+                return new intakeALil();
             }
             public class armDownALil implements Action {
                 @Override
                 public boolean run(@NonNull TelemetryPacket packet) {
-                    elbow.setPosition(Epos1);
+                    arm.armPickup2();
+                    wrist.wristPickup2();
+                    arm.update();
+                    wrist.update();
 
 
 
@@ -473,26 +488,12 @@ public boolean fifthSamp=false;
 
 
         Action seg7 = segment7.build();
-        //segment 8 - scan for blocks
+        //segment 8 - park
         segment8 = segment7.endTrajectory().fresh()
 
-                .strafeToLinearHeading(new Vector2d(x7,y7),Math.toRadians(90));
+                .strafeToLinearHeading(new Vector2d(x7,y7),Math.toRadians(-90));
 
         Action seg8 = segment8.build();
-
-        //segment 9 - backup to rotate or score next block
-        segment9 = segment8.endTrajectory().fresh()
-
-                .strafeToLinearHeading(new Vector2d(xSub,ySub),Math.toRadians(subAngle));
-
-        Action seg9 = segment9.build();
-
-        //segment 10 park
-        segment10 = segment9.endTrajectory().fresh()
-
-                .strafeToLinearHeading(new Vector2d(xSub,ySub),Math.toRadians(subAngle));
-
-        Action seg10 = segment10.build();
 
         waitForStart();
 
@@ -508,8 +509,9 @@ public boolean fifthSamp=false;
                 Mechs.slideIn(),
                 Mechs.closeClaw(),
                 lift.scoreHeight(),
-                Mechs.saScorePos(),
+                Mechs.coverOpen(),
                 new SleepAction(firstLiftWait), //.75 //.25
+                Mechs.saScorePos(),
                 seg1,
                 new SleepAction(armStabilizeWait), //.5
                 Mechs.openClaw(),
@@ -520,12 +522,15 @@ public boolean fifthSamp=false;
                 //grab 2nd sample
                 seg2,
                 Mechs.slideOut(),
+                new SleepAction(slideWait),
+                Mechs.intakeOn(),
                 new SleepAction(intakeWait),
                 Mechs.intakeOff(),
+                //Mechs.bucketWayUp(),
                 new SleepAction(inWait),
                 Mechs.slideIn(),
                 new SleepAction(linkInWait),
-                Mechs.intakeOn(),
+                Mechs.intakeALil(),
                 new SleepAction(intakeInsureWait),
                 Mechs.intakeOff(),
                 Mechs.armDownALil(),
@@ -533,10 +538,11 @@ public boolean fifthSamp=false;
                 Mechs.closeClaw(),
                 new SleepAction(clawCloseWait),
 
-
-                Mechs.saScorePos(),
+                //score 2nd sample
                 lift.scoreHeight(),
+                Mechs.coverOpen(),
                 new SleepAction(secondLiftWait),
+                Mechs.saScorePos(),
                 seg3,
                 new SleepAction(armStabilizeWait),
                 Mechs.openClaw(),
@@ -546,24 +552,29 @@ public boolean fifthSamp=false;
                         Mechs.Return(),
                         lift.baseHeight()
                 ),
+
+                //grab 3rd sample
                 Mechs.slideOut(),
+                new SleepAction(slideWait),
+                Mechs.intakeOn(),
                 new SleepAction(intakeWait), //1
                 Mechs.intakeOff(),
                 new SleepAction(inWait),
                 Mechs.slideIn(),
                 new SleepAction(linkInWait), //.5 //.25
-                Mechs.intakeOn(),
+                Mechs.intakeALil(),
                 new SleepAction(intakeInsureWait), //.1),
                 Mechs.intakeOff(),
                 Mechs.armDownALil(),
                 new SleepAction(armDownWait),
-
                 Mechs.closeClaw(),
                 new SleepAction(clawCloseWait),//.5
 
-                Mechs.saScorePos(),
+                //Score 3rd sample
                 lift.scoreHeight(),
+                Mechs.coverOpen(),
                 new SleepAction(thirdLiftWait),
+                Mechs.saScorePos(),
                 seg5,
                 new SleepAction(armStabilizeWait),
                 Mechs.openClaw(),
@@ -574,6 +585,8 @@ public boolean fifthSamp=false;
 
 
                 Mechs.slideOut(),
+                new SleepAction(slideWait),
+                Mechs.intakeOn(),
                 new SleepAction(lastIntakeWait),
                 Mechs.intakeOff(),
                 new SleepAction(inWait),
@@ -587,14 +600,15 @@ public boolean fifthSamp=false;
                 Mechs.closeClaw(),
                 new SleepAction(clawCloseWait), //.5
 
-                Mechs.saScorePos(),
                 lift.scoreHeight(),
+                Mechs.coverOpen(),
                 new SleepAction(lastLiftWait),
+                Mechs.saScorePos(),
                 seg7,
                 new SleepAction(armStabilizeWait), //.3
                 Mechs.openClaw(),
                 new SleepAction(clawOpenWait), //.3
-                Mechs.Return(),
+                Mechs.park(),
                 lift.baseHeight(),
                 seg8
 

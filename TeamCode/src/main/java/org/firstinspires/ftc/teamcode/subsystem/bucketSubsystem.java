@@ -16,14 +16,14 @@ public class bucketSubsystem {
     private final AnalogInput encoderCover;
     private final Servo cover;
 
-    public static double bucketDown = 0.75;
-    public static double bucketUp = 0.65;
+    public static double bucketDown = 0.16;
+    public static double bucketUp = 0.1;
 
-    public static double bucketEject = .05;
-    public static double bucketSampleOut = .3;
+    public static double bucketEject = .4;
+    public static double bucketAlmostDown = .14;
 
-    public static double coverOpen = 0.8;
-    public static double coverClose = 0.5;
+    public static double coverOpen = 0.7;
+    public static double coverClose = 0.39;
     public double bucketTargetPosition = bucketUp;
     public double coverTargetPosition = coverOpen;
 
@@ -53,8 +53,8 @@ public class bucketSubsystem {
         bucketTargetPosition = bucketEject;
     }
 
-    public void sampleOut() {
-        bucketTargetPosition = bucketSampleOut;
+    public void bucketAlmostDown() {
+        bucketTargetPosition = bucketAlmostDown;
     }
 
     public void coverOpen() {
